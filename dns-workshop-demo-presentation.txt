@@ -1,0 +1,611 @@
+---
+marp: true
+theme: dns-workshop
+class: title-slide
+paginate: true
+footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
+---
+
+# Advanced DNS/DNSSEC Workshop
+## Complete 6-Day Professional Training Program
+
+**DNS Foundations and Advanced Operations**
+*Building Enterprise-Grade DNS Infrastructure*
+
+---
+
+<!-- class: section-divider -->
+
+# Module 1
+## Introduction to DNS Foundations and Concepts
+
+---
+
+## Learning Objectives
+
+By the end of this module, participants will be able to:
+
+- **Understand** the fundamental architecture of the Domain Name System
+- **Explain** the DNS hierarchy and namespace structure
+- **Analyze** DNS query resolution processes
+- **Evaluate** different DNS server types and their roles
+- **Apply** basic DNS troubleshooting techniques
+
+<div class="badge">Knowledge</div> <div class="badge">Comprehension</div> <div class="badge">Application</div> <div class="badge">Analysis</div>
+
+---
+
+## DNS History & Evolution
+
+### The Pre-DNS Era (1970s-early 1980s)
+
+- **HOSTS.TXT file limitations**
+  - Manual maintenance at Stanford Research Institute (SRI)
+  - Single point of failure for name resolution
+  - No hierarchical structure
+
+<div class="warning">
+<strong>Challenge:</strong> By 1983, HOSTS.TXT contained thousands of entries and was updated multiple times daily, creating an unsustainable operational burden.
+</div>
+
+---
+
+## Birth of DNS (1983-1987)
+
+- **Paul Mockapetris** designed the Domain Name System
+- RFC 882 and RFC 883 (1983) - Original specifications
+- RFC 1034 and RFC 1035 (1987) - Current foundation standards
+
+### Key Innovations
+- Hierarchical namespace structure
+- Distributed authority model
+- Caching for performance
+- Fault-tolerant design
+
+---
+
+## DNS Fundamentals
+
+### What is DNS?
+
+The **Domain Name System** is a hierarchical, distributed naming system that:
+
+- Translates human-readable domain names to IP addresses
+- Provides a scalable directory service for the Internet
+- Enables email routing, service discovery, and text-based information storage
+- Operates as a <span class="highlight">distributed database</span> across millions of servers
+
+### Key Characteristics
+
+<div class="columns">
+<div>
+
+**Hierarchical Structure**
+- Tree-based namespace
+- Delegation model
+- Distributed authority
+
+</div>
+<div>
+
+**Fault Tolerance**
+- Multiple redundant servers
+- Caching mechanisms
+- No single point of failure
+
+</div>
+</div>
+
+---
+
+## DNS Namespace Hierarchy
+
+```
+                    . (root)
+                    /    \
+                 com      org     net     edu     gov
+                /         |        \       |       \
+           google    wikipedia   cloudflare  mit   nih
+          /      \              
+       www      mail
+```
+
+### Domain Name Components
+
+- **Root Domain**: `.` (implicit in most representations)
+- **Top-Level Domains (TLDs)**: `.com`, `.org`, `.net`, `.gov`
+- **Second-Level Domains**: `google`, `wikipedia`, `cloudflare`
+- **Subdomains**: `www`, `mail`, `blog`, `api`
+
+<div class="success">
+<strong>Best Practice:</strong> Always think of domain names as paths in an inverted tree structure, reading from right to left.
+</div>
+
+---
+
+## DNS Components Overview
+
+<div class="columns-3">
+<div>
+
+### Domain Names
+- Human-readable identifiers
+- Hierarchical labels
+- Case-insensitive
+- Max 253 characters
+
+</div>
+<div>
+
+### Zones
+- Administrative boundaries
+- Delegation points
+- Authority scope
+- Zone files
+
+</div>
+<div>
+
+### Name Servers
+- Authoritative servers
+- Recursive resolvers
+- Caching servers
+- Root servers
+
+</div>
+</div>
+
+---
+
+## Resource Record Types
+
+| Record Type | Purpose | Example |
+|-------------|---------|---------|
+| **A** | IPv4 address mapping | `www.example.com. A 192.0.2.1` |
+| **AAAA** | IPv6 address mapping | `www.example.com. AAAA 2001:db8::1` |
+| **MX** | Mail exchange routing | `example.com. MX 10 mail.example.com.` |
+| **NS** | Name server delegation | `example.com. NS ns1.example.com.` |
+| **CNAME** | Canonical name alias | `blog.example.com. CNAME www.example.com.` |
+
+---
+
+## DNS Resolution Process
+
+### Step-by-Step Query Resolution
+
+```
+1. User types "www.example.com" in browser
+2. OS checks local cache
+3. Query sent to recursive resolver
+4. Resolver checks cache
+5. Query to root server for "com" NS
+6. Query to .com TLD server for "example.com" NS  
+7. Query to example.com authoritative server
+8. Response returned with IP address
+9. Connection established to web server
+```
+
+---
+
+## Query Types
+
+<div class="columns">
+<div>
+
+### Recursive Queries
+- Client delegates full resolution
+- Resolver does all the work
+- Single request/response pair
+- Most common for end users
+
+</div>
+<div>
+
+### Iterative Queries
+- Client follows referrals
+- Multiple query/response pairs
+- Resolver provides best answer
+- Used between DNS servers
+
+</div>
+</div>
+
+---
+
+## DNS Stakeholder Ecosystem
+
+### Internet Corporation for Assigned Names and Numbers (ICANN)
+
+- **Policy Development**: Multi-stakeholder consensus process
+- **Contract Management**: Registry and registrar agreements
+- **Root Zone Management**: IANA functions operator
+- **Compliance**: Enforcement of contractual obligations
+
+---
+
+## Key Stakeholders
+
+<div class="columns">
+<div>
+
+**Root Server Operators**
+- 13 root server systems (A-M)
+- Anycast deployment
+- Geographic distribution
+- Voluntary cooperation
+
+**Registry Operators**
+- TLD database maintenance
+- Registration processing
+- WHOIS services
+- DNS infrastructure
+
+</div>
+<div>
+
+**Registrars**
+- Customer interface
+- Domain registration services
+- ICANN accreditation required
+- Compliance obligations
+
+**Internet Service Providers**
+- Recursive DNS services
+- Customer DNS resolution
+- Caching infrastructure
+- Performance optimization
+
+</div>
+</div>
+
+---
+
+<!-- class: lab-intro -->
+
+# Practical Lab Introduction
+## DNS Hierarchy Exploration
+
+---
+
+## Lab Environment Overview
+
+### Virtual Machine Setup
+- **Ubuntu 22.04 LTS** with DNS tools pre-installed
+- **Network Topology**: Simulated Internet environment
+- **Available Tools**: dig, nslookup, host, wireshark, bind9-utils
+
+---
+
+## Lab Exercises
+
+1. **DNS Hierarchy Exploration**
+   - Trace queries from root to authoritative servers
+   - Understand delegation and referral process
+
+2. **Query Analysis Workshop**
+   - Use `dig +trace` to follow resolution path
+   - Analyze response codes and flags
+
+3. **DNS Server Identification**
+   - Identify different server types in resolution chain
+   - Understand caching behavior
+
+---
+
+## dig Command Reference
+
+### Basic Syntax
+```bash
+dig [@server] [domain] [record-type] [options]
+```
+
+### Essential Options
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `+trace` | Follow delegation path | `dig +trace www.example.com` |
+| `+short` | Minimal output | `dig +short example.com A` |
+| `+norecurse` | Disable recursion | `dig +norecurse example.com` |
+| `@server` | Query specific server | `dig @8.8.8.8 example.com` |
+| `+stats` | Show query statistics | `dig +stats example.com` |
+
+<div class="warning">
+<strong>Lab Note:</strong> Always use the +trace option when learning DNS hierarchy to see the complete resolution process.
+</div>
+
+---
+
+## Advanced DNS Query Examples
+
+### Tracing DNS Resolution
+
+```bash
+# Full trace from root to authoritative
+dig +trace www.cloudflare.com
+
+# Query specific record types
+dig MX gmail.com
+dig AAAA ipv6.google.com
+dig TXT _dmarc.microsoft.com
+```
+
+---
+
+## Practical Exercise: DNS Walking
+
+<div class="columns">
+<div>
+
+**Exercise 1: Root Servers**
+```bash
+dig . NS
+dig @a.root-servers.net com NS
+```
+
+**Exercise 2: TLD Servers**
+```bash
+dig @a.gtld-servers.net example.com NS
+```
+
+</div>
+<div>
+
+**Exercise 3: Authoritative**
+```bash
+dig @ns1.example.com www.example.com A
+```
+
+**Exercise 4: Reverse DNS**
+```bash
+dig -x 8.8.8.8
+dig -x 2001:4860:4860::8888
+```
+
+</div>
+</div>
+
+---
+
+## DNS Record Types Deep Dive
+
+<div class="columns">
+<div>
+
+**Address Records**
+- **A**: IPv4 addresses
+- **AAAA**: IPv6 addresses
+- **PTR**: Reverse lookups
+
+**Service Records**
+- **MX**: Mail routing
+- **SRV**: Service discovery
+- **CNAME**: Aliases
+
+</div>
+<div>
+
+**Security Records**
+- **TXT**: Text data, SPF, DKIM
+- **CAA**: Certificate authority
+- **DNSKEY**: DNSSEC keys
+- **DS**: Delegation signer
+
+**Zone Management**
+- **NS**: Name servers
+- **SOA**: Start of authority
+
+</div>
+</div>
+
+---
+
+## Real-World Examples
+
+```bash
+# Email security records
+dig TXT google.com | grep -i spf
+dig TXT selector1._domainkey.microsoft.com
+
+# Certificate authority authorization
+dig CAA github.com
+```
+
+---
+
+## Common DNS Issues & Troubleshooting
+
+<div class="warning">
+<strong>Resolution Failures:</strong> NXDOMAIN responses, timeout errors, delegation issues, cache poisoning
+</div>
+
+<div class="error">
+<strong>Performance Issues:</strong> High query response times, recursive resolver problems, network connectivity issues
+</div>
+
+---
+
+## Diagnostic Commands
+
+```bash
+# Check response times
+dig +stats www.example.com
+
+# Verify DNSSEC
+dig +dnssec example.com
+
+# Test different resolvers
+dig @8.8.8.8 example.com
+dig @1.1.1.1 example.com
+```
+
+---
+
+## DNS Security Fundamentals
+
+<div class="columns">
+<div>
+
+**Data Integrity Threats**
+- Cache poisoning attacks
+- DNS spoofing
+- Man-in-the-middle attacks
+- Response modification
+
+</div>
+<div>
+
+**Availability Threats**
+- DDoS amplification
+- Query flooding
+- Infrastructure targeting
+- Resolver overload
+
+</div>
+</div>
+
+---
+
+## Security Measures
+
+- **DNSSEC**: Cryptographic signatures
+- **DNS over TLS (DoT)**: Encrypted transport
+- **DNS over HTTPS (DoH)**: Web-based encryption
+- **Response Rate Limiting**: DDoS mitigation
+- **Access Controls**: Resolver restrictions
+
+<div class="success">
+<strong>Best Practice:</strong> Always validate DNS responses and implement multiple layers of security controls.
+</div>
+
+---
+
+## DNS Performance Optimization
+
+### Caching Strategies
+
+**TTL Management**
+- Balance freshness vs performance
+- Consider change frequency
+- Plan for emergency updates
+- Monitor cache hit ratios
+
+**Resolver Placement**
+- Geographic distribution
+- Network topology awareness
+- Latency optimization
+- Redundancy planning
+
+---
+
+## Monitoring Metrics
+
+| Metric | Target | Tool |
+|--------|--------|------|
+| Query Response Time | < 50ms | dig +stats |
+| Cache Hit Ratio | > 95% | DNS server logs |
+| Availability | 99.9%+ | External monitoring |
+| Error Rate | < 0.1% | Query analysis |
+
+---
+
+## Course Structure Overview
+
+### 6-Day Learning Journey
+
+<div class="columns-3">
+<div>
+
+**Days 1-2: Foundations**
+- DNS fundamentals
+- Zone operations
+- Server types
+- Software platforms
+
+</div>
+<div>
+
+**Days 3-4: Security**
+- Advanced operations
+- Security fundamentals
+- DNSSEC implementation
+- Privacy technologies
+
+</div>
+<div>
+
+**Days 5-6: Operations**
+- Registry operations
+- EPP protocol
+- Monitoring & performance
+- Emerging technologies
+
+</div>
+</div>
+
+### Assessment & Certification
+
+- **Daily Labs**: Hands-on practical exercises
+- **Module Quizzes**: Knowledge validation
+- **Final Project**: Complete DNS infrastructure design
+- **Certification**: DNS Professional credentials
+
+---
+
+## Module Summary
+
+### Key Takeaways
+
+- **DNS is hierarchical and distributed** - No single point of control or failure
+- **Caching is essential** - Improves performance and reduces server load  
+- **Delegation enables scalability** - Administrative responsibility distributed
+- **Multiple record types serve different purposes** - A, AAAA, MX, NS, CNAME, etc.
+- **Understanding the ecosystem is crucial** - ICANN, registries, registrars, ISPs
+
+### Next Module Preview
+
+**Module 2: DNS Operations - Zones, Records, and Data Management**
+- Zone file creation and management
+- Advanced record types and configurations
+- Zone transfer mechanisms
+- Email infrastructure DNS setup
+
+---
+
+## Questions & Discussion
+
+<div class="columns">
+<div>
+
+### Discussion Topics
+- Real-world DNS performance experiences
+- Common resolution problems you've encountered
+- Questions about the DNS hierarchy
+- Clarifications on stakeholder roles
+
+</div>
+<div>
+
+### Up Next
+- 15-minute break
+- Hands-on lab exercises
+- DNS query tracing workshop
+- Group problem-solving session
+
+</div>
+</div>
+
+<div class="success">
+<strong>Remember:</strong> The best way to learn DNS is through hands-on practice and experimentation!
+</div>
+
+---
+
+<!-- class: title-slide -->
+
+# Thank You
+## Questions & Lab Time
+
+**Advanced DNS/DNSSEC Workshop**
+*DNS Foundations Complete*
+
+Ready for hands-on practice?
