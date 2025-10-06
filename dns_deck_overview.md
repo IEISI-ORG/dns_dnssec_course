@@ -1,9 +1,10 @@
 ---
 marp: true
 theme: dns-workshop
-class: title-slide
 paginate: true
-footer: "Advanced DNS/DNSSEC Workshop | Course Overview"
+html: true
+footer: "DNS/DNSSEC Workshop - Example Overview Deck - &copy; CC BY-NC-SA 4.0"
+class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
@@ -11,14 +12,15 @@ footer: "Advanced DNS/DNSSEC Workshop | Course Overview"
 
 **Comprehensive Education in DNS, Security, and Registry Operations**
 
-*Building Enterprise-Grade DNS Competence*
+*Building Leading DNS Competence*
 
 ---
-
 <!-- class: section-divider -->
+
 # Workshop Overview
 
 ---
+<!-- class: section -->
 
 ## Executive Summary
 
@@ -29,9 +31,12 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 - Instructor-led with fully virtualized lab environment  
 - Certification-aligned learning outcomes
 
-<div class="badge">Professional</div> <div class="badge">Hands-On</div> <div class="badge">Certified</div>
+<div class="badge">Professional</div>
+<div class="badge">Hands-On</div>
+<div class="badge">Certified</div>
 
 ---
+<!-- class: section -->
 
 ## Program Objectives
 
@@ -47,6 +52,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 # Course Structure
 
 ---
+<!-- class: section -->
 
 ## Duration and Format
 
@@ -59,28 +65,30 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 | **Format** | Modular, instructor-led, lab-based |
 
 ---
+<!-- class: section -->
 
 ## 12 Modules at a Glance
 
-1. **Introduction to DNS Foundations**  
-2. **DNS Operations & Data Management**  
-3. **Server Types & Roles**  
-4. **DNS Software Platforms (BIND, Unbound, PowerDNS)**  
-5. **Advanced DNS Operations & Architecture**  
-6. **DNS Security Fundamentals**  
-7. **DNSSEC Implementation & Operations**  
-8. **Privacy & Encryption (DoT, DoH)**  
-9. **Registry Operations & EPP Protocol**  
-10. **COCCA Backend Systems**  
-11. **Monitoring & Incident Response**  
-12. **Emerging Technologies & Future DNS**
++ Introduction to DNS Foundations
++ DNS Operations & Data Management
++ Server Types & Roles
++ DNS Software Platforms (BIND, Unbound, PowerDNS)
++ Advanced DNS Operations & Architecture
++ DNS Security Fundamentals
++ DNSSEC Implementation & Operations
++ Privacy & Encryption (DoT, DoH)
++ Registry Operations & EPP Protocol
++ COCCA Backend Systems
++ Monitoring & Incident Response
++ Emerging Technologies & Future DNS
 
 ---
-
 <!-- class: section-divider -->
+
 # Learning Outcomes
 
 ---
+<!-- class: section -->
 
 ## Competency Areas
 
@@ -111,9 +119,16 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 </div>
 </div>
 
----
+<code>
 
-## Certification Pathways
+Too much white space here ... 
+
+</code>
+
+---
+<!-- class: section -->
+
+## Proposed Certification Pathways
 
 | Certificate | Coverage | Duration |
 |--------------|-----------|-----------|
@@ -128,6 +143,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 # Lab Environment & Infrastructure
 
 ---
+<!-- class: section -->
 
 ## Technical Requirements
 
@@ -142,6 +158,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 </div>
 
 ---
+<!-- class: section -->
 
 ## Participant Requirements
 
@@ -150,11 +167,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - DNS experience (recommended for advanced modules)  
 
 ---
-
 <!-- class: section-divider -->
+
 # Assessment & Certification
 
 ---
+<!-- class: section -->
 
 ## Evaluation Methods
 
@@ -164,6 +182,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - **Instructor Assessment** – continuous performance review  
 
 ---
+<!-- class: section -->
 
 ## Sample Assessment Criteria
 
@@ -175,11 +194,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | Participation & Engagement | Collaboration & feedback | 10% |
 
 ---
-
 <!-- class: section-divider -->
+
 # Quality Assurance & Standards
 
 ---
+<!-- class: section -->
 
 ## Industry Alignment
 
@@ -194,6 +214,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Participant feedback loop  
 
 ---
+<!-- class: section -->
 
 ## Success Metrics
 
@@ -205,11 +226,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | **Operational Impact** | Improved DNS infrastructure management within organizations |
 
 ---
-
 <!-- class: section-divider -->
+
 # Implementation Timeline
 
 ---
+<!-- class: section -->
 
 ## Development & Deployment Roadmap
 
@@ -227,11 +249,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
    - Continuous delivery cycle  
 
 ---
-
 <!-- class: section-divider -->
+
 # Course Outcomes & Benefits
 
 ---
+<!-- class: section -->
 
 ## For Participants
 
@@ -241,6 +264,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Access to reference materials & community  
 
 ---
+<!-- class: section -->
 
 ## For Organizations
 
@@ -250,11 +274,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Future-ready infrastructure strategies  
 
 ---
-
 <!-- class: section-divider -->
+
 # Thank You
 
 ---
+<!-- class: section -->
 
 ## Next Steps
 
@@ -266,10 +291,3 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 **Program Coordinator:** Terry Sweetser  
 **Email:** tcs@ieisi.org
 **Organization:** IEISI.ORG
-
----
-
-<footer>
-  Advanced DNS/DNSSEC Workshop – Overview Deck | <span>&copy; CC BY-NC-SA 4.0</span>
-</footer>
-

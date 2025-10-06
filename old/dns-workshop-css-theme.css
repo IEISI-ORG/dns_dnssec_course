@@ -1,27 +1,21 @@
-/* @theme ieisi-dns-workshop */
 /*
- * DNS Advanced Workshop Theme for Marp (Patched)
+ * DNS Advanced Workshop Theme for Marp
  * Professional presentation theme compliant with technical organization brand guidelines
  * Based on ICANN-style branding with blue and orange color palette
- * Patch includes: footer spacing fix, pagination placement, compact/dense utilities,
- * background variants, grid helpers, and global tightening to reduce white space.
  */
+
+/* @theme dns-workshop */
 
 /* === ROOT VARIABLES === */
 :root {
-  /* Accent (replaces prior orange) */
-  --accent-1: #00A4E0;   /* default: teal 500 */
-  --accent-2: #005A9C;   /* default: teal 700 */
-  --accent-contrast: #ffffff;
-
   /* Primary Brand Colors */
-  --primary-blue: #005A9C;        /* Deep blue - main brand color */
+  --primary-blue: #1e3a8a;        /* Deep blue - main brand color */
   --primary-orange: #ea580c;       /* Vibrant orange - accent color */
-  --secondary-blue: #00A4E0;       /* Medium blue - secondary elements */
-  --light-blue: #E6F4FA;           /* Light blue - backgrounds */
+  --secondary-blue: #3b82f6;       /* Medium blue - secondary elements */
+  --light-blue: #dbeafe;           /* Light blue - backgrounds */
   
   /* Supporting Colors */
-  --dark-navy: #0F2D46;            /* Dark navy - high contrast text */
+  --dark-navy: #0f172a;            /* Dark navy - high contrast text */
   --warm-gray: #6b7280;            /* Warm gray - body text */
   --light-gray: #f3f4f6;           /* Light gray - subtle backgrounds */
   --white: #ffffff;                /* Pure white */
@@ -51,9 +45,6 @@
   --space-10: 2.5rem;              /* 40px */
   --space-12: 3rem;                /* 48px */
   --space-16: 4rem;                /* 64px */
-
-  /* Footer height variable */
-  --footer-height: 44px;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -72,18 +63,17 @@ section {
   background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
   color: var(--dark-navy);
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  /* Patched: slightly smaller base size & leading to reduce whitespace */
-  font-size: var(--font-size-base); /* was var(--font-size-lg) */
-  line-height: 1.5;                 /* was 1.6 */
-  /* Patched: padding accounts for footer height to prevent clipping */
-  padding: var(--space-10) var(--space-10) calc(var(--space-10) + var(--footer-height));
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  padding-bottom: calc(var(--space-10) + var(--footer-height));
   position: relative;
 }
 
-/* === HEADER STRIPE === */
+/* === HEADER STYLES === */
 section::before {
   content: '';
   position: absolute;
@@ -91,24 +81,35 @@ section::before {
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-1) 100%);
+  background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-orange) 100%);
+}
+
+header {
+  background: var(--primary-blue);
+  color: var(--white);
+  margin: calc(-1 * var(--space-12)) calc(-1 * var(--space-12)) var(--space-8) calc(-1 * var(--space-12));
+  padding: var(--space-6) var(--space-12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
 }
 
 /* === TYPOGRAPHY === */
 h1 {
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-4xl);
   font-weight: 700;
-  color: var(--primary-white);
-  margin: 0 0 var(--space-6) 0; /* tightened */
+  color: var(--primary-blue);
+  margin: 0 0 var(--space-8) 0;
   line-height: 1.2;
   letter-spacing: -0.025em;
 }
 
 h2 {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-3xl);
   font-weight: 600;
-  color: var(--primary-white);
-  margin: var(--space-6) 0 var(--space-4) 0; /* tightened */
+  color: var(--primary-blue);
+  margin: var(--space-8) 0 var(--space-6) 0;
   line-height: 1.3;
   position: relative;
   padding-left: var(--space-6);
@@ -122,7 +123,7 @@ h2::before {
   transform: translateY(-50%);
   width: 4px;
   height: 100%;
-  background: var(--accent-1);
+  background: var(--primary-orange);
   border-radius: var(--radius-sm);
 }
 
@@ -130,7 +131,7 @@ h3 {
   font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--secondary-blue);
-  margin: var(--space-4) 0 var(--space-3) 0; /* tightened */
+  margin: var(--space-6) 0 var(--space-4) 0;
   line-height: 1.4;
 }
 
@@ -160,22 +161,29 @@ h6 {
   letter-spacing: 0.05em;
 }
 
-p { margin: 0 0 var(--space-3) 0; line-height: 1.6; }
+p {
+  margin: 0 0 var(--space-4) 0;
+  line-height: 1.7;
+}
 
 /* === LIST STYLES === */
 ul, ol {
-  margin: 0 0 var(--space-4) 0; /* tightened */
-  padding-left: var(--space-5);
+  margin: 0 0 var(--space-6) 0;
+  padding-left: var(--space-6);
 }
 
 li {
-  margin: 0 0 var(--space-1) 0; /* tightened */
+  margin: 0 0 var(--space-2) 0;
   line-height: 1.6;
 }
 
+ul li {
+  position: relative;
+}
+
 ul li::marker {
-  color: var(--accent-1);
-  font-size: 1.1em;
+  color: var(--primary-orange);
+  font-size: 1.2em;
 }
 
 ol li::marker {
@@ -197,12 +205,12 @@ code {
 pre {
   background: var(--dark-navy);
   color: var(--white);
-  padding: var(--space-5); /* tightened */
+  padding: var(--space-6);
   border-radius: var(--radius-lg);
   margin: var(--space-6) 0;
   overflow-x: auto;
   box-shadow: var(--shadow-lg);
-  border-left: 4px solid var(--accent-1);
+  border-left: 4px solid var(--primary-orange);
 }
 
 pre code {
@@ -228,24 +236,29 @@ table {
 th {
   background: var(--primary-blue);
   color: var(--white);
-  padding: var(--space-3) var(--space-4); /* tightened */
+  padding: var(--space-4) var(--space-6);
   text-align: left;
   font-weight: 600;
   font-size: var(--font-size-base);
 }
 
 td {
-  padding: var(--space-3) var(--space-4); /* tightened */
+  padding: var(--space-4) var(--space-6);
   border-bottom: 1px solid var(--light-gray);
   vertical-align: top;
 }
 
-tr:nth-child(even) td { background: var(--light-blue); }
-tr:hover td { background: var(--light-blue); }
+tr:nth-child(even) td {
+  background: var(--light-blue);
+}
+
+tr:hover td {
+  background: var(--light-blue);
+}
 
 /* === BLOCKQUOTE STYLES === */
 blockquote {
-  border-left: 4px solid var(--accent-1);
+  border-left: 4px solid var(--primary-orange);
   background: var(--light-blue);
   padding: var(--space-6);
   margin: var(--space-6) 0;
@@ -257,23 +270,26 @@ blockquote {
 blockquote::before {
   content: '"';
   font-size: var(--font-size-4xl);
-  color: var(--accent-1);
+  color: var(--primary-orange);
   position: absolute;
   top: var(--space-2);
   left: var(--space-4);
   line-height: 1;
 }
 
-blockquote p { margin-left: var(--space-8); margin-bottom: 0; }
+blockquote p {
+  margin-left: var(--space-8);
+  margin-bottom: 0;
+}
 
 /* === SPECIAL SECTION CLASSES === */
-section.title-slide, section[data-marpit-class~="title-slide"], .title-slide {
+.title-slide {
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
   color: var(--white);
   text-align: center;
   justify-content: center;
   align-items: center;
-  padding: var(--space-12); /* slightly tighter */
+  padding: var(--space-16);
 }
 
 .title-slide h1 {
@@ -284,45 +300,50 @@ section.title-slide, section[data-marpit-class~="title-slide"], .title-slide {
 }
 
 .title-slide h2 {
-  color: var(--accent-1);
+  color: var(--primary-orange);
   font-size: var(--font-size-2xl);
   font-weight: 400;
   margin-top: 0;
   margin-bottom: var(--space-8);
 }
 
-.title-slide h2::before { display: none; }
+.title-slide h2::before {
+  display: none;
+}
 
-section.section-divider, section[data-marpit-class~="section-divider"], .section-divider {
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+.section-divider {
+  background: linear-gradient(135deg, var(--primary-orange) 0%, #f97316 100%);
   color: var(--white);
   text-align: center;
   justify-content: center;
   align-items: center;
-  padding: var(--space-10); /* slightly tighter */
 }
 
 .section-divider h1 {
   color: var(--white);
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-4xl);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-section.lab-intro, section[data-marpit-class~="lab-intro"], .lab-intro {
+.lab-intro {
   background: linear-gradient(135deg, var(--success-green) 0%, #10b981 100%);
   color: var(--white);
 }
 
 .lab-intro h1,
 .lab-intro h2,
-.lab-intro h3 { color: var(--white); }
+.lab-intro h3 {
+  color: var(--white);
+}
 
-.lab-intro h2::before { background: var(--white); }
+.lab-intro h2::before {
+  background: var(--white);
+}
 
 /* === EMPHASIS CLASSES === */
 .highlight {
-  background: var(--accent-1);
-  color: var(--accent-contrast);
+  background: var(--primary-orange);
+  color: var(--white);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -367,12 +388,19 @@ section.lab-intro, section[data-marpit-class~="lab-intro"], .lab-intro {
   margin: var(--space-4) 0;
 }
 
-/* === FOOTER & PAGINATION FIX === */
+.compact {
+  padding: var(--space-6) var(--space-8);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+/* === FOOTER === */
 footer {
+  height: var(--footer-height);
   position: absolute;
   bottom: 0;
-  left: 0; right: 0;
-  height: var(--footer-height);
+  left: 0;
+  right: 0;
   background: var(--primary-blue);
   color: var(--white);
   padding: var(--space-3) var(--space-12);
@@ -380,33 +408,30 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
 }
 
-/* Ensure Marp page numbers sit above the footer and align consistently */
-section::after { content: attr(data-marpit-pagination);
+/* Page numbers */
+section::after {
   position: absolute;
-  right: 1rem;
   bottom: calc(var(--footer-height) + 0.5rem);
+  right: 1rem;
   font-size: var(--font-size-sm);
   color: var(--warm-gray);
-  z-index: 20;
-  /* In case Marp theme needs explicit content (usually set by Marp) */
-  /* content: attr(data-marpit-pagination); */
+  content: 'Slide ' attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
 }
 
-/* === TWO/THREE-COLUMN LAYOUT === */
+/* === TWO-COLUMN LAYOUT === */
 .columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-6); /* tighter */
+  gap: var(--space-8);
   align-items: start;
 }
 
 .columns-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-5); /* tighter */
+  gap: var(--space-6);
   align-items: start;
 }
 
@@ -419,103 +444,44 @@ img {
   margin: var(--space-4) 0;
 }
 
-/* === MARP-SPECIFIC THEME HOOK === */
-section[data-theme~="ieisi-dns-workshop"] {
+/* === MARP-SPECIFIC === */
+section[data-theme~="dns-workshop"] {
   --color-background: var(--white);
   --color-foreground: var(--dark-navy);
-  --color-highlight: var(--accent-1);
+  --color-highlight: var(--primary-orange);
   --color-dimmed: var(--warm-gray);
 }
 
 /* === RESPONSIVE ADJUSTMENTS === */
 @media (max-width: 768px) {
-  section { padding: var(--space-8) var(--space-8) calc(var(--space-8) + var(--footer-height)); }
-  h1 { font-size: var(--font-size-3xl); }
-  h2 { font-size: var(--font-size-2xl); }
-  .columns, .columns-3 { grid-template-columns: 1fr; gap: var(--space-4); }
+  section {
+    padding: var(--space-8);
+  }
+  
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .columns,
+  .columns-3 {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
 }
 
-/* === PRINT / PDF STYLES === */
+/* === PRINT STYLES === */
 @media print {
   section {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+  
   h1, h2, h3 {
     break-after: avoid;
     page-break-after: avoid;
   }
 }
-
-/* ========================= */
-/*      UTILITY CLASSES      */
-/* ========================= */
-
-/* Dense slide variant for wordy slides */
-.dense {
-  font-size: 0.95rem;
-  line-height: 1.45;
-  padding: var(--space-8) var(--space-8) calc(var(--space-8) + var(--footer-height));
-}
-
-/* Tighten heading spacing on demand */
-.tight h1 { margin-bottom: var(--space-4); }
-.tight h2 { margin: var(--space-4) 0 var(--space-3) 0; }
-.tight h3 { margin: var(--space-3) 0 var(--space-2) 0; }
-
-/* Compact list spacing */
-.compact-list ul, .compact-list ol {
-  margin-bottom: var(--space-3);
-  padding-left: var(--space-4);
-}
-.compact-list li { margin-bottom: 0.25rem; }
-
-/* Compact table variant */
-.table-compact th, .table-compact td { padding: var(--space-2) var(--space-3); }
-
-/* Optional per-slide compact baseline */
-.compact {
-  padding: var(--space-8) var(--space-8) calc(var(--space-8) + var(--footer-height));
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-}
-
-/* Optional: hide footer on a specific slide to gain extra space */
-.no-footer > footer { display: none; }
-.no-footer { padding-bottom: var(--space-10); } /* remove extra bottom padding when footer hidden */
-
-/* Background variants to reduce “big white” feel */
-.alt-bg {
-  background:
-    radial-gradient(1200px 600px at 20% -10%, var(--light-blue) 0%, #fff 60%),
-    linear-gradient(135deg, #fff 0%, var(--light-gray) 100%);
-}
-
-.blue-wash {
-  background: linear-gradient(180deg, #fff 0%, var(--light-blue) 85%);
-}
-
-.panel {
-  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-}
-
-/* Grid helpers */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-5); }
-@media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; gap: var(--space-4); } }
-
-
-/* === ACCENT UTILITIES === */
-/* Set globally on deck via front-matter: class: accent-teal (or per slide via <!-- _class: accent-teal -->) */
-.accent-teal  { --accent-1: #00A4E0; --accent-2: #005A9C; --accent-contrast: #ffffff; }
-.accent-cyan  { --accent-1: #06b6d4; --accent-2: #0e7490; --accent-contrast: #ffffff; }
-.accent-blue  { --accent-1: #3b82f6; --accent-2: #1d4ed8; --accent-contrast: #ffffff; }
-.accent-violet{ --accent-1: #8b5cf6; --accent-2: #6d28d9; --accent-contrast: #ffffff; }
-.accent-emerald{--accent-1: #10b981; --accent-2: #047857; --accent-contrast: #ffffff; }
-.accent-slate { --accent-1: #64748b; --accent-2: #334155; --accent-contrast: #ffffff; }
-
-/* Accent preset matching ICANN-inspired palette */
-.accent-icann { --accent-1: #00A4E0; --accent-2: #005A9C; --accent-contrast: #ffffff; }
