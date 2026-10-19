@@ -1,7 +1,7 @@
 # Advanced DNS/DNSSEC Workshop Plan
 
 ## Overview
-This comprehensive **6-day modular training program** builds upon established curricula from ICANN, APNIC, and NSRC to provide complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
+This comprehensive **modular training program** (six full days plus a Day 7 morning) builds upon established curricula from ICANN, APNIC, and NSRC to provide complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
 
 **Course Structure (2 modules per day):**
 - **Day 1:** DNS Fundamentals - Introduction and Operations (Modules 1-2)
@@ -9,7 +9,8 @@ This comprehensive **6-day modular training program** builds upon established cu
 - **Day 3:** Advanced Operations and Security Fundamentals (Modules 5-6)
 - **Day 4:** DNSSEC and DNS Privacy Technologies (Modules 7-8)
 - **Day 5:** Registry Operations - EPP and COCCA Systems (Modules 9-10)
-- **Day 6:** Monitoring, Emerging Technologies, and Final Assessment (Modules 11-12)
+- **Day 6:** Monitoring and Emerging Technologies (Modules 11-12); course conclusion at the end of the day
+- **Day 7 (morning only):** Final Project
 
 **Daily Schedule:**
 - **Session 1:** 09:00-10:30 (Theory Module A)
@@ -19,6 +20,23 @@ This comprehensive **6-day modular training program** builds upon established cu
 - **Session 3:** 14:00-15:30 (Theory Module B)
 - **Break:** 15:30-16:00
 - **Session 4:** 16:00-17:30 (Practical Module B)
+
+### Programme Facts
+This section is the reference for programme-level facts. The scope summary, overview deck, assessment plan and slide deck plan follow it; change facts here first.
+
+| Item | Value |
+|------|-------|
+| Length | 6 full days + Day 7 morning (6.5 days) |
+| Contact hours | 39: Days 1-6 at 4 × 90 min (36 h), Day 7 at 2 × 90 min (3 h) |
+| Modules | 12, each 90 min theory + 90 min practical |
+| Class size | Maximum 20 participants |
+| Delivery options | A: Days 1-2 · B: Days 3-6 + Day 7 · C: Days 3-4 (see below) |
+
+**Assessment timing** (assessment content is in `dns_assessment_plan.md`):
+- **Practical assessments** are graded lab work. The instructor assesses the day's Appendix A lab exercises against the assessment tasks; they take no extra time.
+- **Knowledge checks**, the **Day 3 mid-course assessment** and the **Day 5 case study** take the last 15-30 minutes of Session 3 (theory).
+- **Day 6:** the course conclusion (30 min) takes the end of the Module 12 practical session; see Appendix A, Module 12.
+- **Day 7:** Final Project in teams of 3-4. Session 1 (09:00-10:30): design and build. Session 2 (11:00-12:30): 15-minute team presentations and close. With 20 participants that is 5-7 teams, 75-105 minutes; with more than 5 teams, presentations start during Session 1.
 
 ---
 
@@ -42,9 +60,9 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ---
 
-### Option B: "Advanced Registry Operations" (4 Days)
+### Option B: "Advanced Registry Operations" (4.5 Days)
 **Target Audience:** Registry operators, registrar technical staff, and DNS professionals working with domain registration systems
-**Duration:** Days 3-6 of the full program
+**Duration:** Days 3-6 of the full program, plus the Day 7 Final Project
 **Modules Covered:** 5-12
 
 **Learning Outcomes:**
@@ -80,12 +98,12 @@ The modular design allows for flexible course delivery tailored to specific audi
 ### Progressive Learning Path:
 1. **Start with Basic DNS Workshop** (2 days) - Build foundation
 2. **Follow with DNS Security Intensive** (2 days) - Add security expertise
-3. **Complete with Advanced Registry Operations** (4 days) - Full professional competency
+3. **Complete with Advanced Registry Operations** (4.5 days) - Full professional competency
 
 ### Specialized Tracks:
 - **Technical Operations Track:** Basic DNS → Advanced Registry Operations
 - **Security Focus Track:** Basic DNS → DNS Security Intensive
-- **Complete Professional Track:** Full 6-day program
+- **Complete Professional Track:** Full program (6.5 days)
 
 ### Organizational Training Options:
 - **Network Team Training:** Basic DNS Workshop for entire team
@@ -338,8 +356,6 @@ The modular design allows for flexible course delivery tailored to specific audi
   - Feature comparison in real scenarios
 
 ---
-
-## Module 5: Advanced DNS Operations and Architecture
 
 ## Module 5: Advanced DNS Operations and Architecture
 **Duration:** 90 minutes theory + 90 minutes practical
@@ -631,8 +647,8 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Assessment and Certification
 - **Daily Assessment:** Practical lab completion and competency demonstration
 - **Mid-course Check:** Day 3 practical assessment covering fundamentals
-- **Final Project:** Day 6 - Design and implement a complete DNS infrastructure solution
-- **Peer Review:** Presentation of implemented solutions to group
+- **Final Project:** Day 7 morning, in teams - Design and implement a complete DNS infrastructure solution
+- **Peer Review:** Team presentations of implemented solutions to the group
 - **Written Examination:** Comprehensive test covering all modules (optional certification track)
 
 ## Required Equipment and Environment
@@ -643,7 +659,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Internet Access:** Required for accessing external DNS resources and documentation
 
 ## Workshop Logistics
-- **Duration:** 6 consecutive days (Monday-Saturday recommended)
+- **Duration:** 6 full days plus a Day 7 morning (see Programme Facts)
 - **Class Size:** Maximum 20 participants for effective hands-on instruction
 - **Equipment:** Participants must bring laptops capable of running SSH clients
 - **Materials:** All lab exercises, documentation, and software provided
@@ -1240,7 +1256,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Test IPv6 DNS resolution
 4. Analyze IPv6 vs dual-stack performance
 
-#### Lab 12.2: Experimental DNS Technologies (30 minutes)
+#### Lab 12.2: Experimental DNS Technologies (15 minutes)
 **Objective:** Explore cutting-edge DNS technologies
 **Resources Needed:**
 - DNS-over-QUIC experimental implementations
@@ -1252,7 +1268,12 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Evaluate new DNS server software
 4. Assess migration considerations
 
-#### Lab 12.3: Future-Ready Architecture Design (15 minutes)
+#### Course Conclusion (30 minutes)
+Closing deck: course recap, Final Project briefing and team allocation, certificates and next steps.
+See "Final Assessment and Course Conclusion" in `dns_slide_deck_plan.md`.
+
+#### Lab 12.3: Future-Ready Architecture Design (moved to Day 7)
+This exercise now opens the Day 7 Final Project; each team's design feeds its project.
 **Objective:** Design DNS architecture for future requirements
 **Resources Needed:**
 - Architecture design tools
