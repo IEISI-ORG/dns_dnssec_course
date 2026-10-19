@@ -4,6 +4,7 @@ theme: dns-workshop
 class: title-slide
 paginate: true
 footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
+class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
@@ -13,13 +14,13 @@ footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
 *Building Enterprise-Grade DNS Infrastructure*
 
 ---
-
 <!-- class: section-divider -->
 
 # Module 1
 ## Introduction to DNS Foundations and Concepts
 
 ---
+<!-- class: section -->
 
 ## Learning Objectives
 
@@ -550,6 +551,7 @@ dig @1.1.1.1 example.com
 - **Certification**: DNS Professional credentials
 
 ---
+<!-- class: section -->
 
 ## Module Summary
 
@@ -570,6 +572,7 @@ dig @1.1.1.1 example.com
 - Email infrastructure DNS setup
 
 ---
+<!-- class: section -->
 
 ## Questions & Discussion
 
@@ -599,7 +602,6 @@ dig @1.1.1.1 example.com
 </div>
 
 ---
-
 <!-- class: title-slide -->
 
 # Thank You
@@ -609,3 +611,4 @@ dig @1.1.1.1 example.com
 *DNS Foundations Complete*
 
 Ready for hands-on practice?
+
