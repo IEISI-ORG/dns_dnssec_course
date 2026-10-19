@@ -1,8 +1,6 @@
-
----
-<!-- class: section-divider -->
 # License
----
+
+Copyright © Terry Sweetser (IEISI.ORG)
 
 ## Creative Commons Attribution–NonCommercial–ShareAlike 4.0
 
@@ -20,3 +18,4 @@ Under the following terms:
 - **NonCommercial** — you may not use the material for commercial purposes  
 - **ShareAlike** — if you remix or build upon the material, you must distribute your contributions under the same license
 
+Full legal code: <https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode>
