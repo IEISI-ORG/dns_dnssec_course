@@ -433,34 +433,39 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall DNSSEC key types (KSK, ZSK) and their purposes
-- Identify DNSSEC resource record types (DNSKEY, RRSIG, NSEC, DS)
+- Recall DNSSEC key types (KSK, ZSK, CSK) and their purposes
+- Identify DNSSEC resource record types (DNSKEY, RRSIG, DS, NSEC, NSEC3, NSEC3PARAM, CDS, CDNSKEY)
 
 **Comprehension (Understand):**
-- Explain the DNSSEC validation process and chain of trust
-- Describe key rollover procedures and timing considerations
+- Explain the DNSSEC validation process, the chain of trust and the four validation outcomes
+- Describe key rollover methods and why their timing depends on TTLs and propagation delays
 
 **Application (Apply):**
-- Sign DNS zones using DNSSEC
-- Configure recursive resolvers for DNSSEC validation
+- Choose signing and DS digest algorithms from the IANA registry (RFC 9904) and NSEC3 settings per RFC 9276
+- Sign DNS zones manually and with BIND `dnssec-policy`
+- Configure recursive resolvers (BIND, Unbound) for DNSSEC validation and diagnose failures
 
 **Synthesis (Create):**
-- Develop DNSSEC key management policies
+- Develop DNSSEC key management policies (RFC 6841 practice statement)
 - Design DNSSEC deployment strategies for complex organisations
 
 ### Theory Content
-- DNSSEC cryptographic foundations
-- Key Signing Key (KSK) and Zone Signing Key (ZSK) management
-- DNSSEC validation algorithm and chain of trust
-- Key rollover strategies (pre-published, double signature)
+- DNSSEC cryptographic foundations, record types and the chain of trust
+- Trust anchors and the root KSK rollover (KSK-2024 signing since 11 October 2026; KSK-2017 revoked 11 January 2027, removed 22 March 2027)
+- Algorithm selection from the IANA registry (RFC 9904, RFC 9905); DS digest types
+- NSEC and NSEC3 (RFC 9276: iterations 0, empty salt); compact denial (RFC 9824)
+- KSK, ZSK and CSK management; key protection (HSM, offline KSK)
+- Key rollover methods (pre-publish, double-KSK, double-DS) and timing (RFC 7583); emergency and algorithm rollovers
+- Automated signing with `dnssec-policy` (KASP); `auto-dnssec` was removed in BIND 9.20; migrating signed zones without an unplanned rollover
+- DS automation with CDS/CDNSKEY (RFC 7344, 8078, 9615, 9975); multi-signer (RFC 8901)
+- Validation troubleshooting: Extended DNS Errors (RFC 8914), `delv`, negative trust anchors (RFC 7646)
 - DNSSEC policy framework development
 
 ### Practical Lab
-- Manual zone signing with BIND's dnssec-keygen and dnssec-signzone
-- Automated signing with BIND inline-signing
-- Configure DNSSEC validation on recursive resolvers
-- Perform emergency key rollover simulation
-- DNSSEC troubleshooting exercises
+- Manual zone signing with BIND's `dnssec-keygen` and `dnssec-signzone`
+- Automated signing with `dnssec-policy`, including DS submission from CDS
+- Configure DNSSEC validation on recursive resolvers and troubleshoot broken zones
+- Perform ZSK and KSK rollovers, including the DS change at the parent
 
 ---
 
@@ -1000,48 +1005,79 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 7: DNSSEC Implementation - Lab Requirements
 
+All steps below were tested on BIND 9.20.29 and Unbound 1.26.1 (Debian 13 packages).
+
 ### Lab Environment Setup
-- **Participant VMs:** 3 Ubuntu server VMs per participant
-- **Software:** BIND 9 with DNSSEC support (dnssec-keygen, dnssec-signzone), ldns-utils (drill) for verification
-- **PKI Infrastructure:** Key generation and management tools
+- **Participant VMs:** 2 Debian 13 VMs per participant: an authoritative server for `teamNN.example` and `manualNN.example`, and a validating resolver
+- **Registry server (instructor):** hosts the signed `example.` zone, the lab's parent "TLD"; adds participants' DS records; also hosts two deliberately broken zones, `expired.example` (expired RRSIGs) and `wrongds.example` (DS matching no DNSKEY)
+- **Software:** BIND 9.20 (bind9, bind9-utils, bind9-dnsutils); Unbound as an optional second resolver
+- **Trust anchor:** `example.` has no DS in the real root, so each resolver gets `trust-anchors { example. static-ds ...; };` (the instructor hands out the DS) alongside `dnssec-validation auto;`
+- **Lab policy:** short TTLs and delays so that rollovers take minutes:
+
+```
+dnssec-policy "lab" {
+    keys {
+        ksk lifetime unlimited algorithm ecdsap256sha256;
+        zsk lifetime P30D algorithm ecdsap256sha256;
+    };
+    nsec3param iterations 0 optout no salt-length 0;
+    dnskey-ttl 60;
+    max-zone-ttl 60;
+    publish-safety 30;
+    retire-safety 30;
+    zone-propagation-delay 30;
+    parent-ds-ttl 60;
+    parent-propagation-delay 30;
+    signatures-validity PT30M;
+    signatures-validity-dnskey PT30M;
+    signatures-refresh PT25M;
+    signatures-jitter PT1M;
+};```
+
+Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured): CDS/CDNSKEY appear about 2 minutes after first signing, a ZSK rollover completes in about 7 minutes, and a KSK rollover completes about 2 minutes after the DS swap is confirmed. The short signature validity is for the lab only: a stopped signer makes the zone bogus within 30 minutes.
 
 ### Lab Exercises
 
-#### Lab 7.1: DNSSEC Zone Signing (45 minutes)
-**Objective:** Manually sign DNS zones with DNSSEC
-**Resources Needed:**
-- Unsigned zone files
-- dnssec-keygen and dnssec-signzone utilities
-- Key storage and management procedures
+#### Lab 7.1: Sign a Zone by Hand (25 minutes)
+**Objective:** Manually sign a DNS zone with DNSSEC
 **Exercise Steps:**
-1. Generate KSK and ZSK keys
-2. Sign zone files manually
-3. Publish DNSKEY records
-4. Verify signed zone integrity
+1. Create the unsigned zone `manualNN.example`
+2. Generate a KSK and a ZSK: `dnssec-keygen -a ECDSAP256SHA256 -f KSK manualNN.example`, then without `-f KSK`
+3. Sign: `dnssec-signzone -S -3 - -H 0 -o manualNN.example db.manualNN.example`
+4. Check with `dnssec-verify` and `named-checkzone`; load the `.signed` file
+5. Query with `dig +dnssec +multi` and identify DNSKEY, RRSIG and NSEC3 records
+6. Send `dsset-manualNN.example.` to the registry
+**Success criteria:** "Zone fully signed" from `dnssec-verify`; the DS is published in `example.`
 
-#### Lab 7.2: DNSSEC Validation Configuration (30 minutes)
-**Objective:** Configure DNSSEC validation on recursive resolvers
-**Resources Needed:**
-- Recursive DNS server (BIND/Unbound)
-- Trust anchor configuration
-- DNSSEC validation testing tools
+#### Lab 7.2: Sign with `dnssec-policy` (20 minutes)
+**Objective:** Sign a zone automatically and submit its DS from CDS
 **Exercise Steps:**
-1. Configure trust anchors
-2. Enable DNSSEC validation
-3. Test validation with signed/unsigned zones
-4. Troubleshoot validation failures
+1. Add the `lab` policy and `dnssec-policy "lab";` to the `teamNN.example` zone
+2. Add `parental-agents` pointing at the registry server (a `remote-servers` list)
+3. Reload and read `rndc dnssec -status teamNN.example`
+4. Wait for CDS/CDNSKEY (`dig teamNN.example CDS +short`)
+5. The registry publishes a DS built from the CDS record
+6. Tell `named` the DS is published: `rndc dnssec -checkds -key <KSK id> published teamNN.example` (with `parental-agents`, `named` otherwise re-checks only hourly)
+**Success criteria:** the parent's DS matches the CDS; `named` logged `checkds DS for key ... seen published`; the KSK's `ds:` state reaches `omnipresent` (note: `ds: rumoured` only means the CDS is published)
 
-#### Lab 7.3: DNSSEC Key Rollover Simulation (15 minutes)
-**Objective:** Perform DNSSEC key rollover procedures
-**Resources Needed:**
-- Signed zones with existing keys
-- Automated key rollover scripts
-- Timing and scheduling tools
+#### Lab 7.3: Validate and Troubleshoot (25 minutes)
+**Objective:** Configure DNSSEC validation and diagnose validation failures
 **Exercise Steps:**
-1. Plan key rollover timeline
-2. Execute ZSK rollover procedure
-3. Simulate emergency KSK rollover
-4. Verify rollover success and timing
+1. Configure the resolver: `dnssec-validation auto;`, the `example.` trust anchor, and a `static-stub` zone for `example` pointing at the registry server
+2. Confirm the AD flag for `isc.org` and `www.teamNN.example`, and SERVFAIL for `dnssec-failed.org`
+3. Diagnose `expired.example` and `wrongds.example` with `dig +cd`, Extended DNS Errors, `delv @registry -a anchors.conf +root=example +vtrace` (pointed at the registry, which holds both the broken zones and their DS) and the resolver log
+4. Add and remove a negative trust anchor (`rndc nta`)
+**Success criteria:** cause and fix stated for each broken zone
+
+#### Lab 7.4: Roll the Keys (20 minutes)
+**Objective:** Perform ZSK and KSK rollovers without breaking validation
+**Exercise Steps:**
+1. ZSK: `rndc dnssec -rollover -key <id> teamNN.example`; follow the key states
+2. KSK: `rndc dnssec -rollover -key <id> teamNN.example`; wait for the CDS to show the new key
+3. The registry replaces the DS
+4. Confirm to `named`: `rndc dnssec -checkds -key <new> published teamNN.example` and `-key <old> withdrawn`
+5. Query through the resolver throughout; discuss emergency KSK rollover with production timings
+**Success criteria:** one KSK and one ZSK remain; the DS matches the new KSK; the AD flag never dropped
 
 ---
 

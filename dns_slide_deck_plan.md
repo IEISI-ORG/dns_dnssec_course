@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~690 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~695 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -716,116 +716,51 @@
 
 ## Module 7: DNSSEC Implementation and Operations
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 65-70
+**Slides:** 70 (64 theory, 6 lab); deck: `modules/module07-dnssec-implementation.marp.md`
 
-### DNSSEC Fundamentals (15 slides)
-1. **DNSSEC Overview and Motivation**
-   - DNS security vulnerabilities
-   - DNSSEC design objectives
-   - Cryptographic protection mechanisms
-   - Trust model establishment
+### Opening (5 slides)
+- Title, module overview, learning objectives
+- What changed recently: `dnssec-policy` replaces `auto-dnssec` (BIND 9.20); IANA algorithm registry (RFC 9904) and SHA-1 deprecation (RFC 9905); NSEC3 per RFC 9276; CDS/CDNSKEY; root KSK-2024 signing since 11 October 2026
+- Agenda (theory and lab)
 
-2. **DNSSEC Cryptographic Foundations**
-   - Public key cryptography primer
-   - Digital signature concepts
-   - Hash functions in DNSSEC
-   - Cryptographic algorithm choices
+### 1. DNSSEC Fundamentals (16 slides)
+- Why DNSSEC; what it gives and does not give; signing data, not the channel
+- Public-key cryptography and where hashes appear
+- Record types: DNSKEY, RRSIG, DS, NSEC, NSEC3, NSEC3PARAM, CDS, CDNSKEY; anatomy of DNSKEY, RRSIG and DS from real lab output
+- Chain of trust; trust anchors and the root KSK rollover (KSK-2024, key tag 38696, signing since 11 October 2026; KSK-2017 revoked 11 January 2027; RFC 5011, RFC 9718)
+- Validation steps and outcomes (RFC 4035 §4.3); AD and CD bits
+- NSEC, zone walking, aggressive caching (RFC 8198), compact denial (RFC 9824); NSEC3 and RFC 9276 parameters (iterations 0, empty salt, opt-out only for large sparse zones); validator iteration limits
 
-3. **DNSSEC Resource Record Types**
-   - DNSKEY records and key types
-   - RRSIG (Resource Record Signature)
-   - NSEC and NSEC3 for negative responses
-   - DS (Delegation Signer) records
+### 2. Key Management (13 slides)
+- KSK, ZSK and CSK
+- Algorithm choice from the IANA registry (8, 13 and 15 RECOMMENDED; 5 and 7 MUST NOT for signing); why algorithm 13
+- DS digest types (SHA-256; SHA-1 MUST NOT)
+- Key generation; key protection (permissions, HSM via `key-store`, offline KSK, backups)
+- Whether and when to roll; ZSK pre-publish; KSK double-KSK and double-DS
+- Rollover timing (RFC 7583) mapped to `dnssec-policy` options; emergency and algorithm rollovers
 
-4. **Chain of Trust Establishment**
-   - Root zone signing
-   - Trust anchor distribution
-   - Delegation verification process
-   - Validation algorithm walkthrough
+### 3. Signing Zones (11 slides)
+- Manual signing: `dnssec-keygen`, `dnssec-signzone -S -3 - -H 0`, `dnssec-verify`
+- Automatic signing with `dnssec-policy` (KASP): the built-in `default` policy, a custom policy, `rndc dnssec -status` and key states
+- CDS/CDNSKEY and DS automation (RFC 7344, 8078, 9615, 9975); `parental-agents`, `checkds` and `rndc dnssec -checkds`
+- Multi-signer (RFC 8901) and other signers (Knot DNS, PowerDNS, OpenDNSSEC)
 
-### DNSSEC Key Management (18 slides)
-5. **Key Types and Purposes**
-   - Zone Signing Key (ZSK) functions
-   - Key Signing Key (KSK) roles
-   - Key separation benefits
-   - Combined key strategies
+### 4. Validation and Troubleshooting (8 slides)
+- BIND: `dnssec-validation auto`, `trust-anchors` (static and initial); Unbound: `auto-trust-anchor-file`, `trust-anchor`, `ede: yes`
+- Testing a validator (AD flag, `dnssec-failed.org`, `+cd`)
+- Troubleshooting workflow: `+cd`, Extended DNS Errors (RFC 8914), `delv +vtrace`, resolver logs, negative trust anchors (RFC 7646)
+- Common failures and worked examples: expired signatures, DS matching no key
 
-6. **Key Generation Procedures**
-   - Cryptographic strength requirements
-   - Key size considerations
-   - Algorithm selection criteria
-   - Secure key generation practices
+### 5. Operations and Policy (5 slides)
+- Deployment planning and safe rollback (remove the DS first)
+- Monitoring; operational pitfalls
+- A DNSSEC policy and practice statement (RFC 6841)
 
-7. **Key Storage and Protection**
-   - Hardware Security Module (HSM) usage
-   - Key backup and recovery
-   - Access control mechanisms
-   - Offline key storage strategies
+### Practical Lab (6 slides)
+- Lab environment; Labs 7.1-7.4 (sign by hand, sign with `dnssec-policy`, validate and troubleshoot, roll the keys)
 
-8. **Key Rollover Procedures**
-   - ZSK rollover methodology
-   - KSK rollover complexity
-   - Pre-published key method
-   - Double signature method
-   - Emergency rollover procedures
-
-9. **Key Timing and Scheduling**
-   - Rollover timeline planning
-   - TTL and propagation delays
-   - Automated vs manual rollover
-   - Monitoring and validation
-
-### DNSSEC Zone Signing Process (12 slides)
-10. **Manual Zone Signing**
-    - dnssec-keygen usage
-    - dnssec-signzone process
-    - Zone signing verification
-    - Signed zone deployment
-
-11. **Automated Signing Solutions**
-    - BIND inline signing
-    - OpenDNSSEC overview
-    - Policy-based automation
-    - Signing system monitoring
-
-12. **NSEC vs NSEC3 Considerations**
-    - NSEC record functionality
-    - Zone enumeration concerns
-    - NSEC3 hashing benefits
-    - Performance implications
-
-### DNSSEC Validation (10 slides)
-13. **Validator Configuration**
-    - Trust anchor configuration
-    - Validation algorithm setup
-    - Negative validation handling
-    - Performance considerations
-
-14. **Validation Troubleshooting**
-    - Common validation failures
-    - Debugging tools and techniques
-    - Signature verification issues
-    - Chain of trust breaks
-
-### DNSSEC Operational Considerations (8 slides)
-15. **Deployment Planning**
-    - Risk assessment procedures
-    - Rollback planning
-    - Testing methodologies
-    - Stakeholder communication
-
-16. **Monitoring and Maintenance**
-    - Signature expiration monitoring
-    - Key rollover tracking
-    - Validation statistics
-    - Performance impact assessment
-
-### Practical Lab Introduction (5 slides)
-17. **DNSSEC Implementation Workshop**
-    - Zone signing exercises
-    - Validation configuration
-    - Key rollover simulation
-    - Troubleshooting scenarios
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1429,16 +1364,16 @@
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
 | Module 6: DNS Security | 45 | 5 | 50 |
-| Module 7: DNSSEC Implementation | 60 | 5 | 65 |
+| Module 7: DNSSEC Implementation | 64 | 6 | 70 |
 | Module 8: DNS Privacy | 40 | 5 | 45 |
 | Module 9: Registry Operations | 50 | 5 | 55 |
 | Module 10: CoCCA Systems | 45 | 5 | 50 |
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **589** | **56** | **645** |
+| **Total Core Content** | **593** | **57** | **650** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **690** |
+| **Grand Total** | | | **695** |
 
 ---
 
