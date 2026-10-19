@@ -104,7 +104,8 @@
     - IPv6 transition challenges
 
 18. **DNS and Network Protocols**
-    - UDP vs TCP for DNS
+    - UDP and TCP: TCP support is mandatory (RFC 7766, RFC 9210)
+    - EDNS(0) and response size (RFC 6891); avoiding IP fragmentation (RFC 9715)
     - Port 53 significance
     - Protocol selection criteria
 
@@ -186,9 +187,9 @@
 
 10. **Text Records (TXT)**
     - General purpose text storage
-    - SPF (Sender Policy Framework) records
-    - DKIM (DomainKeys Identified Mail) signatures
-    - DMARC (Domain-based Message Authentication) policies
+    - SPF (Sender Policy Framework) TXT records (RFC 7208; the SPF RR type is deprecated)
+    - DKIM (DomainKeys Identified Mail) public keys in TXT at `_domainkey` (RFC 6376)
+    - DMARC (Domain-based Message Authentication, Reporting, and Conformance) policies in TXT at `_dmarc` (RFC 9989)
 
 11. **Service Records (SRV)**
     - Service discovery mechanism
@@ -874,7 +875,7 @@
 7. **DoH Protocol Specification**
    - RFC 8484 implementation
    - HTTP/2 and HTTP/3 usage
-   - JSON and wire format options
+   - Wire format only (`application/dns-message`, RFC 8484); JSON APIs are vendor-specific
    - URL template structures
 
 8. **DoH Server Deployment**

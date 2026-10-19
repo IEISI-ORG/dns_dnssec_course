@@ -196,11 +196,11 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Zone concepts: authoritative zones, delegation, glue records
 - DNS record types in detail:
   - A, AAAA (address records)
-  - CNAME, ALIAS (canonical names)
+  - CNAME (canonical names); the zone-apex problem: vendor ALIAS/ANAME records vs. standard HTTPS/SVCB records (RFC 9460)
   - MX (mail exchange)
   - NS (name server)
   - PTR (reverse DNS)
-  - TXT, SPF, DKIM, DMARC (text and email security)
+  - TXT, including the TXT-based email policies SPF (RFC 7208), DKIM (RFC 6376) and DMARC (RFC 9989); the SPF RR type is deprecated
   - SRV (service records)
   - CAA (certificate authority authorisation)
 - Zone file syntax and best practices
@@ -804,7 +804,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 **Exercise Steps:**
 1. Configure MX records for mail routing
 2. Implement SPF records for sender authentication
-3. Add DKIM signatures to DNS
+3. Publish DKIM public keys in DNS
 4. Configure DMARC policy records
 
 ---
@@ -1105,7 +1105,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 #### Lab 9.1: EPP Server Configuration (45 minutes)
 **Objective:** Set up and configure EPP server
 **Resources Needed:**
-- EPP server software (CoCCA or alternative)
+- EPP server software (CoCCA, or the open-source FRED registry from CZ.NIC; Nomulus is also open source but runs on Google Cloud)
 - Database backend
 - TLS certificates for EPP
 **Exercise Steps:**
