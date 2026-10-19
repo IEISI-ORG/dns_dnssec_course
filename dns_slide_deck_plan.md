@@ -1,7 +1,7 @@
 # Advanced DNS/DNSSEC Workshop - Complete Slide Deck Plan
 
 ## Overall Presentation Structure
-- **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Programme Facts in `dns_dnssec_workshop_plan.md`)
+- **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
 - **Estimated Total Slides:** ~690 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
@@ -30,7 +30,7 @@
 ### DNS History & Evolution (8 slides)
 4. **The Pre-DNS Era**
    - HOSTS.TXT file limitations
-   - Centralized management problems
+   - Centralised management problems
    - Scalability challenges
 
 5. **Birth of DNS (1980s)**
@@ -50,10 +50,10 @@
    - Internet infrastructure role
 
 8. **DNS Namespace Hierarchy**
-   - Tree structure visualization
+   - Tree structure visualisation
    - Root domain concept
    - Top-level domains (TLDs)
-   - Second-level and subdomain organization
+   - Second-level and subdomain organisation
 
 9. **DNS Components Overview**
    - Domain names and labels
@@ -104,7 +104,8 @@
     - IPv6 transition challenges
 
 18. **DNS and Network Protocols**
-    - UDP vs TCP for DNS
+    - UDP and TCP: TCP support is mandatory (RFC 7766, RFC 9210)
+    - EDNS(0) and response size (RFC 6891); avoiding IP fragmentation (RFC 9715)
     - Port 53 significance
     - Protocol selection criteria
 
@@ -142,8 +143,8 @@
    - Glue records necessity and function
 
 3. **Zone Types Classification**
-   - Primary (master) zones
-   - Secondary (slave) zones
+   - Primary zones (legacy BIND keyword: `type master`)
+   - Secondary zones (legacy BIND keyword: `type slave`)
    - Stub zones
    - Forward zones
 
@@ -153,7 +154,7 @@
    - NOTIFY mechanisms
    - Security considerations
 
-### DNS Record Types Comprehensive Coverage (20 slides)
+### DNS Record Types (20 slides)
 5. **Address Records (A/AAAA)**
    - IPv4 address mapping (A records)
    - IPv6 address mapping (AAAA records)
@@ -186,9 +187,9 @@
 
 10. **Text Records (TXT)**
     - General purpose text storage
-    - SPF (Sender Policy Framework) records
-    - DKIM (DomainKeys Identified Mail) signatures
-    - DMARC (Domain-based Message Authentication) policies
+    - SPF (Sender Policy Framework) TXT records (RFC 7208; the SPF RR type is deprecated)
+    - DKIM (DomainKeys Identified Mail) public keys in TXT at `_domainkey` (RFC 6376)
+    - DMARC (Domain-based Message Authentication, Reporting, and Conformance) policies in TXT at `_dmarc` (RFC 9989)
 
 11. **Service Records (SRV)**
     - Service discovery mechanism
@@ -196,7 +197,7 @@
     - Common SRV implementations
     - Microsoft Active Directory usage
 
-12. **Certificate Authority Authorization (CAA)**
+12. **Certificate Authority Authorisation (CAA)**
     - SSL/TLS certificate control
     - CAA record format
     - Certificate authority restrictions
@@ -253,7 +254,7 @@
 
 ---
 
-## Module 3: DNS Server Types - Recursive, Authoritative, and Specialized Roles
+## Module 3: DNS Server Types - Recursive, Authoritative, and Specialised Roles
 **Duration:** 90 minutes theory + 90 minutes practical
 **Estimated Slides:** 55-60
 
@@ -271,10 +272,10 @@
    - Client interface responsibilities
 
 3. **Authoritative Server Roles**
-   - Primary (master) server functions
-   - Secondary (slave) server operations
-   - Hidden master architectures
-   - Stealth slave configurations
+   - Primary server functions
+   - Secondary server operations
+   - Hidden primary architectures
+   - Stealth secondary configurations
 
 ### DNS Query Resolution Process (12 slides)
 4. **Step-by-Step Query Resolution**
@@ -284,7 +285,7 @@
    - TLD server interaction
    - Authoritative server response
 
-5. **Caching Strategies and Optimization**
+5. **Caching Strategies and Optimisation**
    - Positive caching mechanisms
    - Negative caching (NXDOMAIN)
    - TTL-based cache expiration
@@ -303,11 +304,11 @@
    - Security and access control
    - Use case scenarios
 
-8. **Hidden Master Architecture**
-   - Hidden master benefits
+8. **Hidden Primary Architecture**
+   - Hidden primary benefits
    - Security advantages
    - Implementation strategies
-   - Zone transfer optimization
+   - Zone transfer optimisation
 
 9. **Anycast DNS Deployment**
    - Anycast concept and benefits
@@ -326,7 +327,7 @@
     - Server placement strategies
     - Network topology considerations
     - Redundancy requirements
-    - Performance optimization
+    - Performance optimisation
 
 12. **ISP DNS Infrastructure**
     - ISP resolver deployment
@@ -347,8 +348,8 @@
     - DDoS mitigation techniques
     - Monitoring and logging
 
-15. **Performance Optimization**
-    - Query response time optimization
+15. **Performance Optimisation**
+    - Query response time optimisation
     - Cache hit ratio improvement
     - Network latency reduction
     - Capacity planning
@@ -373,7 +374,7 @@
 ### DNS Software Landscape Overview (8 slides)
 1. **DNS Software Categories**
    - Open source vs commercial solutions
-   - Authoritative vs recursive specialization
+   - Authoritative vs recursive specialisation
    - Performance and feature comparisons
    - Market share and adoption trends
 
@@ -410,7 +411,7 @@
    - Chroot jail deployment
 
 7. **BIND Performance Tuning**
-   - Memory management optimization
+   - Memory management optimisation
    - Query processing efficiency
    - Cache tuning parameters
    - Multi-threading configuration
@@ -442,7 +443,7 @@
 
 12. **Unbound Performance Characteristics**
     - Multi-threading architecture
-    - Memory usage optimization
+    - Memory usage optimisation
     - Cache management efficiency
     - Benchmarking results
 
@@ -457,7 +458,7 @@
     - Backend system design
     - Database integration options
     - API-driven management
-    - Multi-master capabilities
+    - Multi-primary capabilities
 
 15. **PowerDNS Database Backends**
     - MySQL/MariaDB integration
@@ -475,7 +476,7 @@
     - High-performance recursive resolution
     - Lua scripting capabilities
     - Advanced filtering options
-    - Cloud deployment optimization
+    - Cloud deployment optimisation
 
 ### Alternative DNS Solutions (8 slides)
 18. **NSD (Name Server Daemon)**
@@ -504,7 +505,7 @@
 
 ### Practical Lab Introduction (4 slides)
 22. **Multi-Platform Workshop**
-    - BIND comprehensive configuration
+    - BIND full configuration walkthrough
     - Unbound resolver setup
     - PowerDNS with database backend
     - Performance comparison testing
@@ -528,10 +529,10 @@
    - Health checking and monitoring
    - Failover mechanisms and timing
 
-3. **Hidden Master Architectures**
+3. **Hidden Primary Architectures**
    - Security benefits and use cases
    - Implementation strategies
-   - Zone transfer optimization
+   - Zone transfer optimisation
    - Operational procedures
 
 4. **Split-Horizon DNS Advanced Concepts**
@@ -540,10 +541,10 @@
    - Security implications
    - Management and maintenance
 
-### DNS Caching Optimization (12 slides)
+### DNS Caching Optimisation (12 slides)
 5. **Advanced Caching Strategies**
    - Cache hierarchy design
-   - Negative caching optimization
+   - Negative caching optimisation
    - Prefetching mechanisms
    - Cache warming techniques
 
@@ -554,7 +555,7 @@
    - Emergency change procedures
 
 7. **Cache Performance Analysis**
-   - Hit ratio optimization
+   - Hit ratio optimisation
    - Memory usage patterns
    - Query pattern analysis
    - Capacity planning methodologies
@@ -568,7 +569,7 @@
 
 9. **GeoDNS Implementation**
    - Geographic query routing
-   - Content delivery optimization
+   - Content delivery optimisation
    - Latency-based routing
    - Compliance and legal considerations
 
@@ -589,7 +590,7 @@
     - End-to-end query tracing
     - Latency measurement techniques
     - Bottleneck identification
-    - Performance optimization
+    - Performance optimisation
 
 13. **Complex Resolution Issues**
     - Delegation problems
@@ -598,7 +599,7 @@
     - Interoperability challenges
 
 ### DNS Monitoring and Observability (8 slides)
-14. **Comprehensive Monitoring Strategies**
+14. **End-to-End Monitoring Strategies**
     - Metrics collection frameworks
     - Real-time alerting systems
     - Performance baseline establishment
@@ -613,7 +614,7 @@
 ### Practical Lab Introduction (3 slides)
 16. **Advanced Configuration Workshop**
     - Complex architecture implementation
-    - Performance optimization exercises
+    - Performance optimisation exercises
     - Troubleshooting scenarios
 
 ---
@@ -637,9 +638,9 @@
 
 3. **Cache Poisoning Attacks**
    - Kaminsky attack methodology
-   - Source port randomization
-   - Query ID randomization
-   - 0x20 encoding defenses
+   - Source port randomisation
+   - Query ID randomisation
+   - 0x20 encoding defences
 
 4. **DNS Hijacking Techniques**
    - Registrar account compromise
@@ -670,7 +671,7 @@
 8. **Authoritative Server Security**
    - Access control implementation
    - Zone transfer security
-   - Hidden master strategies
+   - Hidden primary strategies
    - Monitoring and logging
 
 9. **Recursive Resolver Security**
@@ -861,7 +862,7 @@
 5. **DoT Server Configuration**
    - Certificate requirements
    - TLS configuration best practices
-   - Performance optimization
+   - Performance optimisation
    - Monitoring and logging
 
 6. **DoT Client Implementation**
@@ -874,7 +875,7 @@
 7. **DoH Protocol Specification**
    - RFC 8484 implementation
    - HTTP/2 and HTTP/3 usage
-   - JSON and wire format options
+   - Wire format only (`application/dns-message`, RFC 8484); JSON APIs are vendor-specific
    - URL template structures
 
 8. **DoH Server Deployment**
@@ -893,7 +894,7 @@
     - Protocol design differences
     - Performance characteristics
     - Deployment complexity
-    - Use case optimization
+    - Use case optimisation
 
 ### Advanced Privacy Technologies (8 slides)
 11. **DNSCrypt Protocol**
@@ -972,13 +973,13 @@
    - IP address assignments
    - Dependency relationships
 
-9. **EPP Extensions and Customization**
+9. **EPP Extensions and Customisation**
    - Standard EPP extensions
    - Registry-specific extensions
    - Launch phase extensions
    - IDN and DNSSEC extensions
 
-### Registry Policy Implementation (10 slots)
+### Registry Policy Implementation (10 slides)
 10. **Business Rule Configuration**
     - Registration policies
     - Pricing structures
@@ -996,7 +997,7 @@
 12. **Monitoring and Performance**
     - SLA requirements and monitoring
     - Availability measurements
-    - Performance optimization
+    - Performance optimisation
     - Capacity planning
 
 13. **Financial and Billing Systems**
@@ -1014,38 +1015,38 @@
 
 ---
 
-## Module 10: Advanced Registry Systems - COCCA Backend Operations
+## Module 10: Advanced Registry Systems - CoCCA Backend Operations
 **Duration:** 90 minutes theory + 90 minutes practical
 **Estimated Slides:** 50-55
 
-### COCCA Platform Overview (12 slides)
-1. **COCCA Architecture and History**
+### CoCCA Platform Overview (12 slides)
+1. **CoCCA Architecture and History**
    - Developed and operated by CoCCA (Council of Country Code Administrators)
    - ccTLD focus and design
    - Component architecture
    - Version evolution and roadmap
 
-2. **COCCA Core Components**
+2. **CoCCA Core Components**
    - Registry database schema
    - EPP server implementation
    - RDAP and WHOIS service integration
    - Administrative interfaces
 
-3. **COCCA Deployment Models**
+3. **CoCCA Deployment Models**
    - Single registry deployment
    - Multi-registry hosting
    - Cloud deployment options
    - Disaster recovery planning
 
-### COCCA Technical Implementation (15 slides)
+### CoCCA Technical Implementation (15 slides)
 4. **Database Architecture**
    - PostgreSQL integration
    - Schema design principles
    - Data relationships and integrity
-   - Performance optimization
+   - Performance optimisation
 
 5. **EPP Server Configuration**
-   - COCCA EPP implementation
+   - CoCCA EPP implementation
    - Extension support
    - Security configuration
    - Performance tuning
@@ -1054,7 +1055,7 @@
    - RDAP and WHOIS server configuration
    - Query rate limiting
    - Privacy protection integration
-   - Output format customization
+   - Output format customisation
 
 7. **Administrative Interface Usage**
    - Web-based administration
@@ -1089,15 +1090,15 @@
     - Alert and notification systems
 
 ### Practical Lab Introduction (5 slides)
-12. **COCCA Workshop**
-    - Complete COCCA installation
+12. **CoCCA Workshop**
+    - Complete CoCCA installation
     - Registry configuration
     - Registrar integration testing
     - Operational procedures
 
 ---
 
-## Module 11: DNS Monitoring, Incident Response, and Performance Optimization
+## Module 11: DNS Monitoring, Incident Response, and Performance Optimisation
 **Duration:** 90 minutes theory + 90 minutes practical
 **Estimated Slides:** 55-60
 
@@ -1126,15 +1127,15 @@
    - Notification channel management
    - Alert fatigue prevention
 
-### Performance Optimization (15 slides)
+### Performance Optimisation (15 slides)
 5. **DNS Performance Analysis**
    - Baseline establishment
    - Bottleneck identification
    - Performance testing methodologies
    - Capacity planning procedures
 
-6. **Query Response Optimization**
-   - Caching strategy optimization
+6. **Query Response Optimisation**
+   - Caching strategy optimisation
    - Network latency reduction
    - Server placement strategies
    - Load balancing improvements
@@ -1143,12 +1144,12 @@
    - Horizontal scaling strategies
    - Vertical scaling considerations
    - Auto-scaling implementations
-   - Cost optimization techniques
+   - Cost optimisation techniques
 
-### Incident Response Management (15 slots)
+### Incident Response Management (15 slides)
 8. **Incident Response Framework**
    - Incident classification system
-   - Response team organization
+   - Response team organisation
    - Communication procedures
    - Documentation requirements
 
@@ -1187,7 +1188,7 @@
 14. **Monitoring Implementation Workshop**
     - Complete monitoring stack deployment
     - Incident response simulation
-    - Performance optimization exercises
+    - Performance optimisation exercises
     - Recovery procedure testing
 
 ---
@@ -1222,7 +1223,7 @@
    - Performance considerations
    - Migration strategies
 
-5. **Dual-Stack Optimization**
+5. **Dual-Stack Optimisation**
    - Happy Eyeballs implementation
    - IPv4/IPv6 preference handling
    - Performance measurement
@@ -1237,11 +1238,11 @@
 
 7. **Advanced Mitigation Technologies**
    - Machine learning detection
-   - Behavioral analysis systems
+   - Behavioural analysis systems
    - Real-time threat intelligence
    - Automated response systems
 
-8. **Collaborative Defense Initiatives**
+8. **Collaborative Defence Initiatives**
    - Industry threat sharing
    - DNS abuse reporting systems
    - Coordinated response frameworks
@@ -1255,7 +1256,7 @@
    - Edge computing integration
 
 10. **Global DNS Distribution**
-    - Edge DNS optimization
+    - Edge DNS optimisation
     - CDN integration strategies
     - Latency reduction techniques
     - Regional compliance considerations
@@ -1292,7 +1293,7 @@
 **Duration:** 30 minutes, at the end of the Module 12 practical session (Day 6)
 **Estimated Slides:** 10-12
 
-### Comprehensive Review (4 slides)
+### Course Review (4 slides)
 1. **Course Content Summary**
    - Module-by-module recap
    - Key learning objectives achieved
@@ -1302,7 +1303,7 @@
 2. **DNS Best Practices Synthesis**
    - Security implementation checklist
    - Operational excellence guidelines
-   - Performance optimization summary
+   - Performance optimisation summary
    - Future-readiness preparation
 
 ### Final Project Briefing for Day 7 (4 slides)
@@ -1329,7 +1330,7 @@
    - Industry conferences and events
    - Professional development resources
    - Community engagement options
-   - Advanced specialization paths
+   - Advanced specialisation paths
 
 7. **Course Evaluation and Feedback**
    - Learning experience assessment
@@ -1374,7 +1375,7 @@
    - Monitoring setup verification
 
 ### C. Industry Resources (10 slides)
-1. **Professional Organizations**
+1. **Professional Organisations**
    - DNS-OARC (DNS Operations, Analysis, and Research Center)
    - ICANN technical engagement programs
    - Regional Internet Registry training
@@ -1391,7 +1392,7 @@
 ## Slide Design and Presentation Guidelines
 
 ### Visual Design Standards
-- **Color Scheme:** Professional blue and gray palette
+- **Colour Scheme:** Professional blue and grey palette
 - **Typography:** Sans-serif fonts for readability
 - **Layout:** Consistent header/footer with module identification
 - **Imagery:** Technical diagrams, network topology illustrations
@@ -1431,7 +1432,7 @@
 | Module 7: DNSSEC Implementation | 60 | 5 | 65 |
 | Module 8: DNS Privacy | 40 | 5 | 45 |
 | Module 9: Registry Operations | 50 | 5 | 55 |
-| Module 10: COCCA Systems | 45 | 5 | 50 |
+| Module 10: CoCCA Systems | 45 | 5 | 50 |
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
@@ -1451,8 +1452,8 @@
 
 ### Phase 2: Review and Refinement (4 weeks)
 - **Week 9:** Technical accuracy review by subject matter experts
-- **Week 10:** Instructional design review and optimization
-- **Week 11:** Visual design finalization and branding
+- **Week 10:** Instructional design review and optimisation
+- **Week 11:** Visual design finalisation and branding
 - **Week 12:** Final review and pilot preparation
 
 ### Phase 3: Pilot Testing (2 weeks)
@@ -1461,9 +1462,7 @@
 
 ### Quality Assurance Checkpoints
 - **Technical Review:** DNS experts validate technical accuracy
-- **Educational Review:** Instructional designers optimize learning flow
+- **Educational Review:** Instructional designers optimise learning flow
 - **Visual Review:** Graphic designers ensure professional presentation
 - **Accessibility Review:** Materials meet accessibility standards
 - **Industry Review:** Professional community validates relevance
-
-This comprehensive slide deck plan provides the foundation for delivering world-class DNS education that addresses current industry needs while preparing professionals for future technological challenges. The modular design allows for flexible delivery options while maintaining educational excellence and practical applicability.

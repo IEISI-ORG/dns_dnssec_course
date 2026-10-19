@@ -74,5 +74,5 @@ Use the `Makefile` at the repo root (`make html`, `make pdf`) or `./test-html <d
 To run marp by hand:
 
 ```bash
-marp --theme-set dns-workshop-css-theme.css --html --allow-local-files --pdf deck.md
+marp --no-stdin --theme-set dns-workshop-css-theme.css --html --allow-local-files --pdf deck.md
 ```

@@ -1,14 +1,14 @@
 # Advanced DNS/DNSSEC Workshop Plan
 
 ## Overview
-This comprehensive **modular training program** (six full days plus a Day 7 morning) builds upon established curricula from ICANN, APNIC, and NSRC to provide complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
+This **modular training program** (six full days plus a Day 7 morning) is informed by ICANN, APNIC and NSRC training, and provides complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
 
 **Course Structure (2 modules per day):**
 - **Day 1:** DNS Fundamentals - Introduction and Operations (Modules 1-2)
 - **Day 2:** DNS Infrastructure - Server Types and Software Platforms (Modules 3-4) 
 - **Day 3:** Advanced Operations and Security Fundamentals (Modules 5-6)
 - **Day 4:** DNSSEC and DNS Privacy Technologies (Modules 7-8)
-- **Day 5:** Registry Operations - EPP and COCCA Systems (Modules 9-10)
+- **Day 5:** Registry Operations - EPP and CoCCA Systems (Modules 9-10)
 - **Day 6:** Monitoring and Emerging Technologies (Modules 11-12); course conclusion at the end of the day
 - **Day 7 (morning only):** Final Project
 
@@ -21,8 +21,8 @@ This comprehensive **modular training program** (six full days plus a Day 7 morn
 - **Break:** 15:30-16:00
 - **Session 4:** 16:00-17:30 (Practical Module B)
 
-### Programme Facts
-This section is the reference for programme-level facts. The scope summary, overview deck, assessment plan and slide deck plan follow it; change facts here first.
+### Program Facts
+This section is the reference for program-level facts. The scope summary, overview deck, assessment plan and slide deck plan follow it; change facts here first.
 
 | Item | Value |
 |------|-------|
@@ -42,7 +42,7 @@ This section is the reference for programme-level facts. The scope summary, over
 
 ## Alternative Course Programs
 
-The modular design allows for flexible course delivery tailored to specific audiences and organizational needs:
+The modular design allows for flexible course delivery tailored to specific audiences and organisational needs:
 
 ### Option A: "Basic DNS Workshop" (2 Days)
 **Target Audience:** Network administrators, system administrators, and IT professionals new to DNS
@@ -67,9 +67,9 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Learning Outcomes:**
 - Advanced DNS operations and architecture design
-- Comprehensive DNSSEC implementation and management
+- DNSSEC implementation and management
 - EPP protocol mastery and registry system operations
-- COCCA platform expertise
+- CoCCA platform expertise
 - Modern DNS security and monitoring capabilities
 
 **Prerequisites:** Solid DNS fundamentals (completion of Option A or equivalent experience)
@@ -100,12 +100,12 @@ The modular design allows for flexible course delivery tailored to specific audi
 2. **Follow with DNS Security Intensive** (2 days) - Add security expertise
 3. **Complete with Advanced Registry Operations** (4.5 days) - Full professional competency
 
-### Specialized Tracks:
+### Specialised Tracks:
 - **Technical Operations Track:** Basic DNS → Advanced Registry Operations
 - **Security Focus Track:** Basic DNS → DNS Security Intensive
 - **Complete Professional Track:** Full program (6.5 days)
 
-### Organizational Training Options:
+### Organisational Training Options:
 - **Network Team Training:** Basic DNS Workshop for entire team
 - **Security Team Enhancement:** DNS Security Intensive
 - **Registry Staff Development:** Advanced Registry Operations
@@ -116,7 +116,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - DNS operators responsible for authoritative and/or recursive DNS installations
 - Registry and registrar technical staff
 - Cybersecurity professionals working with DNS infrastructure
-- Network engineers seeking comprehensive DNS knowledge
+- Network engineers seeking in-depth DNS knowledge
 
 ## Prerequisites
 - Basic understanding of TCP/IP networking concepts
@@ -144,8 +144,8 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Use basic DNS lookup tools (nslookup, dig, host)
 - Trace DNS resolution from root to authoritative servers
 
-**Analysis (Analyze):**
-- Analyze the DNS resolution process step-by-step
+**Analysis (Analyse):**
+- Analyse the DNS resolution process step-by-step
 - Examine the relationship between different DNS components
 
 ### Theory Content
@@ -184,40 +184,40 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Configure different record types for various use cases
 - Set appropriate TTL values for different scenarios
 
-**Analysis (Analyze):**
-- Analyze zone file syntax and identify errors
+**Analysis (Analyse):**
+- Analyse zone file syntax and identify errors
 - Evaluate TTL strategies for different environments
 
 **Synthesis (Create):**
-- Design zone structures for complex organizations
+- Design zone structures for complex organisations
 - Develop naming conventions and zone management policies
 
 ### Theory Content
 - Zone concepts: authoritative zones, delegation, glue records
 - DNS record types in detail:
   - A, AAAA (address records)
-  - CNAME, ALIAS (canonical names)
+  - CNAME (canonical names); the zone-apex problem: vendor ALIAS/ANAME records vs. standard HTTPS/SVCB records (RFC 9460)
   - MX (mail exchange)
   - NS (name server)
   - PTR (reverse DNS)
-  - TXT, SPF, DKIM, DMARC (text and email security)
+  - TXT, including the TXT-based email policies SPF (RFC 7208), DKIM (RFC 6376) and DMARC (RFC 9989); the SPF RR type is deprecated
   - SRV (service records)
-  - CAA (certificate authority authorization)
+  - CAA (certificate authority authorisation)
 - Zone file syntax and best practices
 - TTL strategy and caching implications
 - Reverse DNS and PTR record management
 
 ### Practical Lab
-- Create comprehensive zone files from scratch
+- Create complete zone files from scratch
 - Configure forward and reverse DNS zones
 - Implement email-related DNS records (MX, SPF, DKIM, DMARC)
 - Set up service discovery with SRV records
 - Test and validate zone configurations
-- TTL modification and cache behavior observation
+- TTL modification and cache behaviour observation
 
 ---
 
-## Module 3: DNS Server Types - Recursive, Authoritative, and Specialized Roles
+## Module 3: DNS Server Types - Recursive, Authoritative, and Specialised Roles
 **Duration:** 90 minutes theory + 90 minutes practical
 
 ### Learning Objectives (Bloom's Taxonomy)
@@ -236,12 +236,12 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Implement DNS forwarding and conditional forwarding
 - Set up DNS server redundancy and load balancing
 
-**Analysis (Analyze):**
-- Analyze DNS query flows in complex infrastructures
+**Analysis (Analyse):**
+- Analyse DNS query flows in complex infrastructures
 - Evaluate DNS server placement strategies
 
 **Evaluation (Evaluate):**
-- Assess DNS infrastructure requirements for different organizations
+- Assess DNS infrastructure requirements for different organisations
 - Compare architectural approaches for scalability and reliability
 
 ### Theory Content
@@ -288,8 +288,8 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Set up Unbound as a high-performance recursive resolver
 - Deploy PowerDNS with database backends
 
-**Analysis (Analyze):**
-- Analyze configuration requirements for different use cases
+**Analysis (Analyse):**
+- Analyse configuration requirements for different use cases
 - Compare software platforms for specific deployment scenarios
 
 **Evaluation (Evaluate):**
@@ -298,7 +298,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Synthesis (Create):**
 - Design DNS software deployment strategies
-- Develop standardized configuration templates
+- Develop standardised configuration templates
 
 ### Theory Content
 - **BIND (Berkeley Internet Name Domain):**
@@ -342,7 +342,7 @@ The modular design allows for flexible course delivery tailored to specific audi
   - Install and configure Unbound
   - Set up local zones and forwarding
   - Configure DNS-over-TLS support
-  - Performance tuning and optimization
+  - Performance tuning and optimisation
 
 - **PowerDNS Workshop:**
   - Install PowerDNS Authoritative with MySQL backend
@@ -363,7 +363,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall advanced DNS concepts including delegation models, anycast routing, and hidden masters
+- Recall advanced DNS concepts including delegation models, anycast routing, and hidden primarys
 - Identify different DNS server architectures and their use cases
 
 **Comprehension (Understand):**
@@ -374,13 +374,13 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Configure BIND/NSD for advanced scenarios including split-horizon DNS
 - Implement DNS load balancing and failover mechanisms
 
-**Analysis (Analyze):**
-- Troubleshoot complex DNS resolution issues using dig, nslookup, and specialized tools
-- Analyze DNS query patterns and performance metrics
+**Analysis (Analyse):**
+- Troubleshoot complex DNS resolution issues using dig, nslookup, and specialised tools
+- Analyse DNS query patterns and performance metrics
 
 ### Theory Content
-- Advanced DNS architecture patterns (hidden masters, anycast, GeoDNS)
-- DNS caching strategies and optimization
+- Advanced DNS architecture patterns (hidden primarys, anycast, GeoDNS)
+- DNS caching strategies and optimisation
 - Split-horizon DNS implementations
 - DNS load balancing techniques
 - Advanced debugging methodologies
@@ -446,7 +446,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Synthesis (Create):**
 - Develop DNSSEC key management policies
-- Design DNSSEC deployment strategies for complex organizations
+- Design DNSSEC deployment strategies for complex organisations
 
 ### Theory Content
 - DNSSEC cryptographic foundations
@@ -480,9 +480,9 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Configure DNS over TLS (DoT) on port 853
 - Implement DNS over HTTPS (DoH) endpoints
 
-**Analysis (Analyze):**
+**Analysis (Analyse):**
 - Evaluate privacy protocol performance and security trade-offs
-- Analyze enterprise deployment considerations for encrypted DNS
+- Analyse enterprise deployment considerations for encrypted DNS
 
 ### Theory Content
 - DNS privacy landscape and threats
@@ -516,8 +516,8 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Execute EPP commands for domain management
 - Configure EPP client connections with proper authentication
 
-**Analysis (Analyze):**
-- Analyze EPP transaction logs for operational insights
+**Analysis (Analyse):**
+- Analyse EPP transaction logs for operational insights
 - Evaluate registry system performance and capacity planning
 
 ### Theory Content
@@ -536,43 +536,43 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ---
 
-## Module 10: Advanced Registry Systems - COCCA Backend Operations
+## Module 10: Advanced Registry Systems - CoCCA Backend Operations
 **Duration:** 90 minutes theory + 90 minutes practical
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall COCCA architecture components and data models
-- Identify COCCA administrative functions and interfaces
+- Recall CoCCA architecture components and data models
+- Identify CoCCA administrative functions and interfaces
 
 **Comprehension (Understand):**
-- Explain COCCA's role in ccTLD management
-- Describe COCCA integration with registrar systems
+- Explain CoCCA's role in ccTLD management
+- Describe CoCCA integration with registrar systems
 
 **Application (Apply):**
-- Navigate COCCA administrative interfaces
-- Configure COCCA policy settings and business rules
+- Navigate CoCCA administrative interfaces
+- Configure CoCCA policy settings and business rules
 
 **Synthesis (Create):**
-- Design COCCA deployment strategies for new TLDs
-- Develop operational procedures for COCCA-based registries
+- Design CoCCA deployment strategies for new TLDs
+- Develop operational procedures for CoCCA-based registries
 
 ### Theory Content
-- COCCA platform overview and architecture
+- CoCCA platform overview and architecture
 - ccTLD management best practices
-- COCCA database schema and data relationships
+- CoCCA database schema and data relationships
 - Integration with WHMCS and other registrar platforms
-- Billing and financial management in COCCA
+- Billing and financial management in CoCCA
 
 ### Practical Lab
-- COCCA installation and configuration
+- CoCCA installation and configuration
 - Registry policy configuration
-- WHMCS-COCCA integration setup
+- WHMCS-CoCCA integration setup
 - Registrar management and onboarding
 - Operational monitoring and maintenance procedures
 
 ---
 
-## Module 11: DNS Monitoring, Incident Response, and Performance Optimization
+## Module 11: DNS Monitoring, Incident Response, and Performance Optimisation
 **Duration:** 90 minutes theory + 90 minutes practical
 
 ### Learning Objectives (Bloom's Taxonomy)
@@ -581,11 +581,11 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Identify incident response procedures for DNS outages
 
 **Application (Apply):**
-- Implement comprehensive DNS monitoring solutions
+- Implement DNS monitoring solutions
 - Execute incident response procedures
 
-**Analysis (Analyze):**
-- Analyze DNS performance data and identify optimization opportunities
+**Analysis (Analyse):**
+- Analyse DNS performance data and identify optimisation opportunities
 - Evaluate the effectiveness of monitoring and alerting systems
 
 **Evaluation (Evaluate):**
@@ -594,7 +594,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Theory Content
 - DNS monitoring strategy and metrics
-- Performance optimization techniques
+- Performance optimisation techniques
 - Incident response planning and procedures
 - Capacity planning for DNS infrastructure
 - Business continuity and disaster recovery
@@ -603,7 +603,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Deploy DNS monitoring with tools like RIPE Atlas, ThousandEyes
 - Configure alerting and notification systems
 - Conduct tabletop incident response exercises
-- Performance optimization workshops
+- Performance optimisation workshops
 - Disaster recovery testing scenarios
 
 ---
@@ -626,7 +626,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Synthesis (Create):**
 - Develop migration strategies for new DNS technologies
-- Design future-ready DNS architectures
+- Design DNS architectures that can adopt new protocols
 
 ### Theory Content
 - DNS-over-QUIC (DoQ, RFC 9250) deployment and HTTP/3 implications
@@ -649,7 +649,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Mid-course Check:** Day 3 practical assessment covering fundamentals
 - **Final Project:** Day 7 morning, in teams - Design and implement a complete DNS infrastructure solution
 - **Peer Review:** Team presentations of implemented solutions to the group
-- **Written Examination:** Comprehensive test covering all modules (optional certification track)
+- **Written Examination:** Test covering all modules (optional certification track)
 
 ## Required Equipment and Environment
 - **Laptops:** WiFi-capable with SSH client support (tablets not suitable)
@@ -659,7 +659,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Internet Access:** Required for accessing external DNS resources and documentation
 
 ## Workshop Logistics
-- **Duration:** 6 full days plus a Day 7 morning (see Programme Facts)
+- **Duration:** 6 full days plus a Day 7 morning (see Program Facts)
 - **Class Size:** Maximum 20 participants for effective hands-on instruction
 - **Equipment:** Participants must bring laptops capable of running SSH clients
 - **Materials:** All lab exercises, documentation, and software provided
@@ -668,14 +668,14 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Identified Gaps and Recommendations
 
 ### Gaps in Current Training Landscape
-1. **Limited Integration Training:** Few programs combine registry operations (EPP/COCCA) with DNS security
+1. **Limited Integration Training:** Few programs combine registry operations (EPP/CoCCA) with DNS security
 2. **Privacy Protocol Coverage:** DoT/DoH training often missing from traditional DNS curricula
 3. **Operational Focus:** More emphasis needed on day-to-day operations vs. initial deployment
 4. **Incident Response:** Limited practical incident response training in DNS context
 5. **Modern Threats:** Insufficient coverage of current DNS abuse and attack patterns
 
 ### Recommendations
-1. **Expand Hands-on Components:** Increase practical lab time from current industry standard
+1. **Expand Hands-on Components:** Keep labs at half of each module's time
 2. **Include Real-world Scenarios:** Base exercises on actual operational challenges
 3. **Add Vendor Diversity:** Include multiple DNS software platforms beyond BIND
 4. **Enhance Security Focus:** Integrate security considerations throughout all modules
@@ -690,13 +690,13 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Continuing Education
 - **Annual Refresher Sessions:** 1-day updates on new threats and technologies
-- **Advanced Workshops:** Specialized sessions on specific topics
+- **Advanced Workshops:** Specialised sessions on specific topics
 - **Community Engagement:** Participation in DNS-OARC, ICANN meetings
 - **Online Resources:** Access to updated materials and virtual labs
 
 ---
 
-*This curriculum builds upon the foundational work of ICANN Technical Engagement, APNIC Academy, and NSRC training programs while addressing current operational needs and emerging technologies in the DNS ecosystem.*
+*The course design is informed by the training work of ICANN Technical Engagement, APNIC Academy and NSRC.*
 
 ---
 
@@ -712,7 +712,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Lab Reset Capability:** Snapshots for quick environment restoration
 
 ### Base Virtual Machine Requirements
-- **Operating System:** Ubuntu 22.04 LTS or CentOS Stream 9
+- **Operating System:** Debian 13 (BIND 9.20) or Ubuntu 24.04 LTS (BIND 9.18; 9.20 from ISC's `ppa:isc/bind`)
 - **RAM:** Minimum 2GB per VM, 4GB recommended
 - **Storage:** 20GB minimum per VM
 - **CPU:** 2 vCPU cores minimum
@@ -741,13 +741,13 @@ The modular design allows for flexible course delivery tailored to specific audi
 4. Compare IPv4 and IPv6 root servers
 
 #### Lab 1.2: DNS Response Analysis (30 minutes)
-**Objective:** Analyze DNS responses and understand flags
+**Objective:** Analyse DNS responses and understand flags
 **Resources Needed:**
 - Packet capture capability (Wireshark)
 - Sample DNS queries and responses
 **Exercise Steps:**
 1. Capture DNS queries using Wireshark
-2. Analyze DNS response codes and flags
+2. Analyse DNS response codes and flags
 3. Compare authoritative vs non-authoritative responses
 4. Examine DNS over IPv4 vs IPv6
 
@@ -785,14 +785,14 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Create reverse zone file
 4. Validate zone file syntax using named-checkzone
 
-#### Lab 2.2: TTL and Caching Behavior (30 minutes)
+#### Lab 2.2: TTL and Caching Behaviour (30 minutes)
 **Objective:** Understand TTL impact on DNS caching
 **Resources Needed:**
 - DNS server with configurable TTLs
 - Cache monitoring tools
 **Exercise Steps:**
 1. Configure records with different TTL values
-2. Monitor cache behavior using dig +norecurse
+2. Monitor cache behaviour using dig +norecurse
 3. Observe TTL countdown in cached responses
 4. Implement TTL strategy for different record types
 
@@ -804,7 +804,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 **Exercise Steps:**
 1. Configure MX records for mail routing
 2. Implement SPF records for sender authentication
-3. Add DKIM signatures to DNS
+3. Publish DKIM public keys in DNS
 4. Configure DMARC policy records
 
 ---
@@ -827,7 +827,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 **Exercise Steps:**
 1. Configure primary authoritative server
 2. Set up secondary server with zone transfers
-3. Test automatic zone synchronization
+3. Test automatic zone synchronisation
 4. Implement notify mechanisms
 
 #### Lab 3.2: Recursive Resolver Configuration (30 minutes)
@@ -887,7 +887,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 1. Install and configure Unbound
 2. Set up local zones and forwarding
 3. Configure DNS-over-TLS support
-4. Performance optimization and tuning
+4. Performance optimisation and tuning
 
 #### Lab 4.3: PowerDNS with Database Backend (30 minutes)
 **Objective:** Implement PowerDNS with MySQL backend
@@ -925,27 +925,27 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Test automatic failover scenarios
 4. Monitor query distribution
 
-#### Lab 5.2: Hidden Master Architecture (30 minutes)
-**Objective:** Implement hidden master DNS architecture
+#### Lab 5.2: Hidden Primary Architecture (30 minutes)
+**Objective:** Implement hidden primary DNS architecture
 **Resources Needed:**
-- Hidden master server (not publicly accessible)
-- Multiple public slave servers
+- Hidden primary server (not publicly accessible)
+- Multiple public secondary servers
 - Zone transfer automation
 **Exercise Steps:**
-1. Configure hidden master server
-2. Set up automated zone transfers to public slaves
+1. Configure hidden primary server
+2. Set up automated zone transfers to public secondaries
 3. Implement security restrictions
 4. Test update propagation
 
-#### Lab 5.3: DNS Performance Optimization (15 minutes)
-**Objective:** Optimize DNS server performance
+#### Lab 5.3: DNS Performance Optimisation (15 minutes)
+**Objective:** Optimise DNS server performance
 **Resources Needed:**
 - Performance monitoring tools
 - Load testing utilities
-- Configuration optimization guides
+- Configuration optimisation guides
 **Exercise Steps:**
 1. Baseline DNS server performance
-2. Implement caching optimizations
+2. Implement caching optimisations
 3. Tune server parameters for high load
 4. Conduct performance testing and analysis
 
@@ -970,7 +970,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 1. Simulate DNS cache poisoning attempts
 2. Conduct DNS amplification attack demonstration
 3. Implement rate limiting and access controls
-4. Monitor and analyze attack patterns
+4. Monitor and analyse attack patterns
 
 #### Lab 6.2: DNS Security Hardening (30 minutes)
 **Objective:** Implement DNS security best practices
@@ -994,7 +994,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 1. Configure Response Policy Zones (RPZ)
 2. Implement DNS filtering policies
 3. Test malware domain blocking
-4. Monitor and analyze filtered queries
+4. Monitor and analyse filtered queries
 
 ---
 
@@ -1087,7 +1087,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Performance testing utilities
 **Exercise Steps:**
 1. Test traditional DNS vs DoT vs DoH
-2. Analyze network traffic patterns
+2. Analyse network traffic patterns
 3. Measure performance impact
 4. Evaluate deployment considerations
 
@@ -1105,7 +1105,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 #### Lab 9.1: EPP Server Configuration (45 minutes)
 **Objective:** Set up and configure EPP server
 **Resources Needed:**
-- EPP server software (CoCCA or alternative)
+- EPP server software (CoCCA, or the open-source FRED registry from CZ.NIC; Nomulus is also open source but runs on Google Cloud)
 - Database backend
 - TLS certificates for EPP
 **Exercise Steps:**
@@ -1127,37 +1127,37 @@ The modular design allows for flexible course delivery tailored to specific audi
 4. Manage contact and nameserver objects
 
 #### Lab 9.3: EPP Transaction Monitoring (15 minutes)
-**Objective:** Monitor and analyze EPP transactions
+**Objective:** Monitor and analyse EPP transactions
 **Resources Needed:**
 - EPP logging and monitoring tools
 - Transaction analysis scripts
 - Reporting utilities
 **Exercise Steps:**
-1. Enable comprehensive EPP logging
+1. Enable full EPP logging
 2. Monitor real-time transactions
 3. Generate registry reports
-4. Analyze transaction patterns and performance
+4. Analyse transaction patterns and performance
 
 ---
 
-## Module 10: Advanced Registry Systems - COCCA - Lab Requirements
+## Module 10: Advanced Registry Systems - CoCCA - Lab Requirements
 
 ### Lab Environment Setup
 - **Participant VMs:** 3 Ubuntu server VMs per participant
-- **Software:** COCCA registry software, PostgreSQL, web server
+- **Software:** CoCCA registry software, PostgreSQL, web server
 - **Integration:** WHMCS or similar billing system
 
 ### Lab Exercises
 
-#### Lab 10.1: COCCA Installation and Configuration (45 minutes)
-**Objective:** Deploy complete COCCA registry system
+#### Lab 10.1: CoCCA Installation and Configuration (45 minutes)
+**Objective:** Deploy complete CoCCA registry system
 **Resources Needed:**
-- COCCA software package
+- CoCCA software package
 - PostgreSQL database
 - Java application server (Resin)
 - Web server configuration
 **Exercise Steps:**
-1. Install COCCA software stack
+1. Install CoCCA software stack
 2. Configure database and application server
 3. Set up initial registry configuration
 4. Test basic registry functionality
@@ -1165,7 +1165,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 #### Lab 10.2: Registry Policy Configuration (30 minutes)
 **Objective:** Configure registry policies and business rules
 **Resources Needed:**
-- COCCA administration interface
+- CoCCA administration interface
 - Policy configuration templates
 - Grace period and pricing examples
 **Exercise Steps:**
@@ -1174,14 +1174,14 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Implement grace period configurations
 4. Test policy enforcement
 
-#### Lab 10.3: WHMCS-COCCA Integration (15 minutes)
-**Objective:** Integrate COCCA with registrar billing system
+#### Lab 10.3: WHMCS-CoCCA Integration (15 minutes)
+**Objective:** Integrate CoCCA with registrar billing system
 **Resources Needed:**
 - WHMCS installation
-- COCCA EPP module for WHMCS
+- CoCCA EPP module for WHMCS
 - Test registrar account
 **Exercise Steps:**
-1. Install COCCA-WHMCS EPP module
+1. Install CoCCA-WHMCS EPP module
 2. Configure registrar connection settings
 3. Test domain registration workflow
 4. Verify billing integration
@@ -1198,7 +1198,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ### Lab Exercises
 
 #### Lab 11.1: DNS Monitoring Implementation (45 minutes)
-**Objective:** Deploy comprehensive DNS monitoring
+**Objective:** Deploy DNS monitoring
 **Resources Needed:**
 - Prometheus and Grafana
 - DNS-specific exporters
@@ -1209,16 +1209,16 @@ The modular design allows for flexible course delivery tailored to specific audi
 3. Implement alerting rules
 4. Test monitoring and alerting scenarios
 
-#### Lab 11.2: Performance Analysis and Optimization (30 minutes)
-**Objective:** Analyze and optimize DNS performance
+#### Lab 11.2: Performance Analysis and Optimisation (30 minutes)
+**Objective:** Analyse and optimise DNS performance
 **Resources Needed:**
 - Performance testing tools
 - Query log analysis scripts
-- Optimization configuration examples
+- Optimisation configuration examples
 **Exercise Steps:**
 1. Conduct DNS performance baseline testing
-2. Analyze query patterns and bottlenecks
-3. Implement performance optimizations
+2. Analyse query patterns and bottlenecks
+3. Implement performance optimisations
 4. Measure improvement results
 
 #### Lab 11.3: Incident Response Simulation (15 minutes)
@@ -1254,10 +1254,10 @@ The modular design allows for flexible course delivery tailored to specific audi
 1. Configure IPv6-only DNS servers
 2. Set up IPv6 reverse DNS
 3. Test IPv6 DNS resolution
-4. Analyze IPv6 vs dual-stack performance
+4. Analyse IPv6 vs dual-stack performance
 
 #### Lab 12.2: Experimental DNS Technologies (15 minutes)
-**Objective:** Explore cutting-edge DNS technologies
+**Objective:** Explore emerging DNS technologies
 **Resources Needed:**
 - DNS-over-QUIC (RFC 9250) implementations (e.g. dnsdist, AdGuard Home)
 - ECH test endpoints and HTTPS/SVCB record lookups
@@ -1272,7 +1272,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 Closing deck: course recap, Final Project briefing and team allocation, certificates and next steps.
 See "Final Assessment and Course Conclusion" in `dns_slide_deck_plan.md`.
 
-#### Lab 12.3: Future-Ready Architecture Design (moved to Day 7)
+#### Lab 12.3: DNS Architecture Design (moved to Day 7)
 This exercise now opens the Day 7 Final Project; each team's design feeds its project.
 **Objective:** Design DNS architecture for future requirements
 **Resources Needed:**
@@ -1302,8 +1302,8 @@ This exercise now opens the Day 7 Final Project; each team's design feeds its pr
 
 ### Software Licensing
 - **Open Source:** BIND, Unbound, PowerDNS (no licensing required)
-- **Commercial:** COCCA (licensing required for full features)
-- **Operating Systems:** Ubuntu/CentOS (freely available)
+- **Commercial:** CoCCA (licensing required for full features)
+- **Operating Systems:** Debian/Ubuntu (freely available)
 
 ### Lab Management Tools
 - **VM Management:** vSphere, VirtualBox, or KVM management

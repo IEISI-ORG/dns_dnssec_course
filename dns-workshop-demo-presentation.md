@@ -26,11 +26,11 @@ By the end of this module, participants will be able to:
 
 - **Understand** the fundamental architecture of the Domain Name System
 - **Explain** the DNS hierarchy and namespace structure
-- **Analyze** DNS query resolution processes
+- **Analyse** DNS query resolution processes
 - **Evaluate** different DNS server types and their roles
 - **Apply** basic DNS troubleshooting techniques
 
-<div class="badge">Knowledge</div> <div class="badge">Comprehension</div> <div class="badge">Application</div> <div class="badge">Analysis</div>
+<span class="badge">Knowledge</span> <span class="badge">Comprehension</span> <span class="badge">Application</span> <span class="badge">Analysis</span>
 
 ---
 
@@ -264,7 +264,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 - Recursive DNS services
 - Customer DNS resolution
 - Caching infrastructure
-- Performance optimization
+- Performance optimisation
 
 </div>
 </div>
@@ -281,9 +281,9 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 ## Lab Environment Overview
 
 ### Virtual Machine Setup
-- **Ubuntu 22.04 LTS** with DNS tools pre-installed
+- **Debian 13 or Ubuntu 24.04 LTS** with DNS tools pre-installed
 - **Network Topology**: Simulated Internet environment
-- **Available Tools**: dig, nslookup, host, wireshark, bind9-utils
+- **Available Tools**: dig, nslookup, host, named-checkzone, Wireshark
 
 ---
 
@@ -295,11 +295,11 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 
 2. **Query Analysis Workshop**
    - Use `dig +trace` to follow resolution path
-   - Analyze response codes and flags
+   - Analyse response codes and flags
 
 3. **DNS Server Identification**
    - Identify different server types in resolution chain
-   - Understand caching behavior
+   - Understand caching behaviour
 
 ---
 <!-- _class: dense tight table-compact -->
@@ -423,7 +423,7 @@ dig -x 2001:4860:4860::8888
 dig TXT google.com | grep -i spf
 dig TXT selector1._domainkey.microsoft.com
 
-# Certificate authority authorization
+# Certificate authority authorisation
 dig CAA github.com
 ```
 
@@ -497,7 +497,7 @@ dig @1.1.1.1 example.com
 ---
 <!-- _class: dense -->
 
-## DNS Performance Optimization
+## DNS Performance Optimisation
 
 ### Caching Strategies
 
@@ -510,7 +510,7 @@ dig @1.1.1.1 example.com
 **Resolver Placement**
 - Geographic distribution
 - Network topology awareness
-- Latency optimization
+- Latency optimisation
 - Redundancy planning
 
 ---
@@ -529,7 +529,7 @@ dig @1.1.1.1 example.com
 
 ## Course Structure Overview
 
-### 6-Day Learning Journey
+### Course Outline (Day 7: Final Project)
 
 <div class="columns-3">
 <div>
@@ -566,7 +566,7 @@ dig @1.1.1.1 example.com
 - **Daily Labs**: Hands-on practical exercises
 - **Module Quizzes**: Knowledge validation
 - **Final Project**: Complete DNS infrastructure design
-- **Certification**: DNS Professional credentials
+- **Certificate**: IEISI course certificate (proposed scheme)
 
 ---
 <!-- _class: dense -->
@@ -579,7 +579,7 @@ dig @1.1.1.1 example.com
 - **Caching is essential** - Improves performance and reduces server load  
 - **Delegation enables scalability** - Administrative responsibility distributed
 - **Multiple record types serve different purposes** - A, AAAA, MX, NS, CNAME, etc.
-- **Understanding the ecosystem is crucial** - ICANN, registries, registrars, ISPs
+- **Many parties run the DNS** - ICANN, registries, registrars, ISPs
 
 ### Next Module Preview
 

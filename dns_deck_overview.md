@@ -9,9 +9,7 @@ _class: title-slide
 # Advanced DNS/DNSSEC Workshop
 ## Professional Training Program: 12 Modules over 6½ Days
 
-**Comprehensive Education in DNS, Security, and Registry Operations**
-
-*Building Leading DNS Competence*
+**DNS, DNSSEC, Privacy and Registry Operations**
 
 ---
 <!-- _class: section-divider -->
@@ -24,14 +22,12 @@ _class: title-slide
 
 The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning, plus a Day 7 Final Project morning, covering DNS architecture, operations, security, and emerging technologies.
 
-- Based on ICANN, APNIC, and NSRC curricula  
+- Informed by ICANN, APNIC and NSRC training  
 - Modular design (12 modules × 90 min theory + 90 min labs)  
-- Instructor-led with fully virtualized lab environment  
-- Certification-aligned learning outcomes
+- Instructor-led with fully virtualised lab environment  
+- Learning outcomes assessed through graded labs and a Final Project
 
-<div class="badge">Professional</div>
-<div class="badge">Hands-On</div>
-<div class="badge">Assessed</div>
+<span class="badge">Professional</span> <span class="badge">Hands-On</span> <span class="badge">Assessed</span>
 
 ---
 
@@ -39,9 +35,9 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 
 - **Build DNS Competency** – from fundamentals to expert operations  
 - **Enhance Security Skills** – DNSSEC & privacy implementations  
-- **Develop Registry Expertise** – EPP & COCCA backend operations  
-- **Foster Best Practices** – industry-standard DNS management  
-- **Prepare for the Future** – encrypted and next-gen DNS technologies
+- **Develop Registry Expertise** – EPP & CoCCA backend operations  
+- **Teach Best Practice** – standard DNS operational procedures  
+- **Prepare for the Future** – encrypted DNS and emerging technologies
 
 ---
 
@@ -74,7 +70,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 + DNSSEC Implementation & Operations
 + Privacy & Encryption (DoT, DoH)
 + Registry Operations & EPP Protocol
-+ COCCA Backend Systems
++ CoCCA Backend Systems
 + Monitoring & Incident Response
 + Emerging Technologies & Future DNS
 
@@ -101,7 +97,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 **Operational Skills**
 - Configuration & troubleshooting  
 - Lab-based DNS implementation  
-- Monitoring & optimization  
+- Monitoring & optimisation  
 
 </div>
 <div>
@@ -135,8 +131,8 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 ## Technical Requirements
 
 - **Isolated network** with Internet gateway  
-- **4 VMs per participant** (Ubuntu/CentOS)  
-- **Software:** BIND, Unbound, PowerDNS, COCCA, monitoring stack  
+- **4 VMs per participant** (Debian/Ubuntu)  
+- **Software:** BIND, Unbound, PowerDNS, CoCCA, monitoring stack  
 - **Multi-VLAN** topology for advanced labs  
 - **Snapshot management** for quick reset  
 
@@ -188,12 +184,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 - **ICANN Guidelines** – policy and technical best practice  
 - **RFC Compliance** – protocol standards integration  
-- **APNIC & NSRC Frameworks** – proven training models  
+- **APNIC & NSRC Training** – models for the course design  
 
 ### Continuous Improvement
 
 - Annual curriculum reviews  
-- Instructor certification & training  
+- Instructor training & calibration  
 - Participant feedback loop  
 
 ---
@@ -205,7 +201,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | **Satisfaction Rate** | > 90% positive feedback |
 | **Certification Completion** | > 85% pass rate |
 | **Skill Retention (90-day)** | > 80% measurable competency |
-| **Operational Impact** | Improved DNS infrastructure management within organizations |
+| **Operational Impact** | Improved DNS infrastructure management within organisations |
 
 ---
 <!-- _class: section-divider -->
@@ -217,7 +213,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 ## Development & Deployment Roadmap
 
 1. **Development Phase (3–4 months)**  
-   - Curriculum finalization & validation  
+   - Curriculum finalisation & validation  
    - Lab environment build & testing  
    - Assessment framework creation  
 
@@ -226,7 +222,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
    - Refinement and validation  
 
 3. **Full Deployment**  
-   - Global rollout with certified instructors  
+   - Wider rollout with trained instructors  
    - Continuous delivery cycle  
 
 ---
@@ -245,12 +241,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 ---
 
-## For Organizations
+## For Organisations
 
 - Trained DNS-competent staff  
 - Improved operational security posture  
-- Enhanced registry management capability  
-- Future-ready infrastructure strategies  
+- Staff who can run registry operations (EPP, CoCCA)  
+- Staff who can plan DNSSEC and encrypted-DNS deployments  
 
 ---
 <!-- _class: section-divider -->
@@ -268,4 +264,4 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 ### Contact Information
 **Program Coordinator:** Terry Sweetser  
 **Email:** tcs@ieisi.org
-**Organization:** IEISI.ORG
+**Organisation:** IEISI.ORG

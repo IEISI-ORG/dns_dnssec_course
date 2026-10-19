@@ -16,7 +16,6 @@
 
   /* Primary Brand Colors */
   --primary-blue: #005A9C;        /* Deep blue - main brand color */
-  --secondary-blue: #00A4E0;       /* Medium blue - secondary elements */
   --light-blue: #E6F4FA;           /* Light blue - backgrounds */
   
   /* Supporting Colors */
@@ -37,7 +36,6 @@
   --font-size-lg: 22px;
   --font-size-xl: 23px;
   --font-size-2xl: 26px;
-  --font-size-3xl: 31px;
   --font-size-4xl: 34px;
   --font-size-5xl: 46px;
   

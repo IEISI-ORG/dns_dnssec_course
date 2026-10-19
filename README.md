@@ -2,7 +2,7 @@
 
 An open course for teaching **DNS, DNSSEC, privacy, and registry operations** with hands-on labs.  
 Slides are built with **[Marp](https://marp.app/)** using a custom theme inspired by ICANN’s design language.  
-**License:** CC BY-NC-SA 4.0 (non-commercial, attribution, share-alike)
+**Licence:** CC BY-NC-SA 4.0 (non-commercial, attribution, share-alike)
 
 **Maintainer:** Terry Sweetser (IEISI.ORG) — <tcs@ieisi.org>
 
@@ -17,7 +17,7 @@ Early stage. The course design is in the planning documents. The 12 module decks
 ## What’s inside
 
 - **Planning documents** (the course content, for now):
-  - `dns_dnssec_workshop_plan.md` — programme facts, module objectives, and lab appendix (the reference document)
+  - `dns_dnssec_workshop_plan.md` — program facts, module objectives, and lab appendix (the reference document)
   - `dns_slide_deck_plan.md` — a slide-by-slide outline for each module
   - `dns_assessment_plan.md` — daily assessments and the final project
   - `dns_workshop_scope.md` — the one-page scope and delivery options
@@ -83,7 +83,7 @@ For the full list of classes, see `dns-workshop-marp-style.md`.
 ```
 .
 ├─ modules/                          # 12 module decks (skeletons)
-├─ dns_dnssec_workshop_plan.md       # programme and lab plan
+├─ dns_dnssec_workshop_plan.md       # program and lab plan
 ├─ dns_slide_deck_plan.md            # slide outlines
 ├─ dns_assessment_plan.md            # assessments
 ├─ dns_workshop_scope.md             # scope summary
@@ -146,7 +146,7 @@ Contributions are very welcome: issues, ideas, forks, and PRs.
 - Keep slides concise; split long content across slides.
 - Use per-slide class directives (`<!-- _class: ... -->`) for styling.
 - Prefer reproducible examples (e.g. `dig`, `named-checkzone`).
-- Respect the license (non-commercial, share-alike).
+- Respect the licence (non-commercial, share-alike).
 - Be respectful in discussions.
 
 ---
@@ -160,9 +160,9 @@ Please search before filing a new issue to avoid duplicates.
 
 ---
 
-## License
+## Licence
 
-This project is licensed under the **Creative Commons Attribution–NonCommercial–ShareAlike 4.0 International** license (see `LICENSE.md`).
+This project is licensed under the **Creative Commons Attribution–NonCommercial–ShareAlike 4.0 International** licence (see `LICENSE.md`).
 
 You are free to **share** and **adapt** the material with **attribution**, for **non-commercial** use, and you must **share alike**.
 
