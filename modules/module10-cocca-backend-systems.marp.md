@@ -1,10 +1,9 @@
 ---
 marp: true
-theme: dns-workshop
+theme: ieisi-dns-workshop
 paginate: true
-html: true
 footer: "IEISI.ORG • CC BY-NC-SA 4.0 • tcs@ieisi.org"
-class: title-slide
+_class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
@@ -93,19 +92,24 @@ class: title-slide
 > **Checkpoint:** Define success criteria for each task.
 
 ---
-<!-- _class: dense grid-2 -->
+<!-- _class: dense -->
 ## References & Resources
+
+<div class="columns">
+<div>
 
 - RFCs / Guides (edit)
 - Tooling docs (edit)
 - Internal runbooks (edit)
 - Troubleshooting tips (edit)
 
+</div>
 <div class="panel">
 <h3>Commands</h3>
 <pre><code>dig +trace example.com
 dig @1.1.1.1 example.com A
 </code></pre>
+</div>
 </div>
 
 ---

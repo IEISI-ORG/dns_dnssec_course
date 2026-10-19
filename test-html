@@ -1,17 +1,20 @@
 #!/bin/bash
+# Build one deck to HTML next to the source and open it in the default browser.
+set -euo pipefail
 
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
     echo "Usage: $0 <markdown-file>"
     exit 1
 fi
 
 MD_FILE="$1"
 HTML_FILE="${MD_FILE%.md}.html"
+THEME="$(dirname "$(readlink -f "$0")")/dns-workshop-css-theme.css"
 
 if [ ! -f "$MD_FILE" ]; then
     echo "Error: File '$MD_FILE' not found"
     exit 1
 fi
 
-marp --theme dns-workshop-css-theme.css "$MD_FILE" && google-chrome "$HTML_FILE"
-
+marp --no-stdin --theme-set "$THEME" --html --allow-local-files "$MD_FILE" -o "$HTML_FILE"
+xdg-open "$HTML_FILE" >/dev/null 2>&1 &

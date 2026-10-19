@@ -1,30 +1,28 @@
 ---
 marp: true
-theme: dns-workshop
+theme: ieisi-dns-workshop
 paginate: true
-html: true
 footer: "DNS/DNSSEC Workshop - Example Overview Deck - &copy; CC BY-NC-SA 4.0"
-class: title-slide
+_class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
-## 6-Day Professional Training Program
+## Professional Training Program: 12 Modules over 6½ Days
 
 **Comprehensive Education in DNS, Security, and Registry Operations**
 
 *Building Leading DNS Competence*
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Workshop Overview
 
 ---
-<!-- class: section -->
 
 ## Executive Summary
 
-The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning experience covering DNS architecture, operations, security, and emerging technologies.
+The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning, plus a Day 7 Final Project morning, covering DNS architecture, operations, security, and emerging technologies.
 
 - Based on ICANN, APNIC, and NSRC curricula  
 - Modular design (12 modules × 90 min theory + 90 min labs)  
@@ -33,10 +31,9 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 
 <div class="badge">Professional</div>
 <div class="badge">Hands-On</div>
-<div class="badge">Certified</div>
+<div class="badge">Assessed</div>
 
 ---
-<!-- class: section -->
 
 ## Program Objectives
 
@@ -48,24 +45,23 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 
 ---
 
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 # Course Structure
 
 ---
-<!-- class: section -->
 
 ## Duration and Format
 
 | Item | Detail |
 |------|--------|
-| **Total Duration** | 6 consecutive days |
-| **Sessions per Day** | 4 (2 theory + 2 practical) |
+| **Total Duration** | 6 full days + Day 7 morning (Final Project) |
+| **Sessions per Day** | 4 (2 theory + 2 practical); Day 7: 2 |
 | **Session Length** | 90 minutes each |
-| **Participants** | Max 20 per session |
+| **Contact Hours** | 39 |
+| **Participants** | Max 20 per class |
 | **Format** | Modular, instructor-led, lab-based |
 
 ---
-<!-- class: section -->
 
 ## 12 Modules at a Glance
 
@@ -83,12 +79,11 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 + Emerging Technologies & Future DNS
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Learning Outcomes
 
 ---
-<!-- class: section -->
 
 ## Competency Areas
 
@@ -119,14 +114,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 </div>
 </div>
 
-<code>
-
-Too much white space here ... 
-
-</code>
-
 ---
-<!-- class: section -->
 
 ## Proposed Certification Pathways
 
@@ -134,16 +122,15 @@ Too much white space here ...
 |--------------|-----------|-----------|
 | **DNS Fundamentals Certificate** | Modules 1-4 | 2 Days |
 | **DNS Security Specialist** | Modules 5-8 | 2 Days |
-| **Advanced Registry Ops Certificate** | Modules 5-12 | 4 Days |
-| **DNS Professional Master** | Complete Program + Project | 6 Days |
+| **Advanced Registry Ops Certificate** | Modules 5-12 + Final Project | 4½ Days |
+| **DNS Professional Master** | Complete Program + Final Project | 6½ Days |
 
 ---
 
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 # Lab Environment & Infrastructure
 
 ---
-<!-- class: section -->
 
 ## Technical Requirements
 
@@ -158,7 +145,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 </div>
 
 ---
-<!-- class: section -->
 
 ## Participant Requirements
 
@@ -167,39 +153,36 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - DNS experience (recommended for advanced modules)  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Assessment & Certification
 
 ---
-<!-- class: section -->
 
 ## Evaluation Methods
 
-- **Daily Labs** – hands-on tasks per module  
+- **Daily Labs** – hands-on tasks per module, graded against assessment tasks  
 - **Knowledge Checks** – short quizzes for theory retention  
-- **Final Project** – complete DNS architecture design  
+- **Final Project** – team DNS architecture design and presentation (Day 7)  
 - **Instructor Assessment** – continuous performance review  
 
 ---
-<!-- class: section -->
 
-## Sample Assessment Criteria
+## Final Project Assessment Criteria
 
 | Area | Evaluation Focus | Weight |
 |------|------------------|--------|
-| Configuration & Deployment | Lab accuracy & security setup | 40% |
-| Troubleshooting & Analysis | Diagnostic and resolution steps | 30% |
-| Project Design Presentation | Clarity & completeness | 20% |
-| Participation & Engagement | Collaboration & feedback | 10% |
+| Technical Design | Architecture, security, scalability, technology choices | 40% |
+| Implementation Plan | Deployment method, risk, timeline, testing | 30% |
+| Operational Excellence | Monitoring, incident response, maintenance | 20% |
+| Presentation Quality | Clarity, accuracy, Q&A | 10% |
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Quality Assurance & Standards
 
 ---
-<!-- class: section -->
 
 ## Industry Alignment
 
@@ -214,7 +197,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Participant feedback loop  
 
 ---
-<!-- class: section -->
 
 ## Success Metrics
 
@@ -226,12 +208,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | **Operational Impact** | Improved DNS infrastructure management within organizations |
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Implementation Timeline
 
 ---
-<!-- class: section -->
 
 ## Development & Deployment Roadmap
 
@@ -249,22 +230,20 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
    - Continuous delivery cycle  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Course Outcomes & Benefits
 
 ---
-<!-- class: section -->
 
 ## For Participants
 
-- 48 hours of intensive DNS training  
+- 39 contact hours of instructor-led training and labs  
 - Practical skills for real-world operations  
-- Certification recognized across industry  
+- IEISI course certificate (proposed scheme)  
 - Access to reference materials & community  
 
 ---
-<!-- class: section -->
 
 ## For Organizations
 
@@ -274,12 +253,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Future-ready infrastructure strategies  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Thank You
 
 ---
-<!-- class: section -->
 
 ## Next Steps
 

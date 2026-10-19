@@ -1,9 +1,9 @@
 # Advanced DNS/DNSSEC Workshop - Complete Slide Deck Plan
 
 ## Overall Presentation Structure
-- **Course Duration:** 6 days, 12 modules
+- **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Programme Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~1,200 slides across all modules
+- **Estimated Total Slides:** ~690 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -19,7 +19,7 @@
    - Participant introductions and expectations
 
 2. **Course Structure & Logistics**
-   - 6-day modular program overview
+   - Modular program overview (6 days + Day 7 Final Project)
    - Daily schedule and breaks
    - Assessment methodology and certification paths
 
@@ -963,7 +963,7 @@
 7. **Contact Object Handling**
    - Contact creation and validation
    - Contact information updates
-   - Privacy and WHOIS considerations
+   - Privacy and registration data (RDAP/WHOIS) considerations
    - Contact verification requirements
 
 8. **Host Object Management**
@@ -985,8 +985,9 @@
     - Eligibility requirements
     - Dispute resolution procedures
 
-11. **WHOIS and Data Management**
-    - WHOIS service requirements
+11. **Registration Data Services (RDAP and WHOIS)**
+    - RDAP (RFC 7480-7484, 9082, 9083) is the required gTLD service; ICANN ended the gTLD port-43 WHOIS requirement on 28 January 2025
+    - ccTLDs set their own policy: RDAP, WHOIS, or both
     - Data accuracy obligations
     - Privacy protection services
     - GDPR compliance considerations
@@ -1019,7 +1020,7 @@
 
 ### COCCA Platform Overview (12 slides)
 1. **COCCA Architecture and History**
-   - Development by CENTR
+   - Developed and operated by CoCCA (Council of Country Code Administrators)
    - ccTLD focus and design
    - Component architecture
    - Version evolution and roadmap
@@ -1027,7 +1028,7 @@
 2. **COCCA Core Components**
    - Registry database schema
    - EPP server implementation
-   - WHOIS service integration
+   - RDAP and WHOIS service integration
    - Administrative interfaces
 
 3. **COCCA Deployment Models**
@@ -1049,8 +1050,8 @@
    - Security configuration
    - Performance tuning
 
-6. **WHOIS Service Setup**
-   - WHOIS server configuration
+6. **RDAP and WHOIS Service Setup**
+   - RDAP and WHOIS server configuration
    - Query rate limiting
    - Privacy protection integration
    - Output format customization
@@ -1203,9 +1204,9 @@
    - Performance bottlenecks
 
 2. **Emerging Protocol Developments**
-   - DNS-over-QUIC (DoQ) overview
+   - DNS-over-QUIC (DoQ, RFC 9250, 2022): standardised; deployment status
    - HTTP/3 implications for DoH
-   - Encrypted SNI integration
+   - Encrypted Client Hello (ECH) published via HTTPS/SVCB records (RFC 9460)
    - New transport protocols
 
 3. **Next-Generation DNS Features**
@@ -1288,10 +1289,10 @@
 ---
 
 ## Final Assessment and Course Conclusion
-**Duration:** 90 minutes
-**Estimated Slides:** 25-30
+**Duration:** 30 minutes, at the end of the Module 12 practical session (Day 6)
+**Estimated Slides:** 10-12
 
-### Comprehensive Review (10 slides)
+### Comprehensive Review (4 slides)
 1. **Course Content Summary**
    - Module-by-module recap
    - Key learning objectives achieved
@@ -1304,7 +1305,7 @@
    - Performance optimization summary
    - Future-readiness preparation
 
-### Final Project Presentation Guidelines (8 slides)
+### Final Project Briefing for Day 7 (4 slides)
 3. **Project Requirements Overview**
    - Infrastructure design scope
    - Security implementation requirements
@@ -1317,7 +1318,7 @@
    - Risk assessment and mitigation
    - Q&A session guidelines
 
-### Certification and Continuing Education (7 slides)
+### Certification and Continuing Education (2 slides)
 5. **Certification Pathways**
    - DNS Fundamentals Certificate
    - DNS Security Specialist Certificate
@@ -1433,10 +1434,10 @@
 | Module 10: COCCA Systems | 45 | 5 | 50 |
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
-| Final Assessment | 25 | 0 | 25 |
-| **Total Core Content** | **604** | **56** | **660** |
+| Course Conclusion | 10 | 0 | 10 |
+| **Total Core Content** | **589** | **56** | **645** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **705** |
+| **Grand Total** | | | **690** |
 
 ---
 

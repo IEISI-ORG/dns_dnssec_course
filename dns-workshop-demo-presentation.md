@@ -1,7 +1,7 @@
 ---
 marp: true
-theme: dns-workshop
-class: title-slide
+theme: ieisi-dns-workshop
+_class: title-slide
 paginate: true
 footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
 ---
@@ -13,8 +13,7 @@ footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
 *Building Enterprise-Grade DNS Infrastructure*
 
 ---
-
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Module 1
 ## Introduction to DNS Foundations and Concepts
@@ -63,6 +62,7 @@ By the end of this module, participants will be able to:
 - Fault-tolerant design
 
 ---
+<!-- _class: dense -->
 
 ## DNS Fundamentals
 
@@ -98,7 +98,12 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 
 ---
 
+<!-- _class: dense -->
+
 ## DNS Namespace Hierarchy
+
+<div class="columns">
+<div>
 
 ```
                     . (root)
@@ -110,12 +115,18 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
        www      mail
 ```
 
+</div>
+<div>
+
 ### Domain Name Components
 
 - **Root Domain**: `.` (implicit in most representations)
 - **Top-Level Domains (TLDs)**: `.com`, `.org`, `.net`, `.gov`
 - **Second-Level Domains**: `google`, `wikipedia`, `cloudflare`
 - **Subdomains**: `www`, `mail`, `blog`, `api`
+
+</div>
+</div>
 
 <div class="success">
 <strong>Best Practice:</strong> Always think of domain names as paths in an inverted tree structure, reading from right to left.
@@ -237,7 +248,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 **Registry Operators**
 - TLD database maintenance
 - Registration processing
-- WHOIS services
+- Registration data services (RDAP, WHOIS)
 - DNS infrastructure
 
 </div>
@@ -260,7 +271,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 
 ---
 
-<!-- class: lab-intro -->
+<!-- _class: lab-intro -->
 
 # Practical Lab Introduction
 ## DNS Hierarchy Exploration
@@ -291,13 +302,23 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
    - Understand caching behavior
 
 ---
+<!-- _class: dense tight table-compact -->
 
 ## dig Command Reference
+
+<div class="columns">
+<div>
 
 ### Basic Syntax
 ```bash
 dig [@server] [domain] [record-type] [options]
 ```
+
+</div>
+<div class="warning">
+<strong>Lab Note:</strong> Always use the +trace option when learning DNS hierarchy to see the complete resolution process.
+</div>
+</div>
 
 ### Essential Options
 
@@ -308,10 +329,6 @@ dig [@server] [domain] [record-type] [options]
 | `+norecurse` | Disable recursion | `dig +norecurse example.com` |
 | `@server` | Query specific server | `dig @8.8.8.8 example.com` |
 | `+stats` | Show query statistics | `dig +stats example.com` |
-
-<div class="warning">
-<strong>Lab Note:</strong> Always use the +trace option when learning DNS hierarchy to see the complete resolution process.
-</div>
 
 ---
 
@@ -478,6 +495,7 @@ dig @1.1.1.1 example.com
 </div>
 
 ---
+<!-- _class: dense -->
 
 ## DNS Performance Optimization
 
@@ -507,6 +525,7 @@ dig @1.1.1.1 example.com
 | Error Rate | < 0.1% | Query analysis |
 
 ---
+<!-- _class: dense -->
 
 ## Course Structure Overview
 
@@ -550,6 +569,7 @@ dig @1.1.1.1 example.com
 - **Certification**: DNS Professional credentials
 
 ---
+<!-- _class: dense -->
 
 ## Module Summary
 
@@ -599,8 +619,7 @@ dig @1.1.1.1 example.com
 </div>
 
 ---
-
-<!-- class: title-slide -->
+<!-- _class: title-slide -->
 
 # Thank You
 ## Questions & Lab Time
@@ -609,3 +628,4 @@ dig @1.1.1.1 example.com
 *DNS Foundations Complete*
 
 Ready for hands-on practice?
+
