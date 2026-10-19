@@ -380,6 +380,7 @@ footer {
   bottom: 0;
   left: 0; right: 0;
   height: var(--footer-height);
+  box-sizing: border-box; /* bar is exactly --footer-height, which section padding reserves */
   background: var(--primary-blue);
   color: var(--white);
   padding: var(--space-3) var(--space-12);
@@ -398,19 +399,22 @@ footer a { color: inherit; text-decoration: none; }
 a { color: var(--primary-blue); }
 section.title-slide a, section.section-divider a, section.lab-intro a { color: inherit; }
 
-/* Ensure Marp page numbers sit above the footer and align consistently */
+/* Page numbers sit inside the footer bar (white on primary-blue, 7.1:1), clear of slide content */
 section::after { content: attr(data-marpit-pagination);
   position: absolute;
-  right: 1rem;
-  bottom: calc(var(--footer-height) + 0.5rem);
+  right: var(--space-12);
+  bottom: 0;
+  height: var(--footer-height);
+  padding: 0; /* Marpit's base sets padding: inherit, which lifts the number out of the bar */
+  display: flex;
+  align-items: center;
   font-size: var(--font-size-xs);
-  color: var(--warm-gray);
+  color: var(--white);
   z-index: 20;
 }
 
-section.title-slide::after, section.section-divider::after, section.lab-intro::after {
-  color: rgba(255, 255, 255, 0.85);
-}
+/* No footer bar to sit in: drop back to grey on the slide background */
+section.no-footer::after { color: var(--warm-gray); }
 
 /* === TWO/THREE-COLUMN LAYOUT === */
 .columns {
