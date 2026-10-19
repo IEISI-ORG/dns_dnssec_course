@@ -1,10 +1,9 @@
 ---
 marp: true
-theme: dns-workshop
+theme: ieisi-dns-workshop
 class: title-slide
 paginate: true
 footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
-class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop

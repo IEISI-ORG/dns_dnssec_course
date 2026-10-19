@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: dns-workshop
+theme: ieisi-dns-workshop
 paginate: true
 html: true
 footer: "DNS/DNSSEC Workshop - Example Overview Deck - &copy; CC BY-NC-SA 4.0"
