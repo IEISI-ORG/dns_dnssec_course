@@ -1,7 +1,7 @@
 # Advanced DNS/DNSSEC Workshop Assessment Plan
 
 ## Overview
-This assessment plan provides comprehensive evaluation methods for the Advanced DNS/DNSSEC Workshop, ensuring participants demonstrate both theoretical knowledge and practical competency across all learning objectives. The assessment framework aligns with Bloom's Taxonomy progression and industry best practices for technical certification.
+This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, so that participants demonstrate both theoretical knowledge and practical competency across all learning objectives. The assessment framework aligns with Bloom's Taxonomy progression and industry best practices for technical certification.
 
 ## Assessment Philosophy
 - **Competency-Based:** Focus on demonstrable skills rather than memorisation
@@ -24,7 +24,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 ### Assessment Methods
 - **Practical Lab Assessments:** Hands-on skill demonstration
 - **Written Examinations:** Knowledge verification and theory understanding
-- **Project-Based Evaluation:** Comprehensive application of learned skills
+- **Project-Based Evaluation:** Applying the course's skills in one integrated project
 - **Peer Assessment:** Collaborative learning and knowledge sharing
 - **Continuous Monitoring:** Ongoing evaluation throughout the course
 
@@ -164,7 +164,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 3. Set up DNS monitoring and alerting (6 points)
 4. Analyse and respond to simulated attack scenario (5 points)
 
-#### Mid-Course Assessment: Comprehensive Practical (30 minutes)
+#### Mid-Course Assessment: Integrated Practical (30 minutes)
 **Assessment Type:** Integrated skills demonstration
 **Scenario:** Design and implement DNS infrastructure for fictional organisation
 **Requirements:**
@@ -271,7 +271,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 - Performance optimisation (Analyse/Evaluate)
 
 **Tasks:**
-1. Deploy comprehensive DNS monitoring solution (10 points)
+1. Deploy a DNS monitoring solution (10 points)
 2. Respond to simulated DNS outage scenario (10 points)
 3. Analyse performance data and recommend optimisations (5 points)
 4. Document incident response procedures (5 points)
@@ -352,13 +352,13 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 - Completion of Days 3-6 and the Day 7 Final Project
 - Pass all advanced assessments (75% minimum)
 - Complete final project successfully
-- Demonstrate comprehensive operational capability
+- Demonstrate operational capability across all modules
 
 **Competencies Certified:**
 - Advanced DNS architecture design
 - Registry operations and EPP protocol
 - CoCCA platform management
-- Comprehensive DNS operations
+- DNS operations across all 12 modules
 
 ### DNS Professional Master Certificate
 **Requirements:**
@@ -405,7 +405,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 - **Competency Matrices:** Skills demonstration documentation
 - **Portfolio Development:** Collection of participant work
 - **Progress Reports:** Regular feedback and improvement tracking
-- **Certification Records:** Permanent competency certification
+- **Certificate Records:** Permanent record of certificates issued
 
 ---
 
@@ -427,14 +427,14 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ### Instructor Resources
 - **Assessment Rubrics:** Detailed evaluation criteria
-- **Scenario Descriptions:** Comprehensive challenge documentation
+- **Scenario Descriptions:** Full challenge documentation
 - **Solution Guides:** Reference implementations
 - **Training Materials:** Instructor preparation resources
 - **Calibration Exercises:** Consistency maintenance tools
 
 ---
 
-## Industry Alignment and Recognition
+## Standards and Value to Employers
 
 ### Professional Standards
 - **ICANN Guidelines:** Alignment with industry best practices
@@ -444,6 +444,6 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ### Value to Employers
 - **Skills Verification:** Demonstrable competency proof
-- **Role Readiness:** Job-specific capability certification
+- **Role Readiness:** Job-specific capability assessment
 - **Career Advancement:** Professional development documentation
 - **Training Investment:** Quantifiable learning outcomes

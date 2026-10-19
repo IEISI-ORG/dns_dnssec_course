@@ -9,9 +9,7 @@ _class: title-slide
 # Advanced DNS/DNSSEC Workshop
 ## Professional Training Program: 12 Modules over 6½ Days
 
-**Comprehensive Education in DNS, Security, and Registry Operations**
-
-*Building Leading DNS Competence*
+**DNS, DNSSEC, Privacy and Registry Operations**
 
 ---
 <!-- _class: section-divider -->
@@ -24,10 +22,10 @@ _class: title-slide
 
 The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning, plus a Day 7 Final Project morning, covering DNS architecture, operations, security, and emerging technologies.
 
-- Based on ICANN, APNIC, and NSRC curricula  
+- Informed by ICANN, APNIC and NSRC training  
 - Modular design (12 modules × 90 min theory + 90 min labs)  
 - Instructor-led with fully virtualised lab environment  
-- Certification-aligned learning outcomes
+- Learning outcomes assessed through graded labs and a Final Project
 
 <div class="badge">Professional</div>
 <div class="badge">Hands-On</div>
@@ -40,8 +38,8 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 - **Build DNS Competency** – from fundamentals to expert operations  
 - **Enhance Security Skills** – DNSSEC & privacy implementations  
 - **Develop Registry Expertise** – EPP & CoCCA backend operations  
-- **Foster Best Practices** – industry-standard DNS management  
-- **Prepare for the Future** – encrypted and next-gen DNS technologies
+- **Teach Best Practice** – standard DNS operational procedures  
+- **Prepare for the Future** – encrypted DNS and emerging technologies
 
 ---
 
@@ -188,12 +186,12 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 - **ICANN Guidelines** – policy and technical best practice  
 - **RFC Compliance** – protocol standards integration  
-- **APNIC & NSRC Frameworks** – proven training models  
+- **APNIC & NSRC Training** – models for the course design  
 
 ### Continuous Improvement
 
 - Annual curriculum reviews  
-- Instructor certification & training  
+- Instructor training & calibration  
 - Participant feedback loop  
 
 ---
@@ -226,7 +224,7 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
    - Refinement and validation  
 
 3. **Full Deployment**  
-   - Global rollout with certified instructors  
+   - Wider rollout with trained instructors  
    - Continuous delivery cycle  
 
 ---
@@ -249,8 +247,8 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 - Trained DNS-competent staff  
 - Improved operational security posture  
-- Enhanced registry management capability  
-- Future-ready infrastructure strategies  
+- Staff who can run registry operations (EPP, CoCCA)  
+- Staff who can plan DNSSEC and encrypted-DNS deployments  
 
 ---
 <!-- _class: section-divider -->

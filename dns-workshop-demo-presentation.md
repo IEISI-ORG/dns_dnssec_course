@@ -529,7 +529,7 @@ dig @1.1.1.1 example.com
 
 ## Course Structure Overview
 
-### 6-Day Learning Journey
+### Course Outline (Day 7: Final Project)
 
 <div class="columns-3">
 <div>
@@ -566,7 +566,7 @@ dig @1.1.1.1 example.com
 - **Daily Labs**: Hands-on practical exercises
 - **Module Quizzes**: Knowledge validation
 - **Final Project**: Complete DNS infrastructure design
-- **Certification**: DNS Professional credentials
+- **Certificate**: IEISI course certificate (proposed scheme)
 
 ---
 <!-- _class: dense -->
@@ -579,7 +579,7 @@ dig @1.1.1.1 example.com
 - **Caching is essential** - Improves performance and reduces server load  
 - **Delegation enables scalability** - Administrative responsibility distributed
 - **Multiple record types serve different purposes** - A, AAAA, MX, NS, CNAME, etc.
-- **Understanding the ecosystem is crucial** - ICANN, registries, registrars, ISPs
+- **Many parties run the DNS** - ICANN, registries, registrars, ISPs
 
 ### Next Module Preview
 

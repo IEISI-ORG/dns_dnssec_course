@@ -9,7 +9,7 @@ The Advanced DNS/DNSSEC Workshop is a hands-on technical training program coveri
 - **Build DNS Competency:** From basic concepts to advanced operational expertise
 - **Enhance Security Skills:** DNSSEC implementation and DNS privacy technologies
 - **Develop Registry Knowledge:** EPP protocol and CoCCA backend operations
-- **Foster Best Practices:** Standard operational procedures and security
+- **Teach Best Practice:** Standard operational procedures and security
 - **Prepare for Future:** Emerging technologies and architectural considerations
 
 ## Workshop Structure
@@ -51,4 +51,4 @@ Option letters, days and modules follow the plan:
 ## Budget Considerations
 - **Development costs:** curriculum development, lab infrastructure, assessment development, instructor training, materials
 - **Operational costs:** instructor fees, infrastructure maintenance, software licensing, certificate administration, updates
-- **Revenue opportunities:** workshop fees, corporate training, licensing agreements, partnership revenue, consulting services
+- **Revenue opportunities:** workshop fees, corporate training, commercial licences for the materials (granted by IEISI as licensor, separately from CC BY-NC-SA), partnership revenue, consulting services

@@ -1,7 +1,7 @@
 # Advanced DNS/DNSSEC Workshop Plan
 
 ## Overview
-This comprehensive **modular training program** (six full days plus a Day 7 morning) builds upon established curricula from ICANN, APNIC, and NSRC to provide complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
+This **modular training program** (six full days plus a Day 7 morning) is informed by ICANN, APNIC and NSRC training, and provides complete DNS training from fundamentals through advanced security and registry operations. The curriculum is structured in **12 modules** following a 90-minute theory + 90-minute practical format with learning objectives based on Bloom's Taxonomy.
 
 **Course Structure (2 modules per day):**
 - **Day 1:** DNS Fundamentals - Introduction and Operations (Modules 1-2)
@@ -67,7 +67,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Learning Outcomes:**
 - Advanced DNS operations and architecture design
-- Comprehensive DNSSEC implementation and management
+- DNSSEC implementation and management
 - EPP protocol mastery and registry system operations
 - CoCCA platform expertise
 - Modern DNS security and monitoring capabilities
@@ -116,7 +116,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - DNS operators responsible for authoritative and/or recursive DNS installations
 - Registry and registrar technical staff
 - Cybersecurity professionals working with DNS infrastructure
-- Network engineers seeking comprehensive DNS knowledge
+- Network engineers seeking in-depth DNS knowledge
 
 ## Prerequisites
 - Basic understanding of TCP/IP networking concepts
@@ -208,7 +208,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Reverse DNS and PTR record management
 
 ### Practical Lab
-- Create comprehensive zone files from scratch
+- Create complete zone files from scratch
 - Configure forward and reverse DNS zones
 - Implement email-related DNS records (MX, SPF, DKIM, DMARC)
 - Set up service discovery with SRV records
@@ -581,7 +581,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Identify incident response procedures for DNS outages
 
 **Application (Apply):**
-- Implement comprehensive DNS monitoring solutions
+- Implement DNS monitoring solutions
 - Execute incident response procedures
 
 **Analysis (Analyse):**
@@ -626,7 +626,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 **Synthesis (Create):**
 - Develop migration strategies for new DNS technologies
-- Design future-ready DNS architectures
+- Design DNS architectures that can adopt new protocols
 
 ### Theory Content
 - DNS-over-QUIC (DoQ, RFC 9250) deployment and HTTP/3 implications
@@ -649,7 +649,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Mid-course Check:** Day 3 practical assessment covering fundamentals
 - **Final Project:** Day 7 morning, in teams - Design and implement a complete DNS infrastructure solution
 - **Peer Review:** Team presentations of implemented solutions to the group
-- **Written Examination:** Comprehensive test covering all modules (optional certification track)
+- **Written Examination:** Test covering all modules (optional certification track)
 
 ## Required Equipment and Environment
 - **Laptops:** WiFi-capable with SSH client support (tablets not suitable)
@@ -675,7 +675,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 5. **Modern Threats:** Insufficient coverage of current DNS abuse and attack patterns
 
 ### Recommendations
-1. **Expand Hands-on Components:** Increase practical lab time from current industry standard
+1. **Expand Hands-on Components:** Keep labs at half of each module's time
 2. **Include Real-world Scenarios:** Base exercises on actual operational challenges
 3. **Add Vendor Diversity:** Include multiple DNS software platforms beyond BIND
 4. **Enhance Security Focus:** Integrate security considerations throughout all modules
@@ -696,7 +696,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ---
 
-*This curriculum builds upon the foundational work of ICANN Technical Engagement, APNIC Academy, and NSRC training programs while addressing current operational needs and emerging technologies in the DNS ecosystem.*
+*The course design is informed by the training work of ICANN Technical Engagement, APNIC Academy and NSRC.*
 
 ---
 
@@ -1133,7 +1133,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Transaction analysis scripts
 - Reporting utilities
 **Exercise Steps:**
-1. Enable comprehensive EPP logging
+1. Enable full EPP logging
 2. Monitor real-time transactions
 3. Generate registry reports
 4. Analyse transaction patterns and performance
@@ -1198,7 +1198,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ### Lab Exercises
 
 #### Lab 11.1: DNS Monitoring Implementation (45 minutes)
-**Objective:** Deploy comprehensive DNS monitoring
+**Objective:** Deploy DNS monitoring
 **Resources Needed:**
 - Prometheus and Grafana
 - DNS-specific exporters
@@ -1257,7 +1257,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 4. Analyse IPv6 vs dual-stack performance
 
 #### Lab 12.2: Experimental DNS Technologies (15 minutes)
-**Objective:** Explore cutting-edge DNS technologies
+**Objective:** Explore emerging DNS technologies
 **Resources Needed:**
 - DNS-over-QUIC (RFC 9250) implementations (e.g. dnsdist, AdGuard Home)
 - ECH test endpoints and HTTPS/SVCB record lookups
@@ -1272,7 +1272,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 Closing deck: course recap, Final Project briefing and team allocation, certificates and next steps.
 See "Final Assessment and Course Conclusion" in `dns_slide_deck_plan.md`.
 
-#### Lab 12.3: Future-Ready Architecture Design (moved to Day 7)
+#### Lab 12.3: DNS Architecture Design (moved to Day 7)
 This exercise now opens the Day 7 Final Project; each team's design feeds its project.
 **Objective:** Design DNS architecture for future requirements
 **Resources Needed:**
