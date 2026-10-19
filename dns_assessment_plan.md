@@ -32,6 +32,11 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ## Daily Assessment Structure
 
+**Timing** follows the Programme Facts section of `dns_dnssec_workshop_plan.md`:
+- **Practical assessments** are graded lab work. The minutes shown are the part of that module's practical session that is assessed, not extra time.
+- **Knowledge checks**, the **mid-course assessment** (Day 3) and the **case study** (Day 5) take the last 15-30 minutes of Session 3.
+- The **Final Project** runs on the Day 7 morning.
+
 ### Day 1: DNS Fundamentals Assessment
 **Modules 1-2: Introduction to DNS and DNS Operations**
 
@@ -255,8 +260,8 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ---
 
-### Day 6: Comprehensive Assessment and Future Technologies
-**Module 11-12: Monitoring/Performance and Emerging Technologies**
+### Day 6: Monitoring and Future Technologies
+**Modules 11-12: Monitoring/Performance and Emerging Technologies**
 
 #### Practical Assessment 6A: Monitoring and Incident Response (45 minutes)
 **Assessment Type:** Operational readiness evaluation
@@ -271,14 +276,19 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 3. Analyze performance data and recommend optimizations (5 points)
 4. Document incident response procedures (5 points)
 
-#### Final Project: DNS Infrastructure Design (90 minutes)
-**Assessment Type:** Capstone project and presentation
+---
+
+### Day 7 (morning): Final Project
+
+#### Final Project: DNS Infrastructure Design (Sessions 1-2, 180 minutes)
+**Assessment Type:** Team capstone project and presentation (teams of 3-4)
+**Schedule:** Session 1 design and build, starting from the Lab 12.3 architecture exercise; Session 2 presentations and close
 **Requirements:**
 - Complete DNS infrastructure design for complex organization
 - Security implementation plan
 - Operational procedures
 - Future technology roadmap
-- 15-minute presentation to group
+- 15-minute team presentation to group
 
 **Evaluation Criteria:**
 - **Technical Design (40%):**
@@ -339,7 +349,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 ### Advanced Registry Operations Certificate
 **Requirements:**
 - DNS Fundamentals Certificate OR equivalent experience
-- Completion of Days 3-6
+- Completion of Days 3-6 and the Day 7 Final Project
 - Pass all advanced assessments (75% minimum)
 - Complete final project successfully
 - Demonstrate comprehensive operational capability
@@ -352,7 +362,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ### DNS Professional Master Certificate
 **Requirements:**
-- Complete 6-day program
+- Complete the full program (Days 1-7)
 - Pass all assessments (80% minimum)
 - Excellent final project (85% minimum)
 - Peer evaluation excellence
@@ -430,10 +440,9 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 - **ICANN Guidelines:** Alignment with industry best practices
 - **RFC Compliance:** Standards-based assessment criteria
 - **Vendor Neutrality:** Platform-agnostic competency evaluation
-- **Global Recognition:** International DNS community acceptance
 - **Continuing Education:** Professional development pathway
 
-### Employer Recognition
+### Value to Employers
 - **Skills Verification:** Demonstrable competency proof
 - **Role Readiness:** Job-specific capability certification
 - **Career Advancement:** Professional development documentation

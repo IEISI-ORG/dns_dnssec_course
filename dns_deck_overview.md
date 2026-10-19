@@ -7,7 +7,7 @@ _class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
-## 6-Day Professional Training Program
+## Professional Training Program: 12 Modules over 6½ Days
 
 **Comprehensive Education in DNS, Security, and Registry Operations**
 
@@ -22,7 +22,7 @@ _class: title-slide
 
 ## Executive Summary
 
-The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning experience covering DNS architecture, operations, security, and emerging technologies.
+The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning, plus a Day 7 Final Project morning, covering DNS architecture, operations, security, and emerging technologies.
 
 - Based on ICANN, APNIC, and NSRC curricula  
 - Modular design (12 modules × 90 min theory + 90 min labs)  
@@ -31,7 +31,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 
 <div class="badge">Professional</div>
 <div class="badge">Hands-On</div>
-<div class="badge">Certified</div>
+<div class="badge">Assessed</div>
 
 ---
 
@@ -54,10 +54,11 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 
 | Item | Detail |
 |------|--------|
-| **Total Duration** | 6 consecutive days |
-| **Sessions per Day** | 4 (2 theory + 2 practical) |
+| **Total Duration** | 6 full days + Day 7 morning (Final Project) |
+| **Sessions per Day** | 4 (2 theory + 2 practical); Day 7: 2 |
 | **Session Length** | 90 minutes each |
-| **Participants** | Max 20 per session |
+| **Contact Hours** | 39 |
+| **Participants** | Max 20 per class |
 | **Format** | Modular, instructor-led, lab-based |
 
 ---
@@ -121,8 +122,8 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 |--------------|-----------|-----------|
 | **DNS Fundamentals Certificate** | Modules 1-4 | 2 Days |
 | **DNS Security Specialist** | Modules 5-8 | 2 Days |
-| **Advanced Registry Ops Certificate** | Modules 5-12 | 4 Days |
-| **DNS Professional Master** | Complete Program + Project | 6 Days |
+| **Advanced Registry Ops Certificate** | Modules 5-12 + Final Project | 4½ Days |
+| **DNS Professional Master** | Complete Program + Final Project | 6½ Days |
 
 ---
 
@@ -160,21 +161,21 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 ## Evaluation Methods
 
-- **Daily Labs** – hands-on tasks per module  
+- **Daily Labs** – hands-on tasks per module, graded against assessment tasks  
 - **Knowledge Checks** – short quizzes for theory retention  
-- **Final Project** – complete DNS architecture design  
+- **Final Project** – team DNS architecture design and presentation (Day 7)  
 - **Instructor Assessment** – continuous performance review  
 
 ---
 
-## Sample Assessment Criteria
+## Final Project Assessment Criteria
 
 | Area | Evaluation Focus | Weight |
 |------|------------------|--------|
-| Configuration & Deployment | Lab accuracy & security setup | 40% |
-| Troubleshooting & Analysis | Diagnostic and resolution steps | 30% |
-| Project Design Presentation | Clarity & completeness | 20% |
-| Participation & Engagement | Collaboration & feedback | 10% |
+| Technical Design | Architecture, security, scalability, technology choices | 40% |
+| Implementation Plan | Deployment method, risk, timeline, testing | 30% |
+| Operational Excellence | Monitoring, incident response, maintenance | 20% |
+| Presentation Quality | Clarity, accuracy, Q&A | 10% |
 
 ---
 <!-- _class: section-divider -->
@@ -237,9 +238,9 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 
 ## For Participants
 
-- 48 hours of intensive DNS training  
+- 39 contact hours of instructor-led training and labs  
 - Practical skills for real-world operations  
-- Certification recognized across industry  
+- IEISI course certificate (proposed scheme)  
 - Access to reference materials & community  
 
 ---

@@ -17,7 +17,7 @@ Early stage. The course design is in the planning documents. The 12 module decks
 ## What’s inside
 
 - **Planning documents** (the course content, for now):
-  - `dns_dnssec_workshop_plan.md` — the 6-day programme, module objectives, and lab appendix
+  - `dns_dnssec_workshop_plan.md` — programme facts, module objectives, and lab appendix (the reference document)
   - `dns_slide_deck_plan.md` — a slide-by-slide outline for each module
   - `dns_assessment_plan.md` — daily assessments and the final project
   - `dns_workshop_scope.md` — the one-page scope and delivery options
