@@ -1,7 +1,7 @@
 ---
 marp: true
 theme: ieisi-dns-workshop
-class: title-slide
+_class: title-slide
 paginate: true
 footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
 ---
@@ -13,13 +13,12 @@ footer: 'Advanced DNS/DNSSEC Workshop | Module 1 | DNS Foundations'
 *Building Enterprise-Grade DNS Infrastructure*
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Module 1
 ## Introduction to DNS Foundations and Concepts
 
 ---
-<!-- class: section -->
 
 ## Learning Objectives
 
@@ -260,7 +259,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 
 ---
 
-<!-- class: lab-intro -->
+<!-- _class: lab-intro -->
 
 # Practical Lab Introduction
 ## DNS Hierarchy Exploration
@@ -550,7 +549,6 @@ dig @1.1.1.1 example.com
 - **Certification**: DNS Professional credentials
 
 ---
-<!-- class: section -->
 
 ## Module Summary
 
@@ -571,7 +569,6 @@ dig @1.1.1.1 example.com
 - Email infrastructure DNS setup
 
 ---
-<!-- class: section -->
 
 ## Questions & Discussion
 
@@ -601,7 +598,7 @@ dig @1.1.1.1 example.com
 </div>
 
 ---
-<!-- class: title-slide -->
+<!-- _class: title-slide -->
 
 # Thank You
 ## Questions & Lab Time

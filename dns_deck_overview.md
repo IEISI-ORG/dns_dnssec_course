@@ -2,9 +2,8 @@
 marp: true
 theme: ieisi-dns-workshop
 paginate: true
-html: true
 footer: "DNS/DNSSEC Workshop - Example Overview Deck - &copy; CC BY-NC-SA 4.0"
-class: title-slide
+_class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
@@ -15,12 +14,11 @@ class: title-slide
 *Building Leading DNS Competence*
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Workshop Overview
 
 ---
-<!-- class: section -->
 
 ## Executive Summary
 
@@ -36,7 +34,6 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 <div class="badge">Certified</div>
 
 ---
-<!-- class: section -->
 
 ## Program Objectives
 
@@ -48,11 +45,10 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 
 ---
 
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 # Course Structure
 
 ---
-<!-- class: section -->
 
 ## Duration and Format
 
@@ -65,7 +61,6 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 | **Format** | Modular, instructor-led, lab-based |
 
 ---
-<!-- class: section -->
 
 ## 12 Modules at a Glance
 
@@ -83,12 +78,11 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 + Emerging Technologies & Future DNS
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Learning Outcomes
 
 ---
-<!-- class: section -->
 
 ## Competency Areas
 
@@ -119,14 +113,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers a complete 6-day hands-on learning
 </div>
 </div>
 
-<code>
-
-Too much white space here ... 
-
-</code>
-
 ---
-<!-- class: section -->
 
 ## Proposed Certification Pathways
 
@@ -139,11 +126,10 @@ Too much white space here ...
 
 ---
 
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 # Lab Environment & Infrastructure
 
 ---
-<!-- class: section -->
 
 ## Technical Requirements
 
@@ -158,7 +144,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 </div>
 
 ---
-<!-- class: section -->
 
 ## Participant Requirements
 
@@ -167,12 +152,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - DNS experience (recommended for advanced modules)  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Assessment & Certification
 
 ---
-<!-- class: section -->
 
 ## Evaluation Methods
 
@@ -182,7 +166,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - **Instructor Assessment** – continuous performance review  
 
 ---
-<!-- class: section -->
 
 ## Sample Assessment Criteria
 
@@ -194,12 +177,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | Participation & Engagement | Collaboration & feedback | 10% |
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Quality Assurance & Standards
 
 ---
-<!-- class: section -->
 
 ## Industry Alignment
 
@@ -214,7 +196,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Participant feedback loop  
 
 ---
-<!-- class: section -->
 
 ## Success Metrics
 
@@ -226,12 +207,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 | **Operational Impact** | Improved DNS infrastructure management within organizations |
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Implementation Timeline
 
 ---
-<!-- class: section -->
 
 ## Development & Deployment Roadmap
 
@@ -249,12 +229,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
    - Continuous delivery cycle  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Course Outcomes & Benefits
 
 ---
-<!-- class: section -->
 
 ## For Participants
 
@@ -264,7 +243,6 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Access to reference materials & community  
 
 ---
-<!-- class: section -->
 
 ## For Organizations
 
@@ -274,12 +252,11 @@ All labs mirror real-world DNS infrastructure — authoritative & recursive conf
 - Future-ready infrastructure strategies  
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 
 # Thank You
 
 ---
-<!-- class: section -->
 
 ## Next Steps
 

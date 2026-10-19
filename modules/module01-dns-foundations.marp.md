@@ -2,9 +2,8 @@
 marp: true
 theme: ieisi-dns-workshop
 paginate: true
-html: true
 footer: "IEISI.ORG • CC BY-NC-SA 4.0 • tcs@ieisi.org"
-class: title-slide
+_class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
@@ -14,7 +13,7 @@ class: title-slide
 **Organisation:** IEISI.ORG
 
 ---
-<!-- class: section-divider -->
+<!-- _class: section-divider -->
 # Module Overview
 
 ---
