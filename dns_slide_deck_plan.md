@@ -963,7 +963,7 @@
 7. **Contact Object Handling**
    - Contact creation and validation
    - Contact information updates
-   - Privacy and WHOIS considerations
+   - Privacy and registration data (RDAP/WHOIS) considerations
    - Contact verification requirements
 
 8. **Host Object Management**
@@ -985,8 +985,9 @@
     - Eligibility requirements
     - Dispute resolution procedures
 
-11. **WHOIS and Data Management**
-    - WHOIS service requirements
+11. **Registration Data Services (RDAP and WHOIS)**
+    - RDAP (RFC 7480-7484, 9082, 9083) is the required gTLD service; ICANN ended the gTLD port-43 WHOIS requirement on 28 January 2025
+    - ccTLDs set their own policy: RDAP, WHOIS, or both
     - Data accuracy obligations
     - Privacy protection services
     - GDPR compliance considerations
@@ -1019,7 +1020,7 @@
 
 ### COCCA Platform Overview (12 slides)
 1. **COCCA Architecture and History**
-   - Development by CENTR
+   - Developed and operated by CoCCA (Council of Country Code Administrators)
    - ccTLD focus and design
    - Component architecture
    - Version evolution and roadmap
@@ -1027,7 +1028,7 @@
 2. **COCCA Core Components**
    - Registry database schema
    - EPP server implementation
-   - WHOIS service integration
+   - RDAP and WHOIS service integration
    - Administrative interfaces
 
 3. **COCCA Deployment Models**
@@ -1049,8 +1050,8 @@
    - Security configuration
    - Performance tuning
 
-6. **WHOIS Service Setup**
-   - WHOIS server configuration
+6. **RDAP and WHOIS Service Setup**
+   - RDAP and WHOIS server configuration
    - Query rate limiting
    - Privacy protection integration
    - Output format customization
@@ -1203,9 +1204,9 @@
    - Performance bottlenecks
 
 2. **Emerging Protocol Developments**
-   - DNS-over-QUIC (DoQ) overview
+   - DNS-over-QUIC (DoQ, RFC 9250, 2022): standardised; deployment status
    - HTTP/3 implications for DoH
-   - Encrypted SNI integration
+   - Encrypted Client Hello (ECH) published via HTTPS/SVCB records (RFC 9460)
    - New transport protocols
 
 3. **Next-Generation DNS Features**

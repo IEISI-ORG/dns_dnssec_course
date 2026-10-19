@@ -456,7 +456,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - DNSSEC policy framework development
 
 ### Practical Lab
-- Manual zone signing with dnssec-tools
+- Manual zone signing with BIND's dnssec-keygen and dnssec-signzone
 - Automated signing with BIND inline-signing
 - Configure DNSSEC validation on recursive resolvers
 - Perform emergency key rollover simulation
@@ -469,7 +469,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall DNS privacy protocols (DoT, DoH, DNSCrypt)
+- Recall DNS privacy protocols (DoT, DoH, DoQ, DNSCrypt)
 - Identify implementation differences between privacy protocols
 
 **Comprehension (Understand):**
@@ -629,14 +629,14 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Design future-ready DNS architectures
 
 ### Theory Content
-- DNS-over-QUIC (DoQ) and HTTP/3 implications
-- Encrypted SNI and privacy enhancements
+- DNS-over-QUIC (DoQ, RFC 9250) deployment and HTTP/3 implications
+- Encrypted Client Hello (ECH) and the HTTPS/SVCB record (RFC 9460)
 - DNS filtering and abuse mitigation technologies
 - IPv6-only DNS operations
 - AI/ML applications in DNS operations
 
 ### Practical Lab
-- Experimental DoQ implementations
+- DoQ (RFC 9250) with current implementations (e.g. dnsdist, AdGuard Home)
 - IPv6-only DNS testing
 - DNS abuse detection and mitigation tools
 - Next-generation DNS server evaluation
@@ -1002,7 +1002,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Lab Environment Setup
 - **Participant VMs:** 3 Ubuntu server VMs per participant
-- **Software:** BIND 9 with DNSSEC support, dnssec-tools
+- **Software:** BIND 9 with DNSSEC support (dnssec-keygen, dnssec-signzone), ldns-utils (drill) for verification
 - **PKI Infrastructure:** Key generation and management tools
 
 ### Lab Exercises
@@ -1259,12 +1259,12 @@ The modular design allows for flexible course delivery tailored to specific audi
 #### Lab 12.2: Experimental DNS Technologies (15 minutes)
 **Objective:** Explore cutting-edge DNS technologies
 **Resources Needed:**
-- DNS-over-QUIC experimental implementations
-- Encrypted SNI testing tools
+- DNS-over-QUIC (RFC 9250) implementations (e.g. dnsdist, AdGuard Home)
+- ECH test endpoints and HTTPS/SVCB record lookups
 - Next-generation DNS software
 **Exercise Steps:**
 1. Test DNS-over-QUIC implementations
-2. Explore encrypted SNI capabilities
+2. Inspect ECH configuration published in HTTPS records (`dig HTTPS`)
 3. Evaluate new DNS server software
 4. Assess migration considerations
 

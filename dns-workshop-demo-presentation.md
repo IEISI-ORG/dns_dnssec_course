@@ -248,7 +248,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 **Registry Operators**
 - TLD database maintenance
 - Registration processing
-- WHOIS services
+- Registration data services (RDAP, WHOIS)
 - DNS infrastructure
 
 </div>
