@@ -7,7 +7,7 @@ _class: title-slide
 ---
 
 # Advanced DNS/DNSSEC Workshop
-## Module 11: DNS Monitoring, Incident Response, and Performance Optimization
+## Module 11: DNS Monitoring, Incident Response, and Performance Optimisation
 
 **Instructor:** Terry Sweetser — <tcs@ieisi.org>  
 **Organisation:** IEISI.ORG
@@ -81,7 +81,7 @@ _class: title-slide
 ## Lab Environment
 
 - VM image / network notes (edit)
-- Tools required (dig, nslookup, bind-utils, etc.)
+- Tools required: dig, nslookup, named-checkzone (Debian/Ubuntu packages bind9-dnsutils, bind9-utils)
 
 ## Lab Tasks
 
@@ -133,7 +133,7 @@ dig @1.1.1.1 example.com A
 
 ---
 <!-- _class: section-divider -->
-# License
+# Licence
 
 ---
 <!-- _class: dense -->
@@ -149,4 +149,4 @@ This work is licensed under a
 **Under the following terms:**
 - **Attribution** — credit **Terry Sweetser (IEISI.ORG)**
 - **NonCommercial** — no commercial use
-- **ShareAlike** — same license on derivatives
+- **ShareAlike** — same licence on derivatives

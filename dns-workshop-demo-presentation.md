@@ -26,7 +26,7 @@ By the end of this module, participants will be able to:
 
 - **Understand** the fundamental architecture of the Domain Name System
 - **Explain** the DNS hierarchy and namespace structure
-- **Analyze** DNS query resolution processes
+- **Analyse** DNS query resolution processes
 - **Evaluate** different DNS server types and their roles
 - **Apply** basic DNS troubleshooting techniques
 
@@ -264,7 +264,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 - Recursive DNS services
 - Customer DNS resolution
 - Caching infrastructure
-- Performance optimization
+- Performance optimisation
 
 </div>
 </div>
@@ -281,9 +281,9 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 ## Lab Environment Overview
 
 ### Virtual Machine Setup
-- **Ubuntu 22.04 LTS** with DNS tools pre-installed
+- **Debian 13 or Ubuntu 24.04 LTS** with DNS tools pre-installed
 - **Network Topology**: Simulated Internet environment
-- **Available Tools**: dig, nslookup, host, wireshark, bind9-utils
+- **Available Tools**: dig, nslookup, host, named-checkzone, Wireshark
 
 ---
 
@@ -295,11 +295,11 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 
 2. **Query Analysis Workshop**
    - Use `dig +trace` to follow resolution path
-   - Analyze response codes and flags
+   - Analyse response codes and flags
 
 3. **DNS Server Identification**
    - Identify different server types in resolution chain
-   - Understand caching behavior
+   - Understand caching behaviour
 
 ---
 <!-- _class: dense tight table-compact -->
@@ -423,7 +423,7 @@ dig -x 2001:4860:4860::8888
 dig TXT google.com | grep -i spf
 dig TXT selector1._domainkey.microsoft.com
 
-# Certificate authority authorization
+# Certificate authority authorisation
 dig CAA github.com
 ```
 
@@ -497,7 +497,7 @@ dig @1.1.1.1 example.com
 ---
 <!-- _class: dense -->
 
-## DNS Performance Optimization
+## DNS Performance Optimisation
 
 ### Caching Strategies
 
@@ -510,7 +510,7 @@ dig @1.1.1.1 example.com
 **Resolver Placement**
 - Geographic distribution
 - Network topology awareness
-- Latency optimization
+- Latency optimisation
 - Redundancy planning
 
 ---

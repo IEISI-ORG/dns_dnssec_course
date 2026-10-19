@@ -1,4 +1,4 @@
-# License
+# Licence
 
 Copyright © Terry Sweetser (IEISI.ORG)
 
@@ -16,6 +16,6 @@ Under the following terms:
 
 - **Attribution** — give appropriate credit to *IEISI.ORG / Terry Sweetser*  
 - **NonCommercial** — you may not use the material for commercial purposes  
-- **ShareAlike** — if you remix or build upon the material, you must distribute your contributions under the same license
+- **ShareAlike** — if you remix or build upon the material, you must distribute your contributions under the same licence
 
 Full legal code: <https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode>

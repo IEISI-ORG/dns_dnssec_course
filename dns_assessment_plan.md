@@ -4,7 +4,7 @@
 This assessment plan provides comprehensive evaluation methods for the Advanced DNS/DNSSEC Workshop, ensuring participants demonstrate both theoretical knowledge and practical competency across all learning objectives. The assessment framework aligns with Bloom's Taxonomy progression and industry best practices for technical certification.
 
 ## Assessment Philosophy
-- **Competency-Based:** Focus on demonstrable skills rather than memorization
+- **Competency-Based:** Focus on demonstrable skills rather than memorisation
 - **Progressive Evaluation:** Building complexity from basic concepts to advanced operations
 - **Practical Application:** Emphasis on real-world scenarios and problem-solving
 - **Multiple Assessment Types:** Varied evaluation methods to accommodate different learning styles
@@ -32,7 +32,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ## Daily Assessment Structure
 
-**Timing** follows the Programme Facts section of `dns_dnssec_workshop_plan.md`:
+**Timing** follows the Program Facts section of `dns_dnssec_workshop_plan.md`:
 - **Practical assessments** are graded lab work. The minutes shown are the part of that module's practical session that is assessed, not extra time.
 - **Knowledge checks**, the **mid-course assessment** (Day 3) and the **case study** (Day 5) take the last 15-30 minutes of Session 3.
 - The **Final Project** runs on the Day 7 morning.
@@ -44,13 +44,13 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Assessment Type:** Hands-on lab evaluation
 **Learning Objectives Tested:**
 - DNS hierarchy understanding (Remember/Understand)
-- Query tracing and analysis (Apply/Analyze)
+- Query tracing and analysis (Apply/Analyse)
 - Tool usage proficiency (Apply)
 
 **Tasks:**
 1. Trace DNS resolution for a complex domain (5 points)
 2. Identify delegation issues in provided scenario (5 points)
-3. Analyze DNS response codes and explain their meaning (5 points)
+3. Analyse DNS response codes and explain their meaning (5 points)
 4. Compare IPv4 and IPv6 DNS resolution paths (5 points)
 
 **Assessment Criteria:**
@@ -64,7 +64,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Learning Objectives Tested:**
 - Zone file syntax and structure (Remember/Understand)
 - Record type implementation (Apply)
-- DNS data management (Apply/Analyze)
+- DNS data management (Apply/Analyse)
 
 **Tasks:**
 1. Create complete zone file for assigned domain with all record types (10 points)
@@ -98,7 +98,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Learning Objectives Tested:**
 - Server type understanding (Understand)
 - Configuration skills (Apply)
-- Architecture implementation (Apply/Analyze)
+- Architecture implementation (Apply/Analyse)
 
 **Tasks:**
 1. Configure BIND authoritative server with primary/secondary setup (10 points)
@@ -115,7 +115,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 #### Practical Assessment 2B: DNS Software Comparison (30 minutes)
 **Assessment Type:** Analysis and evaluation exercise
 **Learning Objectives Tested:**
-- Platform comparison (Analyze/Evaluate)
+- Platform comparison (Analyse/Evaluate)
 - Decision-making skills (Evaluate)
 - Technical communication (Create)
 
@@ -141,20 +141,20 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 #### Practical Assessment 3A: Advanced Architecture Implementation (45 minutes)
 **Assessment Type:** Complex configuration exercise
 **Learning Objectives Tested:**
-- Advanced architecture design (Apply/Analyze)
-- Performance optimization (Apply)
-- Troubleshooting skills (Analyze)
+- Advanced architecture design (Apply/Analyse)
+- Performance optimisation (Apply)
+- Troubleshooting skills (Analyse)
 
 **Tasks:**
 1. Implement anycast DNS configuration (8 points)
-2. Configure hidden master architecture (7 points)
+2. Configure hidden primary architecture (7 points)
 3. Set up split-horizon DNS with views (5 points)
 4. Troubleshoot provided DNS issues (5 points)
 
 #### Practical Assessment 3B: DNS Security Implementation (45 minutes)
 **Assessment Type:** Security configuration and testing
 **Learning Objectives Tested:**
-- Security threat understanding (Understand/Analyze)
+- Security threat understanding (Understand/Analyse)
 - Security implementation (Apply)
 - Attack mitigation (Apply/Evaluate)
 
@@ -162,15 +162,15 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 1. Configure DNS security controls (rate limiting, ACLs) (8 points)
 2. Implement TSIG authentication (6 points)
 3. Set up DNS monitoring and alerting (6 points)
-4. Analyze and respond to simulated attack scenario (5 points)
+4. Analyse and respond to simulated attack scenario (5 points)
 
 #### Mid-Course Assessment: Comprehensive Practical (30 minutes)
 **Assessment Type:** Integrated skills demonstration
-**Scenario:** Design and implement DNS infrastructure for fictional organization
+**Scenario:** Design and implement DNS infrastructure for fictional organisation
 **Requirements:**
 - Multi-site DNS architecture
 - Security considerations
-- Performance optimization
+- Performance optimisation
 - Documentation and presentation
 
 **Evaluation Criteria:**
@@ -187,7 +187,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 #### Practical Assessment 4A: DNSSEC Implementation (45 minutes)
 **Assessment Type:** End-to-end DNSSEC deployment
 **Learning Objectives Tested:**
-- DNSSEC concepts and implementation (Apply/Analyze)
+- DNSSEC concepts and implementation (Apply/Analyse)
 - Key management (Apply)
 - Validation configuration (Apply)
 
@@ -202,7 +202,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Learning Objectives Tested:**
 - Privacy protocol understanding (Understand/Apply)
 - Encryption implementation (Apply)
-- Performance analysis (Analyze/Evaluate)
+- Performance analysis (Analyse/Evaluate)
 
 **Tasks:**
 1. Configure DNS over TLS (DoT) service (8 points)
@@ -221,31 +221,31 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 ---
 
 ### Day 5: Registry Operations Assessment
-**Modules 9-10: EPP Protocol and COCCA Systems**
+**Modules 9-10: EPP Protocol and CoCCA Systems**
 
 #### Practical Assessment 5A: EPP Operations (45 minutes)
 **Assessment Type:** Registry protocol implementation
 **Learning Objectives Tested:**
 - EPP protocol understanding (Understand/Apply)
 - Domain lifecycle management (Apply)
-- Registry operations (Apply/Analyze)
+- Registry operations (Apply/Analyse)
 
 **Tasks:**
 1. Configure EPP server and client connectivity (8 points)
 2. Execute complete domain registration workflow (10 points)
 3. Perform domain transfer and renewal operations (7 points)
-4. Generate registry reports and analyze data (5 points)
+4. Generate registry reports and analyse data (5 points)
 
-#### Practical Assessment 5B: COCCA Registry Management (45 minutes)
+#### Practical Assessment 5B: CoCCA Registry Management (45 minutes)
 **Assessment Type:** Registry system administration
 **Learning Objectives Tested:**
 - Registry platform management (Apply)
-- Policy configuration (Apply/Analyze)
+- Policy configuration (Apply/Analyse)
 - Integration capabilities (Apply)
 
 **Tasks:**
-1. Configure COCCA registry policies and business rules (10 points)
-2. Set up WHMCS-COCCA integration (8 points)
+1. Configure CoCCA registry policies and business rules (10 points)
+2. Set up WHMCS-CoCCA integration (8 points)
 3. Manage registrar accounts and permissions (5 points)
 4. Monitor registry performance and generate reports (7 points)
 
@@ -267,13 +267,13 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Assessment Type:** Operational readiness evaluation
 **Learning Objectives Tested:**
 - Monitoring implementation (Apply)
-- Incident response (Apply/Analyze)
-- Performance optimization (Analyze/Evaluate)
+- Incident response (Apply/Analyse)
+- Performance optimisation (Analyse/Evaluate)
 
 **Tasks:**
 1. Deploy comprehensive DNS monitoring solution (10 points)
 2. Respond to simulated DNS outage scenario (10 points)
-3. Analyze performance data and recommend optimizations (5 points)
+3. Analyse performance data and recommend optimisations (5 points)
 4. Document incident response procedures (5 points)
 
 ---
@@ -284,7 +284,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Assessment Type:** Team capstone project and presentation (teams of 3-4)
 **Schedule:** Session 1 design and build, starting from the Lab 12.3 architecture exercise; Session 2 presentations and close
 **Requirements:**
-- Complete DNS infrastructure design for complex organization
+- Complete DNS infrastructure design for complex organisation
 - Security implementation plan
 - Operational procedures
 - Future technology roadmap
@@ -307,7 +307,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
   - Monitoring and alerting
   - Incident response procedures
   - Maintenance and updates
-  - Performance optimization
+  - Performance optimisation
 
 - **Presentation Quality (10%):**
   - Clear communication
@@ -357,7 +357,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 **Competencies Certified:**
 - Advanced DNS architecture design
 - Registry operations and EPP protocol
-- COCCA platform management
+- CoCCA platform management
 - Comprehensive DNS operations
 
 ### DNS Professional Master Certificate
@@ -420,7 +420,7 @@ This assessment plan provides comprehensive evaluation methods for the Advanced 
 
 ### Practical Assessment Infrastructure
 - **Isolated Lab Environment:** Consistent assessment conditions
-- **Standardized Scenarios:** Repeatable assessment challenges
+- **Standardised Scenarios:** Repeatable assessment challenges
 - **Automated Validation:** Objective configuration checking
 - **Performance Monitoring:** Quantitative skill measurement
 - **Documentation Templates:** Structured reporting requirements
