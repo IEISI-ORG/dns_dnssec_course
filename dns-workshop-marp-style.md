@@ -62,7 +62,13 @@ These need HTML enabled (`--html` on the CLI, `enableHtml` in VS Code).
 | `<span class="badge">Label</span>` | Small pill label |
 | `<div class="warning">…</div>`, `success`, `error` | Callout boxes |
 
-## 5. Building
+## 5. Fonts and text size
+
+The theme names **Inter** (text) and **JetBrains Mono** (code) but does not load them. Install both on any machine that builds the decks, or the output falls back to system fonts and line breaks will differ.
+
+Body text is 20px, the largest size at which the current decks fit. For wordy slides, use `dense` (17px), add `tight` and `table-compact` if needed, or move content into `<div class="columns">`.
+
+## 6. Building
 
 Use the `Makefile` at the repo root (`make html`, `make pdf`) or `./test-html <deck.md>` for a single deck.
 To run marp by hand:

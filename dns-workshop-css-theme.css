@@ -2,7 +2,7 @@
 /*
  * DNS Advanced Workshop Theme for Marp (Patched)
  * Professional presentation theme compliant with technical organization brand guidelines
- * Based on ICANN-style branding with blue and orange color palette
+ * Based on ICANN-style branding with a blue palette
  * Patch includes: footer spacing fix, pagination placement, compact/dense utilities,
  * background variants, grid helpers, and global tightening to reduce white space.
  */
@@ -16,13 +16,12 @@
 
   /* Primary Brand Colors */
   --primary-blue: #005A9C;        /* Deep blue - main brand color */
-  --primary-orange: #ea580c;       /* Vibrant orange - accent color */
   --secondary-blue: #00A4E0;       /* Medium blue - secondary elements */
   --light-blue: #E6F4FA;           /* Light blue - backgrounds */
   
   /* Supporting Colors */
   --dark-navy: #0F2D46;            /* Dark navy - high contrast text */
-  --warm-gray: #6b7280;            /* Warm gray - body text */
+  --warm-gray: #4b5563;            /* Gray - secondary text (AA on light-gray) */
   --light-gray: #f3f4f6;           /* Light gray - subtle backgrounds */
   --white: #ffffff;                /* Pure white */
   --success-green: #059669;        /* Success states */
@@ -30,15 +29,17 @@
   --error-red: #dc2626;            /* Error states */
   
   /* Typography Scale */
-  --font-size-xs: 0.75rem;         /* 12px */
-  --font-size-sm: 0.875rem;        /* 14px */
-  --font-size-base: 1rem;          /* 16px */
-  --font-size-lg: 1.125rem;        /* 18px */
-  --font-size-xl: 1.25rem;         /* 20px */
-  --font-size-2xl: 1.5rem;         /* 24px */
-  --font-size-3xl: 1.875rem;       /* 30px */
-  --font-size-4xl: 2.25rem;        /* 36px */
-  --font-size-5xl: 3rem;           /* 48px */
+  /* Sized for Marp's 1280x720 slide. 20px base measured as the largest size at which
+     the existing decks still fit; use the dense class for wordy slides. */
+  --font-size-xs: 14px;
+  --font-size-sm: 17px;
+  --font-size-base: 20px;
+  --font-size-lg: 22px;
+  --font-size-xl: 23px;
+  --font-size-2xl: 26px;
+  --font-size-3xl: 31px;
+  --font-size-4xl: 34px;
+  --font-size-5xl: 46px;
   
   /* Spacing Scale */
   --space-1: 0.25rem;              /* 4px */
@@ -50,7 +51,6 @@
   --space-8: 2rem;                 /* 32px */
   --space-10: 2.5rem;              /* 40px */
   --space-12: 3rem;                /* 48px */
-  --space-16: 4rem;                /* 64px */
 
   /* Footer height variable */
   --footer-height: 44px;
@@ -72,9 +72,8 @@ section {
   background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
   color: var(--dark-navy);
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  /* Patched: slightly smaller base size & leading to reduce whitespace */
-  font-size: var(--font-size-base); /* was var(--font-size-lg) */
-  line-height: 1.5;                 /* was 1.6 */
+  font-size: var(--font-size-base);
+  line-height: 1.5;
   /* Patched: padding accounts for footer height to prevent clipping */
   padding: var(--space-10) var(--space-10) calc(var(--space-10) + var(--footer-height));
   display: flex;
@@ -82,6 +81,9 @@ section {
   justify-content: flex-start;
   position: relative;
 }
+
+/* Slides are flex columns: stop children shrinking (which clipped code blocks) so overflow is visible */
+section > * { flex-shrink: 0; }
 
 /* === HEADER STRIPE === */
 section::before {
@@ -129,7 +131,7 @@ h2::before {
 h3 {
   font-size: var(--font-size-2xl);
   font-weight: 600;
-  color: var(--secondary-blue);
+  color: var(--primary-blue); /* secondary-blue is 2.8:1 on white */
   margin: var(--space-4) 0 var(--space-3) 0; /* tightened */
   line-height: 1.4;
 }
@@ -241,7 +243,6 @@ td {
 }
 
 tr:nth-child(even) td { background: var(--light-blue); }
-tr:hover td { background: var(--light-blue); }
 
 /* === BLOCKQUOTE STYLES === */
 blockquote {
@@ -268,7 +269,8 @@ blockquote p { margin-left: var(--space-8); margin-bottom: 0; }
 
 /* === SPECIAL SECTION CLASSES === */
 section.title-slide {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+  /* end stop kept >= 4.5:1 against white text */
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0077B6 100%);
   color: var(--white);
   text-align: center;
   justify-content: center;
@@ -294,13 +296,17 @@ section.title-slide h2 {
 section.title-slide h2::before { display: none; }
 
 section.section-divider {
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+  /* accent-1 is too light for white text (2.8:1); run accent-2 to a darker shade */
+  background: linear-gradient(135deg, var(--accent-2) 0%, color-mix(in srgb, var(--accent-2) 70%, #000) 100%);
   color: var(--white);
   text-align: center;
   justify-content: center;
   align-items: center;
   padding: var(--space-10); /* slightly tighter */
 }
+
+section.section-divider h2 { color: var(--white); }
+section.section-divider h2::before { background: var(--white); }
 
 section.section-divider h1 {
   color: var(--white);
@@ -309,7 +315,7 @@ section.section-divider h1 {
 }
 
 section.lab-intro {
-  background: linear-gradient(135deg, var(--success-green) 0%, #10b981 100%);
+  background: linear-gradient(135deg, #065f46 0%, #047857 100%); /* >= 5.4:1 for white text */
   color: var(--white);
 }
 
@@ -321,7 +327,7 @@ section.lab-intro h2::before { background: var(--white); }
 
 /* === EMPHASIS CLASSES === */
 .highlight {
-  background: var(--accent-1);
+  background: var(--accent-2);
   color: var(--accent-contrast);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
@@ -330,7 +336,8 @@ section.lab-intro h2::before { background: var(--white); }
 
 .badge {
   display: inline-block;
-  background: var(--secondary-blue);
+  align-self: flex-start; /* don't stretch when a direct child of the flex slide */
+  background: var(--primary-blue);
   color: var(--white);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-xl);
@@ -376,7 +383,7 @@ footer {
   background: var(--primary-blue);
   color: var(--white);
   padding: var(--space-3) var(--space-12);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   display: flex;
   justify-content: flex-start; /* space-between split Marp's auto-linked email off to the right */
   align-items: center;
@@ -396,11 +403,13 @@ section::after { content: attr(data-marpit-pagination);
   position: absolute;
   right: 1rem;
   bottom: calc(var(--footer-height) + 0.5rem);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--warm-gray);
   z-index: 20;
-  /* In case Marp theme needs explicit content (usually set by Marp) */
-  /* content: attr(data-marpit-pagination); */
+}
+
+section.title-slide::after, section.section-divider::after, section.lab-intro::after {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* === TWO/THREE-COLUMN LAYOUT === */
@@ -427,22 +436,6 @@ img {
   margin: var(--space-4) 0;
 }
 
-/* === MARP-SPECIFIC THEME HOOK === */
-section[data-theme~="ieisi-dns-workshop"] {
-  --color-background: var(--white);
-  --color-foreground: var(--dark-navy);
-  --color-highlight: var(--accent-1);
-  --color-dimmed: var(--warm-gray);
-}
-
-/* === RESPONSIVE ADJUSTMENTS === */
-@media (max-width: 768px) {
-  section { padding: var(--space-8) var(--space-8) calc(var(--space-8) + var(--footer-height)); }
-  h1 { font-size: var(--font-size-3xl); }
-  h2 { font-size: var(--font-size-2xl); }
-  .columns, .columns-3 { grid-template-columns: 1fr; gap: var(--space-4); }
-}
-
 /* === PRINT / PDF STYLES === */
 @media print {
   section {
@@ -461,7 +454,7 @@ section[data-theme~="ieisi-dns-workshop"] {
 
 /* Dense slide variant for wordy slides */
 section.dense {
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   line-height: 1.45;
   padding: var(--space-8) var(--space-8) calc(var(--space-8) + var(--footer-height));
 }
@@ -513,7 +506,6 @@ section.blue-wash {
 /* Grid helpers */
 section.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
 section.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-5); }
-@media (max-width: 768px) { section.grid-2, section.grid-3 { grid-template-columns: 1fr; gap: var(--space-4); } }
 
 
 /* === ACCENT UTILITIES === */
