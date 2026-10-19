@@ -27,9 +27,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 - Instructor-led with fully virtualised lab environment  
 - Learning outcomes assessed through graded labs and a Final Project
 
-<div class="badge">Professional</div>
-<div class="badge">Hands-On</div>
-<div class="badge">Assessed</div>
+<span class="badge">Professional</span> <span class="badge">Hands-On</span> <span class="badge">Assessed</span>
 
 ---
 

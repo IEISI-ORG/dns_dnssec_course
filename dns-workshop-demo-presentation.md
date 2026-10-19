@@ -30,7 +30,7 @@ By the end of this module, participants will be able to:
 - **Evaluate** different DNS server types and their roles
 - **Apply** basic DNS troubleshooting techniques
 
-<div class="badge">Knowledge</div> <div class="badge">Comprehension</div> <div class="badge">Application</div> <div class="badge">Analysis</div>
+<span class="badge">Knowledge</span> <span class="badge">Comprehension</span> <span class="badge">Application</span> <span class="badge">Analysis</span>
 
 ---
 
