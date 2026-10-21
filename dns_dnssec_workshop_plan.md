@@ -717,7 +717,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **Lab Reset Capability:** Snapshots for quick environment restoration
 
 ### Base Virtual Machine Requirements
-- **Operating System:** Debian 13 (BIND 9.20) or Ubuntu 24.04 LTS (BIND 9.18; 9.20 from ISC's `ppa:isc/bind`)
+- **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
 - **RAM:** Minimum 2GB per VM, 4GB recommended
 - **Storage:** 20GB minimum per VM
 - **CPU:** 2 vCPU cores minimum
@@ -728,7 +728,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 1: Introduction to DNS - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 1 Ubuntu desktop VM per participant
+- **Participant VMs:** 1 Debian desktop VM per participant
 - **Shared Infrastructure:** 1 root server simulator, 1 TLD server simulator
 - **Tools Pre-installed:** dig, nslookup, host, wireshark, tcpdump
 
@@ -772,7 +772,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 2: DNS Operations - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 1 Ubuntu server VM per participant
+- **Participant VMs:** 1 Debian server VM per participant
 - **Software:** BIND 9 utilities, text editors (vim/nano)
 - **Zone Files:** Template zone files and examples
 
@@ -817,7 +817,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 3: DNS Server Types - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
+- **Participant VMs:** 2 Debian server VMs per participant
 - **Software:** BIND 9, systemd-resolved
 - **Network:** Multi-segment lab network for testing
 
@@ -864,7 +864,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 4: DNS Software Platforms - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 3 Ubuntu server VMs per participant
+- **Participant VMs:** 3 Debian server VMs per participant
 - **Software:** BIND 9, Unbound, PowerDNS Authoritative and Recursor
 - **Databases:** MySQL/PostgreSQL for PowerDNS backend
 
@@ -912,7 +912,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 5: Advanced DNS Operations - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 4 Ubuntu server VMs per participant
+- **Participant VMs:** 4 Debian server VMs per participant
 - **Network:** Complex multi-segment topology
 - **Software:** BIND 9, NSD, monitoring tools
 
@@ -959,7 +959,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 ## Module 6: DNS Security Fundamentals - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
+- **Participant VMs:** 2 Debian server VMs per participant
 - **Security Tools:** nmap, tcpdump, DNS security scanners
 - **Attack Simulation:** Controlled environment for security testing
 
@@ -1084,7 +1084,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 ## Module 8: DNS Privacy and Encryption - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
+- **Participant VMs:** 2 Debian server VMs per participant
 - **Software:** Unbound with DoT support, nginx for DoH, stunnel
 - **Certificates:** TLS certificates for encrypted connections
 
@@ -1179,7 +1179,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 ## Module 10: Advanced Registry Systems - CoCCA - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 3 Ubuntu server VMs per participant
+- **Participant VMs:** 3 Debian server VMs per participant
 - **Software:** CoCCA registry software, PostgreSQL, web server
 - **Integration:** WHMCS or similar billing system
 
@@ -1227,7 +1227,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 ## Module 11: DNS Monitoring and Performance - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
+- **Participant VMs:** 2 Debian server VMs per participant
 - **Software:** Prometheus, Grafana, RIPE Atlas tools, custom monitoring scripts
 - **Monitoring:** Network monitoring capabilities
 
@@ -1274,7 +1274,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 ## Module 12: Emerging Technologies - Lab Requirements
 
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
+- **Participant VMs:** 2 Debian server VMs per participant
 - **Software:** Experimental DNS software, IPv6 configuration tools
 - **Network:** IPv6-enabled lab environment
 
@@ -1339,7 +1339,7 @@ This exercise now opens the Day 7 Final Project; each team's design feeds its pr
 ### Software Licensing
 - **Open Source:** BIND, Unbound, PowerDNS (no licensing required)
 - **Commercial:** CoCCA (licensing required for full features)
-- **Operating Systems:** Debian/Ubuntu (freely available)
+- **Operating Systems:** Debian (freely available)
 
 ### Lab Management Tools
 - **VM Management:** vSphere, VirtualBox, or KVM management
