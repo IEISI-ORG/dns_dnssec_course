@@ -1,0 +1,19 @@
+// Module 8 additions for the Module 7 resolver VM (BIND 9.20, Debian 13).
+// Include from /etc/bind/named.conf; add the listen-on lines below to your
+// existing options { } block (see named.conf.options.module08).
+// Copy db.resolver.arpa to /etc/bind/ as well; Lab 8.4 edits it.
+
+tls resolver-tls {
+    cert-file "/etc/bind/tls/resolver.crt";
+    key-file  "/etc/bind/tls/resolver.key";
+};
+
+http resolver-http {
+    endpoints { "/dns-query"; };
+};
+
+// Lab 8.4: DDR. Answers _dns.resolver.arpa SVCB for clients of this resolver.
+zone "resolver.arpa" {
+    type primary;
+    file "/etc/bind/db.resolver.arpa";
+};

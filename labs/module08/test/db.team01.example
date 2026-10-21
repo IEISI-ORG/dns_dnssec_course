@@ -1,0 +1,7 @@
+$TTL 60
+@        IN SOA ns1.team01.example. admin.team01.example. 1 3600 600 86400 60
+         IN NS  ns1.team01.example.
+ns1      IN A   192.0.2.1
+www      IN A   192.0.2.80
+secret-project IN A 192.0.2.81
+resolver IN A   192.0.2.10

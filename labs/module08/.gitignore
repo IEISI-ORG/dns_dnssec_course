@@ -1,0 +1,10 @@
+certs/
+keys/
+secrets/
+*.key
+*.pem
+*.private
+*.signed
+*.jnl
+*.log
+*.pid

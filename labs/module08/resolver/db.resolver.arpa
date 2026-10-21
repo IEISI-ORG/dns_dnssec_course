@@ -1,0 +1,8 @@
+; Lab 8.4: Discovery of Designated Resolvers (RFC 9462) for team NN.
+; Replace NN with your team number. resolver.teamNN.example must have an A
+; (and AAAA) record with the resolver's address in your teamNN.example zone.
+$TTL 300
+@        IN SOA  resolver.teamNN.example. admin.teamNN.example. 1 3600 600 86400 300
+         IN NS   resolver.teamNN.example.
+_dns     IN SVCB 1 resolver.teamNN.example. alpn="dot" port=853
+_dns     IN SVCB 2 resolver.teamNN.example. alpn="h2" port=443 dohpath="/dns-query{?dns}"
