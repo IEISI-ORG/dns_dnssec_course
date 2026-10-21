@@ -281,7 +281,7 @@ The **Domain Name System** is a hierarchical, distributed naming system that:
 ## Lab Environment Overview
 
 ### Virtual Machine Setup
-- **Debian 13 or Ubuntu 24.04 LTS** with DNS tools pre-installed
+- **Debian 13 (Stable) or Debian 12 (LTS)** with DNS tools pre-installed
 - **Network Topology**: Simulated Internet environment
 - **Available Tools**: dig, nslookup, host, named-checkzone, Wireshark
 

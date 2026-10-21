@@ -81,7 +81,7 @@ _class: title-slide
 ## Lab Environment
 
 - VM image / network notes (edit)
-- Tools required: dig, nslookup, named-checkzone (Debian/Ubuntu packages bind9-dnsutils, bind9-utils)
+- Tools required: dig, nslookup, named-checkzone (Debian packages bind9-dnsutils, bind9-utils)
 
 ## Lab Tasks
 

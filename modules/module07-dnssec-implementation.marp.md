@@ -755,7 +755,7 @@ server:
     val-log-level: 2  # log why validation failed
 ```
 
-- Debian and Ubuntu packages set up `auto-trust-anchor-file` already
+- Debian's unbound package sets up `auto-trust-anchor-file` already
 - `unbound-anchor` refreshes the root key file when it is stale
 - With `ede: yes`, Unbound puts the failure reason in the response
 
@@ -909,7 +909,7 @@ In BIND, most of this policy becomes one `dnssec-policy` block.
 - **Registry server** (instructor): hosts the signed `example.` zone, the "TLD" for the lab, at 192.0.2.53 (your lab sheet has the real address)
 - **Your VMs:** an authoritative server for `teamNN.example` and `manualNN.example`, and a validating resolver
 - **Software:** BIND 9.20 on Debian 13; Unbound as an optional second resolver
-- **Tools:** dig, delv, dnssec-keygen, dnssec-signzone, dnssec-verify, rndc (Debian/Ubuntu packages bind9-dnsutils, bind9-utils)
+- **Tools:** dig, delv, dnssec-keygen, dnssec-signzone, dnssec-verify, rndc (Debian packages bind9-dnsutils, bind9-utils)
 - **Timings:** the lab policy uses 60-second TTLs and 30-minute signatures, so a ZSK rollover takes about 7 minutes, not 10 days
 
 ---

@@ -131,7 +131,7 @@ The **Advanced DNS/DNSSEC Workshop** delivers six full days of hands-on learning
 ## Technical Requirements
 
 - **Isolated network** with Internet gateway  
-- **4 VMs per participant** (Debian/Ubuntu)  
+- **4 VMs per participant** (Debian)  
 - **Software:** BIND, Unbound, PowerDNS, CoCCA, monitoring stack  
 - **Multi-VLAN** topology for advanced labs  
 - **Snapshot management** for quick reset  
