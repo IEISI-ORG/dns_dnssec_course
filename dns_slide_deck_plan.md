@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~707 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~725 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -679,6 +679,7 @@
    - Client access controls
    - Response policy zones (RPZ)
    - DNS filtering implementation
+   - Resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
 
 10. **Transaction Security (TSIG)**
     - TSIG mechanism overview
@@ -766,90 +767,51 @@
 
 ## Module 8: DNS Privacy and Encryption Technologies
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 45-50
+**Slides:** 63 (56 theory, 7 lab); deck: `modules/module08-dns-privacy-encryption.marp.md`
 
-### DNS Privacy Landscape (10 slides)
-1. **DNS Privacy Concerns**
-   - Query surveillance risks
-   - User tracking capabilities
-   - Censorship and filtering
-   - Metadata exposure issues
+### Opening (5 slides)
+- Title, module overview, learning objectives
+- What changed recently: DoQ (RFC 9250) and DNS over CoAP (RFC 9953); resolver discovery with DDR and DNR (RFC 9462, 9463); Encrypted ClientHello (RFC 9849, 9848); TLS 1.3 as RFC 9846 and RFC 9852; opportunistic resolver-to-authoritative encryption (RFC 9539, Experimental)
+- Agenda (theory and lab)
 
-2. **Privacy Threat Models**
-   - Passive network monitoring
-   - Active traffic manipulation
-   - Resolver logging practices
-   - Third-party data sharing
+### 1. The DNS Privacy Problem (8 slides)
+- What a query reveals (name, client address, timing; ECS, RFC 7871); who sees which hop; threat model (RFC 9076, which obsoletes RFC 7626)
+- Plaintext DNS on the wire (Lab 8.1 capture)
+- DNSSEC and encryption solve different problems; QNAME minimisation and DNS Cookies are Module 6
+- Standards map with RFC status; operator obligations: RFC 8932 (BCP 232), the Recursive operator Privacy Statement, logs and local law
 
-3. **Regulatory and Legal Framework**
-   - GDPR implications for DNS
-   - Regional privacy regulations
-   - Data retention requirements
-   - Cross-border data flows
+### 2. DNS over TLS (10 slides)
+- RFC 7858: TCP 853, ALPN `dot`, no cleartext on 853, pipelining and out-of-order responses; RFC 8310 strict and opportunistic profiles, authentication domain name, RFC 9525
+- The resolver's certificate (DNS name, IP SAN for DDR; SNI stays visible)
+- BIND 9.20 `tls` block and `listen-on ... tls`; the same on Unbound 1.26; dnsdist
+- Testing with `dig` and `kdig` (strict, opportunistic, failures); performance and operations (connection reuse, RFC 7766, 9210, 7828); DoT on the wire
 
-### DNS over TLS (DoT) (12 slides)
-4. **DoT Protocol Overview**
-   - RFC 7858 specifications
-   - TLS connection establishment
-   - Port 853 implementation
-   - Authentication mechanisms
+### 3. DNS over HTTPS and QUIC (10 slides)
+- RFC 8484: URI template, GET and POST, HTTP/2, message ID 0
+- Wire format only (`application/dns-message`, RFC 8484); JSON APIs are vendor-specific
+- A DoH exchange with `curl`; HTTP caching rules and cookies; BIND 9.20 `http` block; deploying DoH behind proxies and load balancers
+- DoQ (RFC 9250): UDP 853, ALPN `doq`, one query per stream, ID 0, 0-RTT limits; Debian 13 support (`kdig`, Knot DNS; not BIND 9.20 or Unbound 1.26 as packaged); instructor demo
+- DoT, DoH and DoQ compared
 
-5. **DoT Server Configuration**
-   - Certificate requirements
-   - TLS configuration best practices
-   - Performance optimisation
-   - Monitoring and logging
+### 4. Discovery and Deployment (9 slides)
+- Configured vs discovered resolvers; SVCB for DNS servers (RFC 9460, 9461: `alpn`, `port`, `dohpath`; IANA SvcParamKeys)
+- DDR (RFC 9462): `_dns.resolver.arpa`, verified and opportunistic discovery, IP SAN; lab output
+- DNR (RFC 9463): DHCPv4 option 162, DHCPv6 option 144, RA option 144; authentication domain name; spoofing
+- Clients you will meet (dated primary sources only: Apple, Chrome, Windows Server 2022, Linux forwarders)
+- Enterprise and ISP policy (split horizon, RFC 9704; run your own encrypted resolver and advertise it); running an encrypted resolver service
 
-6. **DoT Client Implementation**
-   - Operating system support
-   - Mobile device configuration
-   - Enterprise deployment
-   - Fallback mechanisms
+### 5. Beyond the Stub (8 slides)
+- Padding (RFC 7830, RFC 8467 block-length 128/468) and measured record sizes (Lab 8.5)
+- Resolver-to-authoritative encryption (RFC 9539, Experimental); zone transfers over TLS (RFC 9103) with BIND 9.20
+- Oblivious DoH (RFC 9230, Experimental, Independent Submission; RFC 9458, 9540)
+- DNSCrypt (not an IETF standard; individual draft; Debian packages)
+- What encryption still leaves visible (address, SNI and ECH, sizes, the resolver operator); TLS 1.3 updates
 
-### DNS over HTTPS (DoH) (15 slides)
-7. **DoH Protocol Specification**
-   - RFC 8484 implementation
-   - HTTP/2 and HTTP/3 usage
-   - Wire format only (`application/dns-message`, RFC 8484); JSON APIs are vendor-specific
-   - URL template structures
+### Practical Lab (7 slides)
+- Lab environment; Labs 8.1-8.5 (see plaintext DNS, DoT and DoH on the resolver, forward over TLS with Unbound, resolver discovery with DDR, padding on the wire)
 
-8. **DoH Server Deployment**
-   - Web server configuration
-   - Load balancing considerations
-   - CDN integration strategies
-   - Security implementations
-
-9. **DoH Client Adoption**
-   - Browser implementations
-   - Application-level deployment
-   - Enterprise policy management
-   - Performance considerations
-
-10. **DoT vs DoH Comparison**
-    - Protocol design differences
-    - Performance characteristics
-    - Deployment complexity
-    - Use case optimisation
-
-### Advanced Privacy Technologies (8 slides)
-11. **DNSCrypt Protocol**
-    - Protocol mechanism overview
-    - Implementation differences
-    - Resolver support
-    - Migration considerations
-
-12. **Oblivious DNS over HTTPS**
-    - Proxy-based architecture
-    - Privacy enhancement benefits
-    - Implementation challenges
-    - Future development
-
-### Practical Lab Introduction (5 slides)
-13. **Privacy Implementation Workshop**
-    - DoT server configuration
-    - DoH endpoint setup
-    - Client testing procedures
-    - Performance analysis
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1316,15 +1278,15 @@
 | Module 5: Advanced Operations | 52 | 3 | 55 |
 | Module 6: DNS Security | 45 | 5 | 50 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
-| Module 8: DNS Privacy | 40 | 5 | 45 |
+| Module 8: DNS Privacy | 56 | 7 | 63 |
 | Module 9: Registry Operations | 60 | 7 | 67 |
 | Module 10: CoCCA Systems | 45 | 5 | 50 |
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **603** | **59** | **662** |
+| **Total Core Content** | **619** | **61** | **680** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **707** |
+| **Grand Total** | | | **725** |
 
 ---
 
