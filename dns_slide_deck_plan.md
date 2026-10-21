@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~725 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~745 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -621,97 +621,53 @@
 
 ## Module 6: DNS Security Fundamentals and Threat Landscape
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 50-55
+**Slides:** 70 (62 theory, 8 lab); deck: `modules/module06-dns-security-fundamentals.marp.md`
 
-### DNS Threat Landscape Overview (12 slides)
-1. **DNS Security Challenges**
-   - Protocol inherent vulnerabilities
-   - Trust model limitations
-   - Attack surface analysis
-   - Evolution of threats over time
+### Opening (5 slides)
+- Title, module overview, learning objectives
+- What changed recently: TSIG is RFC 8945 (STD 93; HMAC-MD5 MUST NOT); interoperable server cookies (RFC 9018); QNAME minimisation RFC 9156 obsoletes Experimental RFC 7816; BIND 9.20 `allow-transfer` defaults to none (9.18: any); 1232-octet EDNS buffer defaults and RFC 9715
+- Agenda (theory and lab)
 
-2. **DNS Attack Classifications**
-   - Data manipulation attacks
-   - Denial of service attacks
-   - Information disclosure attacks
-   - Infrastructure compromise attacks
+### 1. The Threat Landscape (6 slides)
+- Why DNS is a target; RFC 3833 threat analysis
+- Attack classes (forgery, hijacking, denial of service, abuse as a channel, data exposure) and where in the course each is defended
+- Where attacks land (registrar/registry, server, off-path forgery, reflection, stub and LAN)
+- Dated history from primary sources only: CVE-2008-1447 and CERT/CC VU#800113 (Kaminsky, 2008); CISA ED 19-01 (DNS infrastructure tampering, 2019); CVE-2020-8616 (NXNSAttack, 2020); CVE-2020-25705 (SAD DNS, 2020); CVE-2023-50387 and CVE-2023-50868 (KeyTrap, NSEC3, 2024)
+- Defence map: which measure covers which class
 
-3. **Cache Poisoning Attacks**
-   - Kaminsky attack methodology
-   - Source port randomisation
-   - Query ID randomisation
-   - 0x20 encoding defences
+### 2. Cache Poisoning and Hijacking (9 slides)
+- How a resolver accepts an answer (RFC 5452 §9.1; RFC 2181 §5.4.1); the arithmetic of guessing (RFC 5452 §8.1: 7 seconds with one port, about 116 hours with 64,000)
+- The Kaminsky attack; source-port and ID randomisation (RFC 5452 §9.2), 0x20 (expired draft; Unbound `use-caps-for-id`), cookies, TCP, DNSSEC; NAT de-randomisation
+- Lab 6.2 capture: ports, IDs, per-server client cookies
+- SAD DNS (side channel, kernel fix); hijacking at the registrar, the server, BGP (RFC 6811) and the stub, with registry lock (Module 9); CISA ED 19-01 actions
 
-4. **DNS Hijacking Techniques**
-   - Registrar account compromise
-   - Authoritative server compromise
-   - BGP hijacking impact on DNS
-   - Resolver manipulation attacks
+### 3. Floods and Amplification (11 slides)
+- Reflection and amplification (RFC 5358 factor; BCP 38, BCP 84); measured amplification on the team's own server; `minimal-any` (RFC 8482)
+- Open resolvers (RFC 5358, BCP 140); BIND 9.20 access controls and their defaults (`allow-recursion` inherits `allow-query`; localnets); the localnets trap (Lab 6.1 output)
+- Response rate limiting (`rate-limit`, slip, cookies, log-only) and its lab measurements; what a legitimate client sees (TC, BADCOOKIE)
+- Query floods and random-subdomain attacks; NXNSAttack; resolver fetch limits; response size and fragmentation (1232, RFC 9715, RFC 7766)
 
-### DNS DDoS Attacks and Mitigation (10 slides)
-5. **DNS Amplification Attacks**
-   - Attack mechanism explanation
-   - Amplification factor analysis
-   - Open resolver abuse
-   - Rate limiting countermeasures
+### 4. Hardening Servers (11 slides)
+- Authoritative checklist and lab configuration (recursion no, transfers by TSIG, version none, minimal responses, RRL, hidden primary pointer to Module 5)
+- Recursive resolver checklist and lab configuration (ACLs, validation, `validate-except` for the lab TLD until Module 7, static-stub for `example`)
+- QNAME minimisation (RFC 9156, obsoletes 7816): algorithm, QTYPE choice, iteration limit, BIND relaxed and Unbound defaults; seen in the lab capture; Module 8 points here
+- DNS Cookies (RFC 7873, updated by 9018): client and server cookies, SipHash-2-4 server cookie, BADCOOKIE; seen in `dig` and the query log; BIND and Unbound options; Module 8 points here
+- Pointers: DNSSEC and aggressive NSEC caching (Module 7); DoT, DoH, DoQ and DDR (Module 8)
 
-6. **Volumetric Attack Mitigation**
-   - Anycast distribution benefits
-   - Rate limiting implementations
-   - Response size limitation
-   - Traffic filtering strategies
+### 5. TSIG and Zone Transfers (6 slides)
+- TSIG (RFC 8945): fudge 300, one key per pair, algorithm table
+- Making a key with `tsig-keygen`; TSIG-protected transfers in BIND; failures (BADSIG, BADKEY, BADTIME, NOTAUTH) from the lab; beyond TSIG (rotation, XoT pointer, SIG(0), GSS-TSIG, catalog zones)
 
-7. **DNS Query Flooding**
-   - Random subdomain attacks
-   - Water torture attacks
-   - Mitigation strategies
-   - Monitoring and detection
+### 6. RPZ, Tunnelling and Detection (8 slides)
+- Response Policy Zones: status (expired individual draft `draft-vixie-dnsop-dns-rpz-00`, not an RFC), triggers and actions, BIND configuration (order, `ede filtered`, RD and DO rules), lab output
+- DNS tunnelling and covert channels: mechanism, detection signs, responses; summary of a lab capture (`tools/dns-signs.sh`)
+- Logging and detection signs in BIND (categories, `rndc stats` counters, dnstap); Module 11 for monitoring
 
-### DNS Security Best Practices (15 slides)
-8. **Authoritative Server Security**
-   - Access control implementation
-   - Zone transfer security
-   - Hidden primary strategies
-   - Monitoring and logging
+### Practical Lab (8 slides)
+- Lab introduction, lab environment, lab rules (containment), Labs 6.1-6.5 (close the open doors, watch the resolver defend itself, rate limiting under load, TSIG-protected zone transfer, RPZ and spotting a tunnel)
 
-9. **Recursive Resolver Security**
-   - Open resolver prevention
-   - Client access controls
-   - Response policy zones (RPZ)
-   - DNS filtering implementation
-   - Resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
-
-10. **Transaction Security (TSIG)**
-    - TSIG mechanism overview
-    - Key management procedures
-    - Implementation best practices
-    - Troubleshooting TSIG issues
-
-11. **DNS over Encrypted Channels**
-    - DNS over TLS (DoT) introduction
-    - DNS over HTTPS (DoH) overview
-    - Implementation considerations
-    - Privacy and security tradeoffs
-
-### Incident Response and Forensics (8 slides)
-12. **DNS Incident Detection**
-    - Monitoring strategies
-    - Anomaly detection techniques
-    - Alert correlation methods
-    - Automated response systems
-
-13. **DNS Forensics Techniques**
-    - Log analysis methodologies
-    - Query pattern analysis
-    - Timeline reconstruction
-    - Evidence preservation
-
-### Practical Lab Introduction (5 slides)
-14. **Security Testing Workshop**
-    - Attack simulation exercises
-    - Security control implementation
-    - Monitoring and detection setup
-    - Incident response scenarios
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1276,7 +1232,7 @@
 | Module 3: DNS Server Types | 50 | 5 | 55 |
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
-| Module 6: DNS Security | 45 | 5 | 50 |
+| Module 6: DNS Security | 62 | 8 | 70 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
 | Module 8: DNS Privacy | 56 | 7 | 63 |
 | Module 9: Registry Operations | 60 | 7 | 67 |
@@ -1284,9 +1240,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **619** | **61** | **680** |
+| **Total Core Content** | **636** | **64** | **700** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **725** |
+| **Grand Total** | | | **745** |
 
 ---
 
