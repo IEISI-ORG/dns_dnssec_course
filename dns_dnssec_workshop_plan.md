@@ -510,34 +510,38 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall EPP protocol structure and command syntax
-- Identify registry operational processes and workflows
+- Recall the roles in the registration chain (registry, registrar, reseller, registrant, DNS operator), the EPP object types and the EPP result code classes
+- Identify the EPP standards (RFC 5730-5734, 5910, 3915, 9154) and the extensions listed in the IANA EPP extensions registry
 
 **Comprehension (Understand):**
-- Explain the registrar-registry relationship model
-- Describe domain lifecycle management processes
+- Explain the domain lifecycle, the grace periods (RFC 3915) and the client and server status codes
+- Describe an EPP session over TLS with mutual authentication: framing, greeting, login, commands and the poll queue (RFC 5730, 5734)
 
 **Application (Apply):**
-- Execute EPP commands for domain management
-- Configure EPP client connections with proper authentication
+- Execute EPP commands to create contacts, hosts (with glue) and domains, update name servers, renew, transfer and restore
+- Submit a DS record through the EPP DNSSEC extension (RFC 5910) and explain how a registry processes CDS/CDNSKEY (RFC 7344, 8078, 9615, 9975)
+- Apply secure transfer codes (RFC 9154)
 
 **Analysis (Analyse):**
-- Analyse EPP transaction logs for operational insights
-- Evaluate registry system performance and capacity planning
+- Analyse EPP responses and transaction data to find why a command failed
+- Evaluate registry service levels and monitoring against the gTLD Registry Agreement (Specification 10)
 
 ### Theory Content
-- Registry-registrar operational model
-- EPP protocol architecture and security
-- Domain lifecycle management (registration, renewal, transfer, deletion)
-- Grace periods and redemption processes
-- Registry policy implementation through EPP
+- Registry-registrar model; gTLD (ICANN Registry Agreement, RAA) and ccTLD governance; thick and thin registries; registry services
+- Domain lifecycle, grace periods and redemption (RFC 3915; .com contract values; ICANN ERRP and AGP Limits Policy); client and server status codes, registry lock
+- EPP architecture and standards map (RFC 5730-5734, 5910, 3915, 8334, 8748, 9154, 8807, 3735, 7451, 9874); TLS transport (RFC 8996); sessions, commands, result codes, poll queue
+- Contact, host and domain objects: check, create, info, update, renew, delete; glue and external hosts (RFC 5732); safe deletion of hosts (RFC 9874)
+- Transfers: authInfo, secure transfer codes (RFC 9154); ICANN Transfer Policy in force (21 February 2024 version) and the revised policy adopted 7 June 2026 (TAC, 720-hour locks; implementation date not yet set)
+- DNSSEC at the registry: DS via EPP `secDNS-1.1` (RFC 5910; DS Data vs Key Data and why DS Data is usual); registry checks on DS records; CDS/CDNSKEY from the parent side (RFC 7344, 8078, 9615, 9975)
+- Extensions (launch phases RFC 8334, fees RFC 8748, allocation tokens RFC 8495, login security RFC 8807, maintenance RFC 9167, TTL RFC 9803); registration data: RDAP replaced WHOIS for gTLDs on 28 January 2025
+- Registry operations: Spec 10 service levels, EPP monitoring and protection, escrow (RFC 8909, 9022), billing; registry software (FRED, Nomulus, Namingo; CoCCA in Module 10)
 
 ### Practical Lab
-- EPP client configuration and authentication
-- Domain registration and management workflows
-- Transfer and renewal operations
-- Grace period and deletion exercises
-- Registry reporting and monitoring
+- Connect to the lab registry over TLS with a client certificate and log in (Lab 9.1)
+- Create contacts, hosts with glue and domains; update name servers (Lab 9.2)
+- Publish the Module 7 DS through EPP `secDNS` (Lab 9.3)
+- Transfer a partner team's domain with a secure transfer code, then renew it (Lab 9.4)
+- Delete inside the add grace period, and delete and restore through the redemption period (Lab 9.5)
 
 ---
 
@@ -1131,48 +1135,63 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 
 ## Module 9: Registry Operations and EPP - Lab Requirements
 
+All steps below were run on 2026-10-21 against the Namingo v1.0.34 EPP server (MariaDB 11.8 backend) with the Net::EPP 0.28 client from Debian 13, and every EPP frame sent and received validated against the RFC 5730-5733, 5910 and 3915 schemas. Lab files (instructor kit, not yet in the repository): `epp-send` (client script), XML files `01-hello.xml` to `56-rgp-restore-report.xml`, instructor preparation files and `seed-lab.sh`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 2 Ubuntu server VMs per participant
-- **Software:** EPP server software, EPP client tools
-- **Database:** Registry database with domain data
+- **Participant VMs:** 1 Debian 13 client VM per participant (packages `libnet-epp-perl`, `openssl`, `bind9-utils`, `bind9-dnsutils`); the Module 7 VMs supply the DS record
+- **Registry server (instructor):** Debian 13 VM running the Namingo EPP server (open source, MIT) for the `.example` TLD on TCP port 700, MariaDB backend, system time zone UTC. Namingo's installer runs as root and adds third-party apt repositories (PHP with Swoole, Caddy, MariaDB); Swoole is not packaged in Debian
+- **Accounts:** one registrar per team (`regNN`, password, client certificate from the lab CA whose SHA-256 fingerprint is stored with the registrar); teams work in pairs (`NN` and partner `PP`) for transfers
+- **Lab settings:** `disable_60days => true` (the server otherwise refuses transfers within 60 days of creation with 2201); `mandatory_client_ssl => true` (RFC 5734 mutual authentication); transfers auto-approve after 5 days
+- **Instructor preparation per team:** create `oldNN.example` (with an instructor contact) and move its creation date back 10 days, so that a delete enters the redemption period
+- **Parent zone:** Namingo's zone writer (`automation/write-zone.php`, `dns_reload` off) generates `example.` from the registry database; the instructor's script `publish-example-zone.sh` sets `$TTL 60` (the writer always writes 3600, which the lab policy's `max-zone-ttl` rejects), checks the zone and reloads the Module 7 BIND, which signs it inline. Run both every minute during Lab 9.3 (Namingo's own cron runs the writer every 15 minutes). Tested 2026-10-21: a DS swap sent over EPP was served, signed, by BIND 2 seconds after the writer ran. The writer replaces the hand-edited `db.example`, so register `expired.example`, `wrongds.example` and any Module 7 DS records as registry domains before the first run
 
 ### Lab Exercises
 
-#### Lab 9.1: EPP Server Configuration (45 minutes)
-**Objective:** Set up and configure EPP server
-**Resources Needed:**
-- EPP server software (CoCCA, or the open-source FRED registry from CZ.NIC; Nomulus is also open source but runs on Google Cloud)
-- Database backend
-- TLS certificates for EPP
+#### Lab 9.1: Connect and Log In (15 minutes)
+**Objective:** Establish an EPP session over TLS and read the greeting
 **Exercise Steps:**
-1. Install and configure EPP server
-2. Set up database schema
-3. Configure TLS security
-4. Test basic EPP connectivity
+1. `openssl s_client -connect epp.registry.example:700 -CAfile lab-ca.crt -brief`: check TLS version and certificate
+2. Read the 4-octet frame length of the greeting (`-quiet ... | head -c 4 | od -An -tu1`)
+3. `epp-send 01-hello.xml`: list the objects and extensions offered
+4. `epp-send 02-login.xml 03-logout.xml`
+5. Repeat with a wrong password, the system CA bundle, no client certificate, and the partner's certificate
+**Success criteria:** TLS 1.2 or 1.3 verified; login 1000, logout 1500; wrong password 2200; untrusted server certificate refused by the client; missing client certificate refused by the server; wrong registrar certificate 2201
 
-#### Lab 9.2: EPP Client Operations (30 minutes)
-**Objective:** Perform domain management via EPP
-**Resources Needed:**
-- EPP client software
-- Test registrar credentials
-- Sample domain portfolio
+#### Lab 9.2: Contacts, Hosts and Domains (25 minutes)
+**Objective:** Create the objects for a delegation
 **Exercise Steps:**
-1. Connect to EPP server with client
-2. Perform domain registration workflow
-3. Execute transfer and renewal operations
-4. Manage contact and nameserver objects
+1. Check `teamNN.example` and the partner's name (`10`)
+2. Create the contact and the domain (`11`, `12`)
+3. Edit `13` to carry the Module 7 server's addresses (lab sheet), then create `ns1.teamNN.example` with glue and the external host `nsNN.example.net` (`13`, `14`)
+4. Delegate to both (`15`); read the domain and host (`16`, `17`)
+5. Send a copy of `13` without the `host:addr` lines, and send `12` again
+**Success criteria:** info shows both name servers, status `ok`, `rgpStatus addPeriod`; host `linked`; 2306 and 2302 explained
 
-#### Lab 9.3: EPP Transaction Monitoring (15 minutes)
-**Objective:** Monitor and analyse EPP transactions
-**Resources Needed:**
-- EPP logging and monitoring tools
-- Transaction analysis scripts
-- Reporting utilities
+#### Lab 9.3: Publish Your DS (15 minutes)
+**Objective:** Submit the Module 7 DS through EPP `secDNS-1.1`
 **Exercise Steps:**
-1. Enable full EPP logging
-2. Monitor real-time transactions
-3. Generate registry reports
-4. Analyse transaction patterns and performance
+1. Get the DS: `dig @ns1.teamNN.example teamNN.example CDS +short` or `dnssec-dsfromkey -2` on the KSK
+2. Put its four fields in `20-domain-update-ds-add.xml`; send; check with `16`
+3. Try a SHA-1 DS (`dnssec-dsfromkey -1`)
+4. Discuss the DS swap after a KSK rollover (`21`) and CDS scanning by the registry
+**Success criteria:** the DS in `secDNS:infData` matches the CDS record; `dig @registry teamNN.example DS +short` returns it within about a minute; SHA-1 rejected (2004 on the lab server)
+
+#### Lab 9.4: Transfer and Renew (20 minutes)
+**Objective:** Move a domain between registrars with a secure transfer code
+**Exercise Steps:**
+1. Both teams `export PARTNER=PP`; the losing registrar sets a random code (`export AUTHINFO=$(openssl rand -base64 18)`, file `35`) and gives it to the partner
+2. Gaining registrar requests and queries the transfer (`30`, `31`): 1001, `pending`
+3. Losing registrar reads the poll queue (`32`: 1301), approves (`33`) and acknowledges the message (`MSGID=<id= from the msgQ line>`, `34`)
+4. Gaining registrar reads the domain (`36`) and renews it with `curExpDate` from the info response (`37`)
+**Success criteria:** sponsor changed, `transferPeriod`, DS and name servers kept, expiry extended by the transfer and by the renew; a wrong code gives 2202
+
+#### Lab 9.5: Delete and Restore (15 minutes)
+**Objective:** Follow the RFC 3915 grace periods and redemption process
+**Exercise Steps:**
+1. Create and delete `spareNN.example` inside the add grace period; check that the name is available (`50`-`52`)
+2. Note the time (`date -u +%Y-%m-%dT%H:%M:%SZ`) and delete `oldNN.example` (`53`): `pendingDelete`, `redemptionPeriod` (`54`)
+3. Note the time and send the restore request (`55`): `pendingRestore`; restore report with `DELTIME` and `RESTIME` set to those two times (`56`): status `ok`
+**Success criteria:** the RFC 3915 state diagram drawn from the observed states; the refunded delete identified
 
 ---
 
