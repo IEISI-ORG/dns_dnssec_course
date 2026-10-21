@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <transfer op="approve">
+      <domain:transfer xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <domain:name>teamNN.example</domain:name>
+      </domain:transfer>
+    </transfer>
+    <clTRID>teamNN-xfer-ok</clTRID>
+  </command>
+</epp>

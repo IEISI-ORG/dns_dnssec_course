@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <contact:create xmlns:contact="urn:ietf:params:xml:ns:contact-1.0">
+        <contact:id>iNN-holder</contact:id>
+        <contact:postalInfo type="int">
+          <contact:name>Instructor NN</contact:name>
+          <contact:org>Workshop Team NN</contact:org>
+          <contact:addr>
+            <contact:street>1 Lab Street</contact:street>
+            <contact:city>Brisbane</contact:city>
+            <contact:sp>QLD</contact:sp>
+            <contact:pc>4000</contact:pc>
+            <contact:cc>AU</contact:cc>
+          </contact:addr>
+        </contact:postalInfo>
+        <contact:voice>+61.730000000</contact:voice>
+        <contact:email>teamNN@registrant.example</contact:email>
+        <contact:authInfo>
+          <contact:pw>Contact-NN-pw</contact:pw>
+        </contact:authInfo>
+      </contact:create>
+    </create>
+    <clTRID>prepNN-contact</clTRID>
+  </command>
+</epp>

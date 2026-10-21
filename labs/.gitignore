@@ -1,0 +1,10 @@
+# Generated on the lab server; never commit
+certs/
+keys/
+*.key
+*.private
+*.pem
+*.signed
+*.jnl
+*.log
+*.pid
