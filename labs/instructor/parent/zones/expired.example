@@ -1,0 +1,5 @@
+; Lab 7.3: signed with validity in the past, so every RRSIG has expired.
+$TTL 60
+@    SOA ns1.example. hostmaster.example. 1 3600 600 86400 60
+     NS  ns1.example.
+www  A   192.0.2.80

@@ -1,0 +1,50 @@
+#!/bin/bash
+# parent-run: build db.example, start named in the foreground and, once it has
+# signed example., write the trust-anchor handout for participants' resolvers
+# (Lab 7.3).
+set -euo pipefail
+H=/handout
+
+put() {   # put <file> <content>: replace a handout file in one step
+    local tmp
+    tmp=$(mktemp "$H/.$1.XXXXXX")
+    printf '%s\n' "$2" > "$tmp"
+    chown "${HANDOUT_UID:-0}:${HANDOUT_GID:-0}" "$tmp"
+    chmod 0644 "$tmp"
+    mv "$tmp" "$H/$1"
+}
+
+write_handout() {
+    local ds i
+    for i in $(seq 120); do
+        ds=$(dig @127.0.0.1 +norec +noall +answer example DNSKEY 2>/dev/null \
+             | dnssec-dsfromkey -2 -f - example 2>/dev/null || true)
+        [ -n "$ds" ] && break
+        sleep 1
+    done
+    if [ -z "$ds" ]; then
+        echo "parent-run: no DNSKEY for example. after 120 s; no handout written" >&2
+        return 1
+    fi
+    # ds: "example. IN DS <tag> <alg> <type> <digest>"
+    read -r _ _ _ tag alg type digest <<< "$ds"
+    put example.ds "$ds"
+    put trust-anchors.conf "$(printf 'trust-anchors {\n    example. static-ds %s %s %s "%s";\n};' \
+        "$tag" "$alg" "$type" "$digest")"
+    put unbound-trust-anchor.conf "$(printf 'trust-anchor: "example. DS %s %s %s %s"' \
+        "$tag" "$alg" "$type" "$digest")"
+    echo "parent-run: handout written: $ds"
+}
+
+# Build db.example from teams.conf and ds/ before named starts. The journal
+# named keeps for the unsigned zone describes the old file, so it goes with
+# it; if the build fails, the old file and its journal stay in use.
+if /opt/lab/bin/make-example-zone; then
+    rm -f /var/lib/lab/db.example.jnl
+else
+    echo "parent-run: could not rebuild db.example; serving the previous one" >&2
+fi
+[ -s /var/lib/lab/db.example ] || { echo "parent-run: no db.example" >&2; exit 1; }
+
+write_handout &
+exec named -g -u bind -c /etc/lab/named.conf

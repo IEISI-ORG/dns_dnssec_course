@@ -1,0 +1,71 @@
+#!/bin/bash
+# make-example-zone: write the unsigned example. zone (db.example) from
+#   - the teams file: one "NN address" line per team (teamNN.example and
+#     manualNN.example are delegated to that address), and
+#   - ds/*.ds: the DS records published so far (publish-ds, lab-init).
+# named signs it with the lab policy (inline signing); run `rndc reload
+# example` afterwards if named is already running.
+set -euo pipefail
+: "${PARENT_ADDR:?set PARENT_ADDR in .env}"
+S=/var/lib/lab
+TEAMS=${TEAMS_FILE:-/etc/lab-classroom/teams.conf}
+ipv4='^([0-9]{1,3}\.){3}[0-9]{1,3}$'
+
+# The serial must grow on every rewrite, even twice in one second.
+prev=$(cat "$S/serial" 2>/dev/null || true)
+[[ $prev =~ ^[0-9]+$ ]] || prev=0
+serial=$(date +%s)
+[ "$serial" -gt "$prev" ] || serial=$((prev + 1))
+
+tmp=$(mktemp "$S/db.example.XXXXXX")
+trap 'rm -f "$tmp"' EXIT
+{
+    echo "\$TTL 60"
+    echo "@         SOA ns1.example. hostmaster.example. $serial 3600 600 86400 60"
+    echo "          NS  ns1.example."
+    echo "ns1       A   $PARENT_ADDR"
+    echo "; Lab 7.3 broken zones, served by this server"
+    echo "expired   NS  ns1.example."
+    echo "wrongds   NS  ns1.example."
+    if [ -n "${DOQ_ADDR:-}" ]; then
+        echo "; Module 8 DoQ demo (Knot)"
+        echo "doq       NS  ns1.doq.example."
+        echo "ns1.doq   A   $DOQ_ADDR"
+    fi
+    echo "; teams"
+    teams=" "
+    while IFS= read -r line || [ -n "$line" ]; do
+        read -r nn addr rest <<< "${line%%#*}"
+        [ -n "${nn:-}" ] || continue
+        if ! [[ $nn =~ ^[0-9]{2}$ && $addr =~ $ipv4 && -z $rest ]]; then
+            echo "make-example-zone: bad line in $TEAMS: $nn $addr $rest" >&2
+            exit 1
+        fi
+        teams+="$nn "
+        for z in team manual; do
+            echo "$z$nn    NS  ns1.$z$nn.example."
+            echo "ns1.$z$nn A   $addr"
+        done
+    done < "$TEAMS"
+    echo "; DS records"
+    shopt -s nullglob
+    for f in "$S"/ds/*.ds; do
+        z=$(basename "$f" .ds)
+        case "$z" in
+        expired.example|wrongds.example) ;;
+        *)  nn=${z%.example}; nn=${nn: -2}
+            if [[ $teams != *" $nn "* ]]; then
+                # a DS without a delegation would make the zone fail to load
+                echo "make-example-zone: team $nn is not in $TEAMS; not publishing $z DS (publish-ds $z --remove clears it)" >&2
+                continue
+            fi ;;
+        esac
+        cat "$f"
+    done
+} > "$tmp"
+
+named-checkzone -q example "$tmp" || { named-checkzone example "$tmp" >&2; exit 1; }
+chmod 0644 "$tmp"
+mv "$tmp" "$S/db.example"
+trap - EXIT
+echo "$serial" > "$S/serial"

@@ -1,0 +1,6 @@
+; DoQ demo zone served by Knot (Module 8).
+$TTL 60
+@    SOA ns1.doq.example. hostmaster.example. 1 3600 600 86400 60
+     NS  ns1.doq.example.
+ns1  A   @DOQ_ADDR@
+www  A   192.0.2.82

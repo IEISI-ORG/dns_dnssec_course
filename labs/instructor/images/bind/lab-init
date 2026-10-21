@@ -1,0 +1,65 @@
+#!/bin/bash
+# lab-init: one-shot set-up for the parent server, run by the init service on
+# every `docker compose up`, before the parent starts.
+# - creates the rndc key and the broken-zone keys if they do not exist yet;
+# - re-signs expired.example with validity in the past (Lab 7.3), so it has
+#   expired again however long ago the stack was built;
+# - signs wrongds.example and gives example. a DS for a key it does not use.
+# Keys stay in the parent-state volume, so the example. trust anchor on the
+# lab sheet does not change until `docker compose down -v`.
+set -euo pipefail
+: "${PARENT_ADDR:?set PARENT_ADDR in .env}"
+S=/var/lib/lab
+Z=/etc/lab/zones
+
+install -d -o bind -g bind -m 0750 "$S" "$S/keys"
+install -d -m 0755 "$S/ds"
+install -d -m 0700 "$S/brk-keys"
+
+if [ ! -s "$S/rndc.key" ]; then
+    rndc-confgen -a -c "$S/rndc.key" >/dev/null
+fi
+chown root:bind "$S/rndc.key"
+chmod 0640 "$S/rndc.key"
+
+ksk_of() { grep -l 'key-signing key' "$1"/K*.key | head -n 1; }
+
+keys_for() {   # keys_for <zone> <dir>: a KSK and a ZSK, created once
+    local zone=$1 dir=$2 ksk all
+    install -d -m 0700 "$dir"
+    ksk=$(grep -l 'key-signing key' "$dir"/K*.key 2>/dev/null | wc -l || true)
+    all=$(ls "$dir"/K*.key 2>/dev/null | wc -l || true)
+    if [ "$ksk" -ne 1 ] || [ "$all" -ne 2 ]; then
+        # first run, or an interrupted one: make this zone's keys afresh
+        rm -f "$dir"/K*
+        dnssec-keygen -q -a ECDSAP256SHA256 -K "$dir" "$zone" >/dev/null
+        dnssec-keygen -q -a ECDSAP256SHA256 -f KSK -K "$dir" "$zone" >/dev/null
+    fi
+}
+
+sign() {       # sign <zone> [dnssec-signzone options]
+    local zone=$1; shift
+    dnssec-signzone -q -S -K "$S/brk-keys/$zone" -3 - -H 0 -o "$zone" \
+        -f "$S/$zone.signed" "$@" "$Z/$zone" >/dev/null
+    chown bind:bind "$S/$zone.signed"
+}
+
+# expired.example: signatures valid from 2 days ago to 1 day ago. -P skips
+# the post-signing check, which would reject the expired signatures.
+keys_for expired.example "$S/brk-keys/expired.example"
+sign expired.example -P \
+    -s "$(date -u -d '-2 days' +%Y%m%d%H%M%S)" \
+    -e "$(date -u -d '-1 day' +%Y%m%d%H%M%S)"
+dnssec-dsfromkey -2 "$(ksk_of "$S/brk-keys/expired.example")" > "$S/ds/expired.example.ds"
+
+# wrongds.example: valid signatures, but the parent's DS is made from a
+# decoy KSK that is never published in the zone.
+keys_for wrongds.example "$S/brk-keys/wrongds.example"
+sign wrongds.example
+keys_for wrongds.example "$S/brk-keys/decoy"
+dnssec-dsfromkey -2 "$(ksk_of "$S/brk-keys/decoy")" > "$S/ds/wrongds.example.ds"
+
+# db.example is built by parent-run, not here: init also runs on an `up`
+# while named is running, and rewriting the zone behind named's back puts it
+# out of step with named's journal for the zone.
+echo "lab-init: done; expired.example re-signed"

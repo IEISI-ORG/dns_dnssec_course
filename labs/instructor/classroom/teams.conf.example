@@ -1,0 +1,6 @@
+# One line per team: two-digit team number, address of the team's
+# authoritative VM. teamNN.example and manualNN.example are delegated there.
+# Copy to teams.conf in this directory. After editing it:
+#   docker compose exec parent publish-ds --refresh
+01 192.0.2.101
+02 192.0.2.102

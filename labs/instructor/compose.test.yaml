@@ -1,0 +1,57 @@
+# Test override (test/run.sh): an internal bridge with the same addresses
+# instead of ipvlan, plus a stand-in team server and a client.
+networks:
+  lab:
+    driver: bridge
+    driver_opts: !reset {}
+    internal: true
+
+services:
+  team01:
+    profiles: [test]
+    image: dnslab/bind:local
+    command:
+      - bash
+      - -c
+      - install -d -o bind -g bind /var/lib/lab /var/lib/lab/keys
+        && { [ -e /var/lib/lab/db.team01.example ] || install -o bind -g bind -m 0644 /etc/lab/db.team01.example /var/lib/lab/; }
+        && exec named -g -u bind -c /etc/lab/named.conf
+    volumes:
+      - ./test/team01:/etc/lab:ro
+      - team01-state:/var/lib/lab
+    networks:
+      lab: { ipv4_address: 192.0.2.101 }
+    depends_on: [parent]
+
+  resolver:
+    profiles: [test]
+    image: dnslab/bind:local
+    command:
+      - bash
+      - -c
+      - install -d -o bind -g bind /var/lib/lab
+        && until [ -s /handout/trust-anchors.conf ]; do sleep 1; done
+        && exec named -g -u bind -c /etc/lab/named.conf
+    volumes:
+      - ./test/resolver:/etc/lab:ro
+      - ${HANDOUT_DIR:-./handout}:/handout:ro
+    networks:
+      lab: { ipv4_address: 192.0.2.10 }
+    depends_on: [parent]
+
+  client:
+    profiles: [test]
+    build:
+      context: ./images
+      target: client
+      args: { DEBIAN_TAG: "${DEBIAN_TAG:-trixie-20261005-slim}" }
+    image: dnslab/client:local
+    command: [sleep, infinity]
+    init: true
+    volumes:
+      - ${HANDOUT_DIR:-./handout}:/handout:ro
+    networks:
+      lab: { ipv4_address: 192.0.2.30 }
+
+volumes:
+  team01-state:

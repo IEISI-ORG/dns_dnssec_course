@@ -1,0 +1,154 @@
+#!/bin/bash
+# publish-ds: the "registry" step of Labs 7.1, 7.2 and 7.4. Run it in the
+# parent container (docker compose exec -T parent publish-ds ...).
+#
+#   publish-ds ZONE < dsset-ZONE.         DS (or DNSKEY) records from the team,
+#                                          e.g. the dsset- file from Lab 7.1
+#   publish-ds ZONE --cds ADDRESS         read the CDS records from the team's
+#                                          server (Labs 7.2 and 7.4)
+#   publish-ds ZONE --remove              withdraw the DS
+#   publish-ds --list                     show every published DS
+#   publish-ds --refresh                  rebuild example. after editing teams.conf
+#
+# With --cds and a DS already published, dnssec-cds accepts the new CDS only
+# if a key that matches the current DS signed it (RFC 7344). With no DS yet
+# there is nothing to check it against: the CDS is accepted as it is, and the
+# instructor confirms the key tag with the team (RFC 8078 calls this
+# accepting the initial DS by out-of-band means).
+set -euo pipefail
+S=/var/lib/lab
+RNDC=(rndc -k "$S/rndc.key")
+die() { echo "publish-ds: $*" >&2; exit 1; }
+
+if [ "${1:-}" = --list ]; then
+    shopt -s nullglob
+    for f in "$S"/ds/*.ds; do cat "$f"; done
+    exit 0
+fi
+
+if [ "${1:-}" = --refresh ]; then
+    exec 9> "$S/.publish.lock"
+    flock 9
+    /opt/lab/bin/make-example-zone
+    "${RNDC[@]}" reload example
+    exit 0
+fi
+
+zone=${1:-}; zone=${zone%.}; shift || true
+[[ $zone =~ ^(team|manual)[0-9]{2}\.example$ ]] \
+    || die "ZONE must be teamNN.example or manualNN.example (got '${zone}')"
+nn=${zone%.example}; nn=${nn: -2}
+team_addr=$(awk -v n="$nn" '{ sub(/#.*/, "") } $1 == n { print $2; exit }' \
+            "${TEAMS_FILE:-/etc/lab-classroom/teams.conf}")
+# --remove works for a team no longer in teams.conf, so its DS can be cleared
+[ -n "$team_addr" ] || [ "${1:-}" = --remove ] || die "team $nn is not in the teams file"
+
+exec 9> "$S/.publish.lock"
+flock 9
+
+out="$S/ds/$zone.ds"
+new=$(mktemp); child=$(mktemp); old=$(mktemp)
+trap 'rm -f "$new" "$child" "$old"' EXIT
+
+# keep only well-formed DS records for this zone, written as
+# "zone. IN DS tag alg type digest"; dsset- files may split the digest in two,
+# so the rest of the line is joined. Bad lines are reported and dropped.
+to_ds() {
+    awk -v z="$zone." '
+        { for (i = 1; i <= NF; i++) if ($i == "DS") break }
+        $1 != z || i > NF { next }
+        {
+            d = ""; for (j = i + 4; j <= NF; j++) d = d $j
+            d = toupper(d); t = $(i+3)
+            len = (t == 1) ? 40 : (t == 2) ? 64 : (t == 4) ? 96 : -1
+            if ($(i+1) ~ /^[0-9]+$/ && $(i+2) ~ /^[0-9]+$/ && t ~ /^[0-9]+$/ &&
+                ((d ~ /^[0-9A-F]+$/ && length(d) == len) || $(i+1) " " $(i+2) " " t " " d == "0 0 0 00"))
+                print z, "IN DS", $(i+1), $(i+2), t, d
+            else
+                print "publish-ds: ignored malformed DS: " $0 > "/dev/stderr"
+        }'
+}
+
+case "${1:-}" in
+"")
+    [ -t 0 ] && die "pipe the records in: docker compose exec -T parent publish-ds $zone < dsset-$zone."
+    input=$(cat)
+    if grep -qw DNSKEY <<< "$input"; then
+        grep -w DNSKEY <<< "$input" | dnssec-dsfromkey -2 -f - "$zone" | to_ds > "$new" \
+            || die "dnssec-dsfromkey could not read the DNSKEY records"
+    else
+        to_ds <<< "$input" > "$new"
+    fi
+    [ -s "$new" ] || die "no valid DS or DNSKEY records for $zone. on stdin"
+    grep -q ' DS 0 0 0 ' "$new" && die "a delete record is not a DS; use --remove"
+    ;;
+--cds)
+    addr=${2:-$team_addr}
+    [ $# -le 2 ] || die "too many arguments"
+    [ "$addr" = "$team_addr" ] \
+        || echo "publish-ds: note: teams.conf has $team_addr for team $nn; asking $addr" >&2
+    for t in DNSKEY CDS; do
+        dig @"$addr" +norec +dnssec +noall +answer +time=3 +tries=2 "$zone" "$t" >> "$child" \
+            || die "no answer from $addr for $zone $t"
+    done
+    grep -qw CDS "$child" || die "$addr publishes no CDS for $zone"
+    if [ -s "$out" ]; then
+        # -s -86400: accept signatures made up to a day before the DS was
+        # published (BIND back-dates RRSIG inception; the default, the DS
+        # file's modification time, would reject a fresh CDS as a replay)
+        dnssec-cds -s -86400 -d "$out" -f "$child" "$zone" | to_ds > "$new" \
+            || die "dnssec-cds rejected the CDS (not signed by a key matching the current DS?)"
+        if [ ! -s "$new" ] || grep -q ' DS 0 0 0 ' "$new"; then
+            echo "publish-ds: the team's CDS asks to delete the DS of $zone"
+            : > "$new"
+        fi
+    else
+        awk '$4 == "CDS"' "$child" | sed 's/[[:space:]]CDS[[:space:]]/ DS /' | to_ds > "$new"
+        grep -q ' DS 0 0 0 ' "$new" && die "CDS is a delete request and no DS is published"
+        [ -s "$new" ] || die "could not read the CDS of $zone"
+        # RFC 8078: the CDS must match a DNSKEY the zone publishes
+        keys=$(awk '$4 == "DNSKEY"' "$child" | dnssec-dsfromkey -2 -f - "$zone" 2>/dev/null | to_ds)
+        while read -r line; do
+            grep -qxF "$line" <<< "$keys" \
+                || die "CDS does not match any DNSKEY at $addr: $line"
+        done < <(awk '$6 == 2' "$new")
+        echo "publish-ds: no DS yet, CDS accepted without a signature check: confirm these key tags with the team:"
+        cat "$new"
+    fi
+    ;;
+--remove)
+    : > "$new"
+    ;;
+*)
+    die "unknown option '$1'"
+    ;;
+esac
+
+if [ -s "$out" ] && cmp -s "$new" "$out"; then
+    echo "publish-ds: DS for $zone unchanged"
+    exit 0
+fi
+[ -e "$out" ] && cp -p "$out" "$old" || : > "$old"
+if [ -s "$new" ]; then
+    install -m 0644 "$new" "$out"
+else
+    rm -f "$out"
+fi
+# make-example-zone only replaces db.example if the new zone checks; if it
+# fails, put the old DS file back so later runs are not blocked by it
+if ! /opt/lab/bin/make-example-zone; then
+    if [ -s "$old" ]; then install -m 0644 "$old" "$out"; else rm -f "$out"; fi
+    die "the new example. zone did not check; nothing published"
+fi
+"${RNDC[@]}" reload example >/dev/null
+
+# wait for the signed zone to carry the change
+want=""
+[ -s "$out" ] && want=$(awk '{print $4}' "$out" | sort | tr '\n' ' ')
+for _ in $(seq 20); do
+    have=$(dig @127.0.0.1 +norec +short "$zone" DS | awk '{print $1}' | sort | tr '\n' ' ')
+    [ "$have" = "$want" ] && break
+    sleep 1
+done
+echo "publish-ds: $zone DS now: ${have:-none}"
+[ "$have" = "$want" ] || die "the signed zone does not show the new DS yet; check the parent log"
