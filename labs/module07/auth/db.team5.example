@@ -1,0 +1,5 @@
+$TTL 60
+@   SOA ns1.team5.example. hostmaster.team5.example. 1 3600 600 86400 60
+    NS  ns1.team5.example.
+ns1 A   127.0.0.1
+www A   192.0.2.10

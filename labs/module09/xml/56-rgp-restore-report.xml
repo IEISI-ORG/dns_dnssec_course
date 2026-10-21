@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update>
+      <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <domain:name>oldNN.example</domain:name>
+        <domain:chg/>
+      </domain:update>
+    </update>
+    <extension>
+      <rgp:update xmlns:rgp="urn:ietf:params:xml:ns:rgp-1.0">
+        <rgp:restore op="report">
+          <rgp:report>
+            <rgp:preData>oldNN.example deleted by registrar error</rgp:preData>
+            <rgp:postData>oldNN.example restored, same contacts and name servers</rgp:postData>
+            <rgp:delTime>@DELTIME@</rgp:delTime>
+            <rgp:resTime>@RESTIME@</rgp:resTime>
+            <rgp:resReason>Registrant error.</rgp:resReason>
+            <rgp:statement>This registrar has not restored the Registered Name in order to assume the rights to use or sell the Registered Name for itself or for any third party.</rgp:statement>
+            <rgp:statement>The information in this report is true to best of this registrar's knowledge, and this registrar acknowledges that intentionally supplying false information in this report shall constitute an incurable material breach of the Registry-Registrar Agreement.</rgp:statement>
+          </rgp:report>
+        </rgp:restore>
+      </rgp:update>
+    </extension>
+    <clTRID>teamNN-restore-rep</clTRID>
+  </command>
+</epp>

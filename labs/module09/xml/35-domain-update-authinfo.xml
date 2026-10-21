@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update>
+      <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <domain:name>teamNN.example</domain:name>
+        <domain:chg>
+          <domain:authInfo>
+            <domain:pw>@AUTHINFO@</domain:pw>
+          </domain:authInfo>
+        </domain:chg>
+      </domain:update>
+    </update>
+    <clTRID>teamNN-authinfo</clTRID>
+  </command>
+</epp>

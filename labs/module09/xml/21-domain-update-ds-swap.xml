@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update>
+      <domain:update xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <domain:name>teamNN.example</domain:name>
+      </domain:update>
+    </update>
+    <extension>
+      <secDNS:update xmlns:secDNS="urn:ietf:params:xml:ns:secDNS-1.1">
+        <secDNS:rem>
+          <secDNS:dsData>
+            <secDNS:keyTag>20915</secDNS:keyTag>
+            <secDNS:alg>13</secDNS:alg>
+            <secDNS:digestType>2</secDNS:digestType>
+            <secDNS:digest>234DF971032783507C458FB74A40357695A8F4959023B01ABF72A818EAA52F3A</secDNS:digest>
+          </secDNS:dsData>
+        </secDNS:rem>
+        <secDNS:add>
+          <secDNS:dsData>
+            <secDNS:keyTag>53602</secDNS:keyTag>
+            <secDNS:alg>13</secDNS:alg>
+            <secDNS:digestType>2</secDNS:digestType>
+            <secDNS:digest>AD1AAE1CDCEA2605F41146B2D4F29C90E8250EB4777D2F0E7811C873B8E7273F</secDNS:digest>
+          </secDNS:dsData>
+        </secDNS:add>
+      </secDNS:update>
+    </extension>
+    <clTRID>teamNN-ds-swap</clTRID>
+  </command>
+</epp>

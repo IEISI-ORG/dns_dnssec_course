@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+# epp-send: minimal EPP client for the Module 9 lab (RFC 5730 over the
+# RFC 5734 TLS transport), built on Net::EPP::Client from the Debian package
+# libnet-epp-perl.
+#
+#   TEAM=07 EPP_PW=... epp-send 02-login.xml 10-domain-check.xml 03-logout.xml
+#
+# Environment: EPP_HOST, EPP_PORT (700), EPP_CA (CA file for the server
+# certificate), EPP_CERT and EPP_KEY (client certificate, RFC 5734 mutual
+# authentication), TEAM, PARTNER, EPP_PW and any @NAME@ placeholder.
+#
+# Sends the XML files in order over one TLS session and prints every frame.
+# Substitutions in each file before it is sent:
+#   NN          -> $TEAM     (your two-digit team number)
+#   PP          -> $PARTNER  (your partner team, for transfers)
+#   @PASSWORD@  -> $EPP_PW   (your registrar's EPP password)
+#   @NAME@      -> $NAME     (any other placeholder, e.g. @AUTHINFO@, @MSGID@)
+# Each <clTRID> gets a time stamp and counter appended: clTRIDs should be
+# unique (RFC 5730 section 2.5), and some servers reject a repeated one.
+use strict;
+use warnings;
+use Net::EPP::Client;
+
+my $host = $ENV{EPP_HOST} // 'epp.registry.example';
+my $port = $ENV{EPP_PORT} // 700;
+my $ca   = $ENV{EPP_CA}   // '/etc/ssl/certs/ca-certificates.crt';
+my %cert = $ENV{EPP_CERT} ? (SSL_cert_file => $ENV{EPP_CERT},      # client certificate
+                             SSL_key_file  => $ENV{EPP_KEY} // die "set EPP_KEY\n") : ();
+my $team = $ENV{TEAM}     // die "set TEAM to your two-digit team number\n";
+die "usage: epp-send file.xml [file.xml ...]\n" unless @ARGV;
+
+sub fill {
+    my ($xml) = @_;
+    $xml =~ s/NN/$team/g;
+    $xml =~ s/PP/$ENV{PARTNER} \/\/ die "set PARTNER\n"/ge;
+    $xml =~ s/\@([A-Z]+)\@/my $v = $1 eq 'PASSWORD' ? $ENV{EPP_PW} : $ENV{$1};
+                           defined $v ? $v : die "set " . ($1 eq 'PASSWORD' ? 'EPP_PW' : $1) . "\n"/ge;
+    return $xml;
+}
+
+my $epp = Net::EPP::Client->new(host => $host, port => $port, ssl => 1);
+my $greeting = $epp->connect(SSL_ca_file => $ca, SSL_verify_mode => 1,
+                             SSL_verifycn_scheme => 'default',
+                             SSL_verifycn_name => $host,
+                             SSL_version => '!SSLv2:!SSLv3:!TLSv1:!TLSv1_1', %cert);
+print "<<< greeting\n", $greeting->toString(1), "\n";
+
+my ($stamp, $n) = (time . "-$$", 0);
+for my $file (@ARGV) {
+    open(my $fh, '<', $file) or die "$file: $!\n";
+    my $xml = fill(do { local $/; <$fh> });
+    close $fh;
+    $n++;
+    $xml =~ s/<clTRID>([^<]+)<\/clTRID>/<clTRID>$1-$stamp-$n<\/clTRID>/;
+    (my $shown = $xml) =~ s/(<(?:new)?[pP][wW]>)[^<]*(<\/(?:new)?[pP][wW]>)/$1********$2/g;
+    print ">>> $file\n", $shown, "\n";
+    my $answer = $epp->request($xml);
+    print "<<< response\n", $answer->toString(1), "\n";
+}
+$epp->disconnect;

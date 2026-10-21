@@ -83,6 +83,7 @@ For the full list of classes, see `dns-workshop-marp-style.md`.
 ```
 .
 ├─ modules/                          # 12 module decks (skeletons)
+├─ labs/                             # tested lab kits (configs, scripts, EPP frames)
 ├─ dns_dnssec_workshop_plan.md       # program and lab plan
 ├─ dns_slide_deck_plan.md            # slide outlines
 ├─ dns_assessment_plan.md            # assessments

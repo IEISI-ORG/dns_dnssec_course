@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <transfer op="request">
+      <domain:transfer xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <domain:name>teamPP.example</domain:name>
+        <domain:period unit="y">1</domain:period>
+        <domain:authInfo>
+          <domain:pw>@AUTHINFO@</domain:pw>
+        </domain:authInfo>
+      </domain:transfer>
+    </transfer>
+    <clTRID>teamNN-xfer-req</clTRID>
+  </command>
+</epp>
