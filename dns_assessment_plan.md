@@ -223,18 +223,18 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 ### Day 5: Registry Operations Assessment
 **Modules 9-10: EPP Protocol and CoCCA Systems**
 
-#### Practical Assessment 5A: EPP Operations (45 minutes)
+#### Practical Assessment 5A: EPP Operations (assessed from the Lab 9.1-9.5 checkpoints; no separate session)
 **Assessment Type:** Registry protocol implementation
 **Learning Objectives Tested:**
 - EPP protocol understanding (Understand/Apply)
 - Domain lifecycle management (Apply)
 - Registry operations (Apply/Analyse)
 
-**Tasks:**
-1. Configure EPP server and client connectivity (8 points)
-2. Execute complete domain registration workflow (10 points)
-3. Perform domain transfer and renewal operations (7 points)
-4. Generate registry reports and analyse data (5 points)
+**Tasks** (assessed during Labs 9.1-9.5):
+1. Establish an authenticated EPP session over TLS (client certificate, login) and interpret the greeting (8 points)
+2. Execute a complete domain registration workflow: contact, hosts with glue, domain, delegation and DS (10 points)
+3. Perform domain transfer and renewal operations with a secure transfer code (7 points)
+4. Delete and restore a domain through the grace periods, explaining each result code and status (5 points)
 
 #### Practical Assessment 5B: CoCCA Registry Management (45 minutes)
 **Assessment Type:** Registry system administration

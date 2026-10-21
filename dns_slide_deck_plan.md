@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~695 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~707 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -855,98 +855,49 @@
 
 ## Module 9: Registry Operations and EPP Protocol
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 55-60
+**Slides:** 67 (60 theory, 7 lab); deck: `modules/module09-registry-operations-epp.marp.md`
 
-### Registry Operational Model (12 slides)
-1. **Domain Registration Ecosystem**
-   - Registry-registrar separation
-   - ICANN accreditation process
-   - Thick vs thin registry models
-   - Market competition dynamics
+### Opening (5 slides)
+- Title, module overview, learning objectives
+- What changed recently: RDAP replaced WHOIS for gTLDs (28 January 2025); secure transfer codes (RFC 9154); revised ICANN Transfer Policy adopted 7 June 2026, not yet in force; DS by EPP `secDNS` and CDS/CDNSKEY; RFC 9874 for deleting hosts
+- Agenda (theory and lab)
 
-2. **Domain Lifecycle Management**
-   - Registration process workflow
-   - Renewal and expiration handling
-   - Transfer procedures
-   - Deletion and redemption
+### 1. The Registry Operating Model (9 slides)
+- Roles: registry, registrar, reseller, registrant, DNS operator; the shared registry model; gTLD (Registry Agreement, RAA) and ccTLD governance
+- Thick and thin registries; services a registry runs (EPP, zone, RDAP, escrow, billing, reporting)
+- Domain lifecycle; grace periods (RFC 3915: add, renew, auto-renew, transfer, redemption, pending delete; .com contract values; ERRP, AGP Limits Policy); redemption and restore state diagram
+- Client, server and pending status codes; registry lock
 
-3. **Grace Period Management**
-   - Add Grace Period (AGP)
-   - Renew Grace Period (RGP)
-   - Transfer Grace Period (TGP)
-   - Redemption Grace Period
-   - Pending Delete status
+### 2. EPP Fundamentals (10 slides)
+- What EPP is (RFC 5730; STD 69 = RFC 5730-5734; history from RFC 3730); EPP standards map (RFC 5730-5734, 5910, 3915, 8334, 8748, 9154, 8807, 3735, 7451, 9874)
+- TLS transport with mutual authentication and 4-octet framing (RFC 5734, 8996); session, greeting and login
+- Commands; result codes; objects and their links; the poll queue
 
-### EPP Protocol Deep Dive (20 slides)
-4. **EPP Architecture and Design**
-   - Client-server protocol model
-   - XML-based communication
-   - TLS security requirements
-   - Session management
+### 3. Objects, Renewals and Transfers (13 slides)
+- Contacts (RFC 5733); `check`; domain `create`; host objects and glue, internal and external hosts (RFC 5732); name server updates (`hostObj`, `hostAttr`); `info`; renew
+- Transfers: flow, request and response, secure transfer codes (RFC 9154), ICANN Transfer Policy (in force, and the revision adopted 7 June 2026)
+- Deleting hosts and domains (RFC 5731 2305; RFC 9874 sacrificial hosts)
 
-5. **EPP Command Structure**
-   - Login and authentication
-   - Object management commands
-   - Query and information commands
-   - Transform commands
+### 4. DNSSEC at the Registry (7 slides)
+- Paths for the DS (EPP, CDS scanning, web form); Registry Agreement Spec 6
+- `secDNS-1.1` (RFC 5910): DS Data vs Key Data and why DS Data is usual; adding a DS; KSK rollover with `rem` then `add`
+- What a registry should check (digest type, algorithm, matching DNSKEY); CDS/CDNSKEY from the registry side (RFC 7344, 8078, 9615, 9975)
 
-6. **Domain Object Management**
-   - Domain creation procedures
-   - Information queries
-   - Update operations
-   - Transfer initiation and approval
+### 5. Extensions and Registration Data (5 slides)
+- How EPP is extended (RFC 3735, 7451, 9038); extensions you will meet (RFC 8334, 8748, 8495, 8807, 8590, 9167, 9803, 8543/8544, 9873)
+- Registration data: RDAP replaced WHOIS for gTLDs on 28 January 2025 (except .com, .name, .post); ccTLD policy; redaction (RFC 9537); EPP to RDAP status mapping (RFC 8056)
+- Policy in software: eligibility, reserved names, pricing, lifecycle timings, data, DNS rules
 
-7. **Contact Object Handling**
-   - Contact creation and validation
-   - Contact information updates
-   - Privacy and registration data (RDAP/WHOIS) considerations
-   - Contact verification requirements
+### 6. Registry Operations (5 slides)
+- Service levels (gTLD Registry Agreement Spec 10); running and protecting the EPP service
+- Escrow (RFC 8909, 9022; Spec 2), billing and registrar onboarding
+- Registry software: FRED, Nomulus, Namingo; CoCCA in Module 10
 
-8. **Host Object Management**
-   - Name server registration
-   - Host attribute management
-   - IP address assignments
-   - Dependency relationships
+### Practical Lab (7 slides)
+- Lab environment; Labs 9.1-9.5 (connect and log in, contacts/hosts/domains, publish the DS, transfer and renew, delete and restore)
 
-9. **EPP Extensions and Customisation**
-   - Standard EPP extensions
-   - Registry-specific extensions
-   - Launch phase extensions
-   - IDN and DNSSEC extensions
-
-### Registry Policy Implementation (10 slides)
-10. **Business Rule Configuration**
-    - Registration policies
-    - Pricing structures
-    - Eligibility requirements
-    - Dispute resolution procedures
-
-11. **Registration Data Services (RDAP and WHOIS)**
-    - RDAP (RFC 7480-7484, 9082, 9083) is the required gTLD service; ICANN ended the gTLD port-43 WHOIS requirement on 28 January 2025
-    - ccTLDs set their own policy: RDAP, WHOIS, or both
-    - Data accuracy obligations
-    - Privacy protection services
-    - GDPR compliance considerations
-
-### Registry Operations Management (8 slides)
-12. **Monitoring and Performance**
-    - SLA requirements and monitoring
-    - Availability measurements
-    - Performance optimisation
-    - Capacity planning
-
-13. **Financial and Billing Systems**
-    - Registry-registrar billing
-    - Transaction fee management
-    - Financial reporting requirements
-    - Audit and compliance
-
-### Practical Lab Introduction (5 slides)
-14. **EPP Implementation Workshop**
-    - EPP server configuration
-    - Client connectivity testing
-    - Domain management workflows
-    - Transaction monitoring
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1366,14 +1317,14 @@
 | Module 6: DNS Security | 45 | 5 | 50 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
 | Module 8: DNS Privacy | 40 | 5 | 45 |
-| Module 9: Registry Operations | 50 | 5 | 55 |
+| Module 9: Registry Operations | 60 | 7 | 67 |
 | Module 10: CoCCA Systems | 45 | 5 | 50 |
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **593** | **57** | **650** |
+| **Total Core Content** | **603** | **59** | **662** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **695** |
+| **Grand Total** | | | **707** |
 
 ---
 
