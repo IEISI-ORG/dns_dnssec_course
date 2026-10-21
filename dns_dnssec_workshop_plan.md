@@ -419,6 +419,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - DNS DDoS attacks and mitigation
 - DNS tunneling and covert channels
 - Rate limiting and access control strategies
+- Resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
 
 ### Practical Lab
 - Simulate DNS attacks in controlled environment
@@ -474,34 +475,37 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall DNS privacy protocols (DoT, DoH, DoQ, DNSCrypt)
-- Identify implementation differences between privacy protocols
+- Recall what a DNS query reveals and to whom, and the IETF protocols that protect it (DoT RFC 7858/8310, DoH RFC 8484, DoQ RFC 9250, padding RFC 7830/8467, DDR RFC 9462, DNR RFC 9463, ODoH RFC 9230) with their status
+- Identify what encryption leaves visible (resolver address, SNI, sizes and timing, the resolver operator)
 
 **Comprehension (Understand):**
-- Explain the privacy implications of traditional DNS
-- Compare DoT vs DoH implementation approaches
+- Explain the strict and opportunistic usage profiles (RFC 8310) and how a client authenticates an encrypted resolver
+- Compare DoT, DoH and DoQ (transport, port, ALPN, visibility, head-of-line blocking, software support)
 
 **Application (Apply):**
-- Configure DNS over TLS (DoT) on port 853
-- Implement DNS over HTTPS (DoH) endpoints
+- Configure DNS over TLS (port 853) and DNS over HTTPS (port 443, `application/dns-message`) on a BIND 9.20 resolver with a team certificate, and test them with `dig` and `kdig`
+- Configure Unbound to forward every query over TLS with a verified name
+- Publish DDR records (`_dns.resolver.arpa` SVCB) and check the certificate for verified discovery
 
 **Analysis (Analyse):**
-- Evaluate privacy protocol performance and security trade-offs
-- Analyse enterprise deployment considerations for encrypted DNS
+- Analyse packet captures to show what DoT hides and what it does not, and measure the effect of padding
+- Evaluate deployment choices for an ISP, enterprise or ccTLD: protocols, discovery (DDR, DNR), certificates, logging and the Recursive operator Privacy Statement (RFC 8932)
 
 ### Theory Content
-- DNS privacy landscape and threats
-- DNS over TLS (DoT) - RFC 7858 implementation
-- DNS over HTTPS (DoH) - RFC 8484 considerations
-- DNSCrypt protocol overview
-- Enterprise policy implications of encrypted DNS
+- DNS privacy landscape and threats (RFC 9076, which obsoletes RFC 7626); who sees each hop; EDNS Client Subnet (RFC 7871); QNAME minimisation and DNS Cookies are covered in Module 6
+- DNS over TLS: RFC 7858 and the RFC 8310 profiles; certificates and service identity (RFC 9525); BIND 9.20 and Unbound 1.26 configuration; testing and failures; connection management (RFC 7766, 9210, 7828)
+- DNS over HTTPS: RFC 8484 (wire format only, `application/dns-message`; JSON APIs are vendor-specific); HTTP caching and cookies; deployment behind proxies and load balancers
+- DNS over QUIC (RFC 9250) and Debian 13 support; DoT, DoH and DoQ compared
+- Resolver discovery: SVCB for DNS servers (RFC 9460, 9461), DDR (RFC 9462), DNR (RFC 9463); client behaviour only from dated vendor sources; enterprise and ISP policy (split horizon, RFC 9704)
+- Padding (RFC 7830, 8467); resolver-to-authoritative encryption (RFC 9539, Experimental); zone transfers over TLS (RFC 9103); Oblivious DoH (RFC 9230, Experimental); DNSCrypt (not an IETF standard); Encrypted ClientHello (RFC 9849) and TLS 1.3 (RFC 9846, 9852)
+- Operator policy: RFC 8932 (BCP 232), the Recursive operator Privacy Statement, log retention and local law
 
 ### Practical Lab
-- Configure Unbound for DoT support
-- Set up DoH proxy using nginx/apache
-- Test encrypted DNS clients (Android, iOS, browsers)
-- Monitor encrypted DNS traffic patterns
-- Policy configuration for enterprise DoT/DoH deployment
+- See plaintext DNS on the wire, including the resolver's own queries (Lab 8.1)
+- Add DoT and DoH to the Module 7 BIND resolver with a team certificate; test strict, failing and opportunistic connections (Lab 8.2)
+- Forward a client's queries over TLS with Unbound (Lab 8.3)
+- Publish DDR records and verify the certificate's IP address (Lab 8.4)
+- Measure padded and unpadded message sizes on the wire (Lab 8.5)
 
 ---
 
@@ -1087,49 +1091,61 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 
 ## Module 8: DNS Privacy and Encryption - Lab Requirements
 
+All steps below were run on 2026-10-21 with Debian 13 packages (bind9 9.20.29, unbound 1.26.1, knot-dnsutils 3.4.6, openssl 3.5.7, curl 8.14.1, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace that put the lab addresses on one loopback. Lab kit: `labs/module08/` (certificate script, BIND and Unbound snippets, DDR zone, and the rehearsal harness `test/rehearse.sh`).
+
 ### Lab Environment Setup
-- **Participant VMs:** 2 Debian server VMs per participant
-- **Software:** Unbound with DoT support, nginx for DoH, stunnel
-- **Certificates:** TLS certificates for encrypted connections
+- **Participant VMs:** the two Debian 13 VMs from Module 7: the BIND 9.20 validating resolver (gets DoT, DoH and DDR) and the authoritative server for `teamNN.example` (used as the client)
+- **Packages:** `bind9`, `bind9-dnsutils`, `knot-dnsutils` (`kdig`), `unbound` (client VM), `tcpdump`, `tshark`, `openssl`, `curl`
+- **Certificates:** each team runs `make-certs.sh NN <resolver address>` on its resolver: a 30-day team CA and an ECDSA P-256 certificate for `resolver.teamNN.example` with the resolver's address as an IP SAN. Keys stay on the resolver; only `ca.crt` goes to the client. No shared or fixed secrets
+- **Zone data:** `resolver.teamNN.example` A (and AAAA) record in `teamNN.example`; `secret-project.teamNN.example` A record for Lab 8.1
+- **Instructor demo (optional):** Knot DNS 3.4 with `listen-quic` for DoQ; BIND 9.20 and Unbound 1.26 as packaged in Debian 13 do not serve DoQ
+- **Not tested:** the `systemctl` steps on real VMs, Debian 12 (BIND 9.18, Unbound 1.17), DNR options in a DHCP server (discussion only)
 
 ### Lab Exercises
 
-#### Lab 8.1: DNS over TLS (DoT) Implementation (45 minutes)
-**Objective:** Configure and test DNS over TLS
-**Resources Needed:**
-- Unbound with TLS support
-- TLS certificates
-- DoT client testing tools
+#### Lab 8.1: See Plaintext DNS (15 minutes)
+**Objective:** See what an on-path observer sees
 **Exercise Steps:**
-1. Configure Unbound for DoT on port 853
-2. Generate and install TLS certificates
-3. Test DoT connectivity with various clients
-4. Monitor encrypted DNS traffic
+1. Capture on the resolver: `tcpdump -i any -n -w plain.pcap port 53 or port 853 or port 443`
+2. From the client, `dig @<resolver> secret-project.teamNN.example A`
+3. List the queries with `tshark -r plain.pcap -T fields -e ip.src -e ip.dst -e dns.qry.name`
+**Success criteria:** the client's query and the resolver's own queries (one showing QNAME minimisation) identified
 
-#### Lab 8.2: DNS over HTTPS (DoH) Setup (30 minutes)
-**Objective:** Implement DNS over HTTPS service
-**Resources Needed:**
-- nginx or apache web server
-- DoH proxy software
-- HTTPS certificates
-- DoH client tools
+#### Lab 8.2: DoT and DoH on Your Resolver (25 minutes)
+**Objective:** Serve DoT and DoH from BIND 9.20 and test strict, failing and opportunistic clients
 **Exercise Steps:**
-1. Configure DoH proxy with nginx
-2. Set up HTTPS certificates
-3. Test DoH functionality with browsers
-4. Compare DoH vs DoT performance
+1. Make the team certificate: `sudo mkdir /etc/bind/tls; sudo sh labs/module08/make-certs.sh NN <resolver address> /etc/bind/tls`; then `sudo chown root:bind` and `sudo chmod 640` on `/etc/bind/tls/resolver.key`
+2. Install `named.conf.module08` (`tls` and `http` blocks, `resolver.arpa` zone) and `db.resolver.arpa`; add the `listen-on` lines from `named.conf.options.module08`; `named-checkconf`; restart `named`
+3. Strict DoT with `kdig` and `dig` (`+tls-ca=ca.crt +tls-hostname=resolver.teamNN.example`)
+4. A wrong `+tls-hostname`, `+tls-ca` without the file, and `+tls` alone
+5. DoH with `kdig +https`, `dig +https` and `dig +https-get`; repeat the Lab 8.1 capture over DoT
+**Success criteria:** strict DoT and DoH succeed; wrong name and unknown CA fail; the capture shows SNI and ALPN `dot` but no query name on the client hop, and cleartext queries from the resolver to the authoritative server
 
-#### Lab 8.3: Privacy Protocol Comparison (15 minutes)
-**Objective:** Compare different DNS privacy protocols
-**Resources Needed:**
-- Multiple privacy protocol implementations
-- Network analysis tools
-- Performance testing utilities
+#### Lab 8.3: Forward over TLS with Unbound (15 minutes)
+**Objective:** Send all of a client's queries over authenticated DoT
 **Exercise Steps:**
-1. Test traditional DNS vs DoT vs DoH
-2. Analyse network traffic patterns
-3. Measure performance impact
-4. Evaluate deployment considerations
+1. Install `module08-forward.conf` (listens on 127.0.0.1 port 5300; `forward-tls-upstream`, `forward-addr <resolver>@853#resolver.teamNN.example`) and the team `ca.crt`; restart Unbound. After `apt install unbound` the service shows as failed (BIND owns port 53 on this VM); expected until the lab file is installed
+2. `dig @127.0.0.1 -p 5300 www.teamNN.example`, with a capture on the client
+3. Set a wrong name after `#`, restart, query, read the log
+**Success criteria:** answers through Unbound; only TCP 853 to the resolver, queries padded to 147-octet TLS records; wrong name gives SERVFAIL and "hostname mismatch" in the log
+
+#### Lab 8.4: Resolver Discovery with DDR (20 minutes)
+**Objective:** Advertise the encrypted resolver with DDR and check verified discovery
+**Exercise Steps:**
+1. Set the team number in `db.resolver.arpa`; `named-checkzone`; `rndc reload resolver.arpa`
+2. `dig @<resolver> _dns.resolver.arpa SVCB` (`dig` 9.20 prints `dohpath` as `key7`)
+3. `openssl s_client -connect <resolver>:853 -CAfile ca.crt -verify_ip <resolver> -alpn dot -brief`, then with another team's address
+4. Discuss: private lab addresses and opportunistic discovery; what DNR (DHCPv4 option 162, DHCPv6 and RA option 144) would add
+**Success criteria:** two SVCB records (DoT on 853, DoH on 443 with `dohpath`); "Verification: OK" for the team's own address and "IP address mismatch" for another
+
+#### Lab 8.5: Padding on the Wire (15 minutes)
+**Objective:** Measure what padding hides
+**Exercise Steps:**
+1. `response-padding { any; } block-size 468;` on the resolver
+2. Capture TCP 853 while querying two names of different length over DoT, with and without `+padding=128`
+3. Read TLS record lengths with `tshark -Y tls -T fields -e ip.src -e tls.record.length`; compare `kdig +padding` and `+nopadding`
+4. Try `+padding=128` over UDP and plain TCP
+**Success criteria:** unpadded record sizes differ by the name-length difference (78 and 89 octets in the test lab); padded sizes are identical (147 and 487); participants note that BIND also padded over plain TCP (documented in the BIND ARM for `response-padding`: queries that use TCP or carry a valid server cookie; a design choice that departs from RFC 7830 §6), while Unbound padded only over TLS
 
 ---
 

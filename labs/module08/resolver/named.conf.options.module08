@@ -1,0 +1,9 @@
+// Lines to add inside the existing options { } block of the Module 7
+// resolver. Keep your existing port 53 listen-on lines.
+    listen-on port 853 tls resolver-tls { any; };                     // DoT
+    listen-on port 443 tls resolver-tls http resolver-http { any; };  // DoH
+    listen-on-v6 port 853 tls resolver-tls { any; };
+    listen-on-v6 port 443 tls resolver-tls http resolver-http { any; };
+
+    // Lab 8.5: pad responses to padded queries, in 468-octet blocks (RFC 8467)
+    response-padding { any; } block-size 468;

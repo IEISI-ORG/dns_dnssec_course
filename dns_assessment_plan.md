@@ -202,13 +202,13 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 **Learning Objectives Tested:**
 - Privacy protocol understanding (Understand/Apply)
 - Encryption implementation (Apply)
-- Performance analysis (Analyse/Evaluate)
+- Traffic and privacy analysis (Analyse/Evaluate)
 
-**Tasks:**
-1. Configure DNS over TLS (DoT) service (8 points)
-2. Set up DNS over HTTPS (DoH) endpoint (8 points)
-3. Test client connectivity to encrypted services (6 points)
-4. Compare privacy protocol performance and security (8 points)
+**Tasks:** (same tools and lab kit as Labs 8.2-8.5, on a fresh resolver)
+1. Configure DNS over TLS on BIND with a certificate that carries the resolver's name and IP address; show a strict `kdig` query succeeding and a wrong-name query failing (8 points)
+2. Add a DNS over HTTPS endpoint (`/dns-query`, `application/dns-message`); query it with GET and POST (8 points)
+3. Point a client at it: Unbound forwarding over TLS, and DDR records for `_dns.resolver.arpa` that pass verified discovery (6 points)
+4. From a packet capture, state what DoT hid and what it left visible, and show the effect of padding on record sizes (8 points)
 
 #### Knowledge Check 4: Security and Privacy Quiz (20 minutes)
 **Assessment Type:** Technical scenarios and analysis
