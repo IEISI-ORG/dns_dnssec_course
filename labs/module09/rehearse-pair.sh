@@ -1,13 +1,15 @@
 #!/bin/bash
 # rehearse-pair.sh A B: run every Module 9 lab step for teams A and B (partners),
 # as the instructor's dry run. Needs EPP_HOST, EPP_PORT, EPP_CA, and for each team
-# NN the files certs/regNN.crt + certs/regNN.key and password Lab-pass-NN, plus
+# NN the files certs/regNN.crt + certs/regNN.key and its password in PW_FILE (from seed-lab.sh), plus
 # KSK files in keys/ (Kteam<NN>.example.+013+*.key) for the DS step.
-# Writes one transcript per step to out/. Run from the m09_lab directory.
+# Writes one transcript per step to out/. Run from this directory.
 set -euo pipefail
 A=$1; B=$2; X=xml; O=out; mkdir -p $O
+PW_FILE=${PW_FILE:-secrets/passwords.tsv}
+pw() { awk -v c="reg$1" '$1 == c { print $2 }' "$PW_FILE"; }
 send() { local t=$1; shift
-  TEAM=$t EPP_PW=Lab-pass-$t EPP_CERT=certs/reg$t.crt EPP_KEY=certs/reg$t.key ./epp-send "$@"; }
+  TEAM=$t EPP_PW=$(pw $t) EPP_CERT=certs/reg$t.crt EPP_KEY=certs/reg$t.key ./epp-send "$@"; }
 codes() { grep -o 'result code="[0-9]*"\|avail="[01]"\|rgpStatus s="[A-Za-z]*"\|trStatus>[A-Za-z]*' "$1" | tr '\n' ' '; echo; }
 for t in $A $B; do p=$([ $t = $A ] && echo $B || echo $A)
   send $t $X/01-hello.xml > $O/91-$t-hello.txt

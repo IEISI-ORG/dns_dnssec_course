@@ -3,14 +3,18 @@
 # Namingo registry database (MariaDB). Tested 2026-10-21 against Namingo v1.0.34.
 #   MYSQL="mariadb -uroot" TEAMS=20 ./seed-lab.sh
 #   MYSQL="mariadb -uroot" FIRST=21 TEAMS=22 TLD=0 ./seed-lab.sh   # add teams 21-22 later
-# Each team NN gets registrar regNN with EPP password Lab-pass-NN (change these
-# for a real class), allowed from LAB_NET (default 127.0.0.1; set your lab subnet).
+# Each team NN gets registrar regNN with a random 16-character EPP password,
+# allowed from LAB_NET (default 127.0.0.1; set your lab subnet). Passwords are
+# appended to PW_FILE (default secrets/passwords.tsv, mode 600) as "regNN<TAB>pw":
+# hand each team its own line privately and never commit the file.
 set -euo pipefail
 MYSQL=${MYSQL:-mariadb -uroot}
 TEAMS=${TEAMS:-2}
 FIRST=${FIRST:-1}
 TLD=${TLD:-1}
 LAB_NET=${LAB_NET:-127.0.0.1}
+PW_FILE=${PW_FILE:-secrets/passwords.tsv}
+mkdir -p "$(dirname "$PW_FILE")"; touch "$PW_FILE"; chmod 600 "$PW_FILE"
 {
 echo 'USE registry;'
 [ "$TLD" = 1 ] && cat <<'SQL'
@@ -23,7 +27,9 @@ INSERT INTO domain_restore_price (tldid, price) VALUES (@tld, '50.00');
 SQL
 for i in $(seq "$FIRST" "$TEAMS"); do
   n=$(printf %02d "$((10#$i))")
-  hash=$(php -r "echo password_hash('Lab-pass-$n', PASSWORD_ARGON2ID, ['memory_cost'=>65536,'time_cost'=>3,'threads'=>1]);")
+  pw=$(openssl rand -hex 8)   # 16 characters: RFC 5730 allows 6-16
+  printf 'reg%s\t%s\n' "$n" "$pw" >> "$PW_FILE"
+  hash=$(PW=$pw php -r 'echo password_hash(getenv("PW"), PASSWORD_ARGON2ID, ["memory_cost"=>65536,"time_cost"=>3,"threads"=>1]);')
   cat <<SQL
 INSERT INTO registrar (name, clid, pw, prefix, email, whois_server, rdap_server, url, abuse_email, abuse_phone,
   accountBalance, creditLimit, creditThreshold, thresholdType, currency, companyNumber, crdate, lastupdate)
