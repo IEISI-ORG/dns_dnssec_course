@@ -26,7 +26,7 @@ subjectAltName (needed for DDR verified discovery). Each team generates its
 own; keys never leave the resolver VM, and only `ca.crt` is copied to the
 client. Make `resolver.key` readable by BIND:
 `chown root:bind resolver.key; chmod 640 resolver.key`.
-`.gitignore` keeps keys, certificates directories, logs and pid files out of git.
+`../.gitignore` keeps keys, certificates directories, logs and pid files out of git.
 
 ## Rehearsal harness (`test/`)
 
