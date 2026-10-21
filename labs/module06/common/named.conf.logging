@@ -1,0 +1,21 @@
+// Module 6, both VMs: security-relevant logging to its own file.
+// Include it from /etc/bind/named.conf:   include "/etc/bind/named.conf.logging";
+// First: sudo install -d -o bind -g bind /var/log/named
+// (Debian's AppArmor profile for named allows writing to /var/log/named/.)
+// Refused queries are not logged at severity info; count them with
+// "rndc stats" ("queries rejected" lines in /var/cache/bind/named.stats).
+logging {
+    channel security_log {
+        file "/var/log/named/security.log" versions 5 size 10m;
+        print-time yes;
+        print-category yes;
+        print-severity yes;
+        severity info;
+    };
+    category security   { security_log; default_syslog; };   // approvals and denials (transfers, updates)
+    category rate-limit { security_log; };                   // RRL start/stop notices
+    category rpz        { security_log; };                   // RPZ rewrites
+    category xfer-in    { security_log; default_syslog; };
+    category xfer-out   { security_log; default_syslog; };
+    category notify     { security_log; };
+};

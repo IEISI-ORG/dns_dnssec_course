@@ -1,0 +1,7 @@
+// Module 6, Lab 6.4: add these two lines inside your existing
+//   zone "teamNN.example" { type primary; file "..."; ... };
+// and include the key file at the top level of named.conf.local:
+//   include "/etc/bind/teamNN-xfr.key";
+// Use your resolver's address from the lab sheet in place of 192.0.2.10.
+        allow-transfer { key "teamNN-xfr"; };
+        also-notify { 192.0.2.10 key "teamNN-xfr"; };

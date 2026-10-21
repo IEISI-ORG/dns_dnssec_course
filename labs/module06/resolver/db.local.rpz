@@ -1,0 +1,8 @@
+; Module 6, Lab 6.5: this team's own policy, checked before the feed
+$TTL 60
+@        SOA localhost. admin.localhost. 1 3600 600 86400 60
+         NS  localhost.
+; allow a name the feed blocks (PASSTHRU)
+tracker.example          CNAME rpz-passthru.
+; block a name the feed does not list (NXDOMAIN)
+ftp.teamNN.example       CNAME .

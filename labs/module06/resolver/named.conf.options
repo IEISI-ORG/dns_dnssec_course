@@ -1,0 +1,42 @@
+// Module 6, resolver VM: replaces /etc/bind/named.conf.options
+// Lab 6.1 (access), Lab 6.2 (defences you can observe).
+// Replace the two lab addresses with yours from the lab sheet.
+acl "trusted" {
+    localhost;
+    192.0.2.10;     // this resolver
+    192.0.2.30;     // your authoritative VM (the client in these labs)
+};
+
+options {
+    directory "/var/cache/bind";
+
+    // Recursion for your own clients only (RFC 5358, BCP 140)
+    recursion yes;
+    allow-query { trusted; };
+    allow-query-cache { trusted; };
+    allow-recursion { trusted; };
+    allow-transfer { none; };
+    allow-update { none; };
+
+    version none;
+    hostname none;
+    server-id none;
+
+    // Debian default: validate with the built-in root trust anchor (Module 7)
+    dnssec-validation auto;
+    // The lab TLD example. is not in the real root, so validation would fail
+    // ("parent indicates it should be secure"). Module 7 (Lab 7.3) gives you
+    // a trust anchor for example.: delete this line then.
+    validate-except { "example"; };
+
+    // Written out although they are BIND 9.20 defaults, so you can see them
+    qname-minimization relaxed;    // RFC 9156; NS queries while walking down
+    send-cookie yes;               // DNS Cookies to authoritative servers (RFC 7873)
+    answer-cookie yes;             // and in answers to clients
+    minimal-responses yes;
+
+    // Fewer simultaneous fetches to one zone: limits random-subdomain floods
+    fetches-per-zone 100 fail;
+
+    // Lab 6.5: paste the response-policy block from named.conf.rpz-options here
+};

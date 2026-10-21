@@ -1,0 +1,8 @@
+; Rehearsal only: a team zone as earlier modules leave it
+$TTL 60
+@          SOA ns1.team01.example. admin.team01.example. 1 300 60 86400 60
+           NS  ns1.team01.example.
+ns1        A   192.0.2.30
+www        A   192.0.2.80
+mail       A   192.0.2.81
+ftp        A   192.0.2.82

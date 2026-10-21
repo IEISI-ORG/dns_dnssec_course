@@ -1,0 +1,11 @@
+; Module 6, Lab 6.5: the instructor's "threat feed" (a response policy zone).
+; Names are under the lab TLD example.; see example.additions.
+$TTL 60
+@        SOA ns1.example. admin.example. 1 300 60 86400 60
+         NS  ns1.example.
+; QNAME triggers
+malware.example          CNAME .                        ; NXDOMAIN
+phish.example            CNAME walled-garden.example.   ; redirect (local data)
+tracker.example          CNAME *.                       ; NODATA
+; response IP trigger: any answer containing 192.0.2.66
+32.66.2.0.192.rpz-ip     CNAME .                        ; NXDOMAIN
