@@ -1,0 +1,105 @@
+# Instructor server for the DNS/DNSSEC workshop. See README.md.
+#   docker compose up -d --build                 parent server (Modules 7-9)
+#   docker compose --profile m08 up -d --build   adds the Knot DoQ demo
+#     (or COMPOSE_PROFILES=m08 and DOQ_ADDR in .env)
+name: dnslab
+
+x-bind-image: &bind-image
+  build:
+    context: ./images
+    target: bind
+    args: { DEBIAN_TAG: "${DEBIAN_TAG:-trixie-20261005-slim}" }
+  image: dnslab/bind:local
+
+x-lab-env: &lab-env
+  PARENT_ADDR: ${PARENT_ADDR:?set PARENT_ADDR in .env}
+  DOQ_ADDR: ${DOQ_ADDR:-}
+  TEAMS_FILE: /etc/lab-classroom/teams.conf
+  HANDOUT_UID: ${HANDOUT_UID:-1000}
+  HANDOUT_GID: ${HANDOUT_GID:-1000}
+
+x-parent-volumes: &parent-volumes
+  - parent-state:/var/lib/lab
+  - ./parent:/etc/lab:ro
+  # a directory, not the file: editors that replace teams.conf on save would
+  # leave a single-file mount pointing at the old copy
+  - type: bind
+    source: ${CLASSROOM_DIR:-./classroom}
+    target: /etc/lab-classroom
+    read_only: true
+    bind: { create_host_path: false }
+
+services:
+  # one-shot: keys, broken zones, db.example (runs on every `up`)
+  init:
+    <<: *bind-image
+    command: ["/opt/lab/bin/lab-init"]
+    environment: *lab-env
+    volumes: *parent-volumes
+    network_mode: none
+    security_opt: [no-new-privileges:true]
+    restart: "no"
+
+  # the "registry": example., expired.example, wrongds.example
+  parent:
+    <<: *bind-image
+    command: ["/opt/lab/bin/parent-run"]
+    init: true
+    environment: *lab-env
+    volumes:
+      - parent-state:/var/lib/lab
+      - ./parent:/etc/lab:ro
+      # a directory, not the file: editors that replace teams.conf on save would
+      # leave a single-file mount pointing at the old copy
+      - type: bind
+        source: ${CLASSROOM_DIR:-./classroom}
+        target: /etc/lab-classroom
+        read_only: true
+        bind: { create_host_path: false }
+      - ${HANDOUT_DIR:-./handout}:/handout
+    networks:
+      lab: { ipv4_address: "${PARENT_ADDR}" }
+    depends_on:
+      init: { condition: service_completed_successfully }
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+  # Module 8: DoQ demo on Knot DNS
+  doq:
+    profiles: [m08]
+    build:
+      context: ./images
+      target: knot
+      args: { DEBIAN_TAG: "${DEBIAN_TAG:-trixie-20261005-slim}" }
+    image: dnslab/knot:local
+    environment:
+      DOQ_ADDR: ${DOQ_ADDR:-}
+      HANDOUT_UID: ${HANDOUT_UID:-1000}
+      HANDOUT_GID: ${HANDOUT_GID:-1000}
+    volumes:
+      - doq-state:/var/lib/knot-lab
+      - ./knot:/etc/lab:ro
+      - ${HANDOUT_DIR:-./handout}:/handout
+    networks:
+      lab: { ipv4_address: "${DOQ_ADDR:-}" }
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+# Each service gets its own address on the classroom LAN. ipvlan L2 shares the
+# host NIC's MAC address, so the hypervisor's virtual switch needs no
+# promiscuous mode or MAC learning. The host itself cannot reach these
+# addresses over its own NIC: use `docker compose exec`, or another machine.
+networks:
+  lab:
+    driver: ipvlan
+    driver_opts:
+      parent: ${LAB_PARENT_IF:?set LAB_PARENT_IF in .env}
+      ipvlan_mode: l2
+    ipam:
+      config:
+        - subnet: ${LAB_SUBNET:?set LAB_SUBNET in .env}
+          gateway: ${LAB_GATEWAY:?set LAB_GATEWAY in .env}
+
+volumes:
+  parent-state:
+  doq-state:

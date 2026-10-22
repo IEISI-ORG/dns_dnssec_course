@@ -9,3 +9,8 @@ secrets/
 *.jnl
 *.log
 *.pid
+# instructor stack: per-classroom settings and generated files
+instructor/.env
+instructor/classroom/teams.conf
+instructor/handout/
+instructor/test/work/

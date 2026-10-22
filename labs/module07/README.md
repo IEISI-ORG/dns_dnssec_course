@@ -14,4 +14,4 @@ The configs used to run every Module 7 command and lab step, tested on 2026-10-1
 2. Sign `m71/` and `brk/` zones as in the Lab 7.1 and Lab 7.3 slides; `named.conf` loads the `.signed` files. Re-sign the expired zone (team3) with past dates before each class.
 3. Replace `ta.ds` and the `trust-anchor` line in `unb/unbound.conf` with the DS of your own `example.` KSK.
 
-This kit is the starting point for the instructor registry server. Module 9 (`../module09/`) replaces the hand-written `example.` zone with one built from the registry database.
+This kit is the starting point for the instructor registry server; `../instructor/` runs it as a Docker Compose stack. Module 9 (`../module09/`) replaces the hand-written `example.` zone with one built from the registry database.
