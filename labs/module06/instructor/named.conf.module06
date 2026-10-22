@@ -1,0 +1,12 @@
+// Module 6, instructor registry server (the same server that serves
+// example. for Modules 7 and 9). Add to its named.conf.
+// The RPZ feed for Lab 6.5, transferable from the lab network only.
+acl "lab-network" { 192.0.2.0/24; };     // replace with the lab sheet's classroom prefix
+
+zone "feed.rpz.test" {
+    type primary;
+    file "/etc/bind/db.feed.rpz.test";
+    allow-transfer { lab-network; };
+    allow-query { lab-network; };
+    notify no;            // team resolvers refresh on the SOA timers
+};

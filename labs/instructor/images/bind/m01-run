@@ -1,0 +1,45 @@
+#!/bin/bash
+# m01-run root|child|resolver: one server of the Module 1 lab hierarchy.
+# Copies /etc/lab/<role>/ into a working directory with the classroom values
+# filled in (@PARENT_ADDR@, @M01_ROOT_ADDR@, @M01_CHILD_ADDR@, @LAB_SUBNET@,
+# and the fault labels @M01_L_GLUE@, @M01_L_NSSET@, @M01_L_NOTSERVED@),
+# checks the result and runs named in the foreground.
+# No keys and no state: the files are rebuilt on every start.
+set -euo pipefail
+role=${1:?usage: m01-run root|child|resolver}
+ipv4='^((25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])$'
+need() {   # need VAR...: each must be set to an IPv4 address
+    local v
+    for v in "$@"; do
+        [[ ${!v:-} =~ $ipv4 ]] || { echo "m01-run: set $v in .env to an IPv4 address (now: '${!v:-}')" >&2; exit 1; }
+    done
+}
+case $role in
+root)     need M01_ROOT_ADDR PARENT_ADDR ;;
+child)    need M01_CHILD_ADDR ;;
+resolver) need M01_RESOLVER_ADDR M01_ROOT_ADDR
+          [[ ${LAB_SUBNET:-} =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$ ]] \
+              || { echo "m01-run: set LAB_SUBNET in .env (for example 192.0.2.0/24)" >&2; exit 1; } ;;
+*)        echo "m01-run: unknown role $role" >&2; exit 1 ;;
+esac
+. /opt/lab/bin/m01-labels
+m01_labels
+
+src=/etc/lab/$role
+W=/var/lib/lab-m01
+[ -s "$src/named.conf" ] || { echo "m01-run: no $src/named.conf" >&2; exit 1; }
+rm -rf "$W"
+install -d -o bind -g bind -m 0750 "$W"
+for f in "$src"/*; do
+    sed -e "s/@PARENT_ADDR@/${PARENT_ADDR:-}/g" \
+        -e "s/@M01_ROOT_ADDR@/${M01_ROOT_ADDR:-}/g" \
+        -e "s/@M01_CHILD_ADDR@/${M01_CHILD_ADDR:-}/g" \
+        -e "s#@LAB_SUBNET@#${LAB_SUBNET:-}#g" \
+        -e "s/@M01_L_GLUE@/$M01_L_GLUE/g" \
+        -e "s/@M01_L_NSSET@/$M01_L_NSSET/g" \
+        -e "s/@M01_L_NOTSERVED@/$M01_L_NOTSERVED/g" "$f" > "$W/$(basename "$f")"
+done
+chown bind:bind "$W"/*
+chmod 0644 "$W"/*
+named-checkconf -z "$W/named.conf" >/dev/null || { named-checkconf -z "$W/named.conf" >&2; exit 1; }
+exec named -g -u bind -c "$W/named.conf"

@@ -128,40 +128,42 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 1: Introduction to DNS - Foundations and Concepts
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module01-dns-foundations.marp.md` (70 slides: 64 theory, 6 lab). Module 1 also opens the course (welcome, course structure and assessment from Program Facts). Lab kit: `labs/module01/`; lab servers: `labs/instructor` profile `m01`.
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall the purpose and history of the Domain Name System
-- Identify the components of the DNS hierarchy and namespace
-- List the key stakeholders in DNS management (ICANN, IANA, registries, registrars)
+- Recall why the DNS replaced HOSTS.TXT (RFC 1034 §2.1) and the milestones from RFC 882/883 (1983) to RFC 1034/1035 (STD 13, 1987) and RFC 9499 (2024)
+- Identify the parts of the namespace: labels, FQDNs, the root, TLD types (generic, country code, IDN, `arpa`), domains, zones, delegation and glue
+- List who runs each part: IETF, ICANN, IANA (PTI), the Root Zone Maintainer, the 12 root server operators and RSSAC, registries, registrars, resellers, registrants, DNS operators, RIRs
 
 **Comprehension (Understand):**
-- Explain how DNS translates domain names to IP addresses
-- Describe the distributed and hierarchical nature of DNS
-- Compare DNS with other naming systems
+- Explain how a recursive resolver turns a name into an address by following referrals from the root, and what it caches
+- Describe authoritative servers (primary, secondary), recursive resolvers, stub resolvers and forwarders (RFC 9499 terms)
+- Compare the DNS with other ways hosts look up names (`/etc/hosts` and nsswitch, multicast DNS, LLMNR)
 
 **Application (Apply):**
-- Use basic DNS lookup tools (nslookup, dig, host)
-- Trace DNS resolution from root to authoritative servers
+- Use `dig`, `host` and `nslookup` (Debian 13 packages `bind9-dnsutils`, `bind9-host`), and capture DNS traffic with `tcpdump` and `tshark`
+- Trace a lookup from the root by hand with `dig +norec`, and with `dig +trace` when the classroom has Internet access
 
 **Analysis (Analyse):**
-- Analyse the DNS resolution process step-by-step
-- Examine the relationship between different DNS components
+- Read a DNS message: header flags (QR, AA, TC, RD, RA), RCODEs (NOERROR, NXDOMAIN, SERVFAIL, REFUSED), NODATA, sections, UDP and TCP, IPv4 and IPv6
+- Diagnose a broken delegation (server does not serve the zone, unreachable server, stale glue, parent/child NS mismatch, missing delegation) and name who must fix it
 
 ### Theory Content
-- DNS history and evolution from HOSTS.TXT
-- DNS namespace structure and hierarchy (root, TLD, second-level domains)
-- DNS stakeholder ecosystem (ICANN, IANA, root operators, TLD operators)
-- Basic DNS concepts: zones, domains, subdomains
-- DNS and the broader Internet infrastructure
-- Introduction to IPv4 and IPv6 address resolution
+- Course opening: welcome, the 12 modules over 6.5 days, daily schedule, assessment (Program Facts), the lab VMs for the week
+- From HOSTS.TXT to the DNS: RFC 608, 952; RFC 882/883; RFC 1034/1035 design goals; a sourced timeline (RFC 920, 1591, 3596; ICANN 1998; root signed 15 July 2010; IANA stewardship transition 1 October 2016; RFC 9499); other naming systems
+- The namespace: labels and size limits, FQDNs and the trailing dot, search lists; TLD types with IANA counts (as of 22 October 2026: 1,437 TLDs, 1,127 generic, 309 country code, 1 special use, 151 IDN); IDNA2008 A-labels; special-use names (RFC 6761 and others); domains vs zones; delegation and glue (RFC 9471; in-domain, sibling, unrelated)
+- Records, servers and caching: RR format and RRsets; A, AAAA, NS, SOA, CNAME as a preview (Module 2 owns the details); server roles; TTL and caching at concept level; the stub resolver on Debian 13
+- Resolution: walk-through, recursive vs iterative queries, referrals, walking the tree by hand, `dig +trace` and its limits, the root server system (13 names, 12 operators, anycast instances as of a date), root hints and priming (RFC 9609; current IANA root hints), what a resolver caches
+- The DNS message: sections, header flags, RCODEs, NODATA, Extended DNS Errors (pointer), reading `dig` output, UDP/TCP/EDNS(0) and truncation (RFC 1035, 6891, 7766, 9210), IPv6 (AAAA, ip6.arpa, root service over IPv6)
+- Who runs the DNS: ICANN and IANA/PTI, root zone change process (Root Zone Administrator and Maintainer, RSSAC037), root server operators and RSSAC, registries/registrars/resellers/registrants (Module 9 terms), RIRs and reverse DNS
+- Tools and a debugging method: `dig` options, `host`, `nslookup`, a seven-step method, delegation faults and their evidence (RFC 9499: "lame delegation" is historic), a worked example on the participant's own not-yet-served zone
+- Pointers, not content: Module 2 (record types, zone files, TTL strategy), 3 (server types), 4 (software), 6 (security, QNAME minimisation, cookies), 7 (DNSSEC, AD/CD/DO), 8 (encrypted transports), 9 (registry operations, EPP)
 
 ### Practical Lab
-- Basic DNS lookups using command-line tools
-- Tracing DNS resolution paths
-- Exploring the DNS hierarchy with dig +trace
-- Understanding DNS response codes and flags
-- Introduction to DNS debugging methodology
+- Lab 1.1 Walk the hierarchy (30 min): real root, TLD and authoritative servers; `dig +trace`; TLD types; anycast instances; offline path on the lab hierarchy
+- Lab 1.2 Read the response (30 min): flags, RCODEs, NODATA, sections, truncation and TCP, read back from a `tcpdump` capture with `tshark`
+- Lab 1.3 Debug a delegation (30 min): five lab zones, one fault each (zone names configurable by the instructor); worksheet assessed as Practical Assessment 1A task 2
 
 ---
 
@@ -398,34 +400,40 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- List common DNS security threats and attack vectors
-- Recall DNS security best practices and mitigation strategies
+- List the classes of attack on the DNS (forged data, hijacking, denial of service, abuse as a channel, data exposure) and where each one lands
+- Recall the defences and their standards: RFC 5452 randomisation, DNS Cookies (RFC 7873, 9018), QNAME minimisation (RFC 9156), TSIG (RFC 8945), BCP 38 and BCP 140, and the status of RPZ (an expired Internet-Draft)
 
 **Comprehension (Understand):**
-- Explain DNS cache poisoning, DDoS attacks, and DNS hijacking
-- Describe the security implications of DNS configuration choices
+- Explain cache poisoning and the Kaminsky attack, and why port and ID randomisation, cookies and DNSSEC validation each help
+- Explain reflection and amplification, open resolvers and random-subdomain floods, and how response rate limiting treats legitimate and spoofed clients
 
 **Application (Apply):**
-- Configure DNS rate limiting and access controls
-- Implement TSIG for secure zone transfers
+- Configure BIND 9.20 access controls (`allow-query`, `allow-query-cache`, `allow-recursion`, `allow-transfer`) and response rate limiting, and measure their effect
+- Observe QNAME minimisation, DNS Cookies and port and ID randomisation in captures and logs
+- Implement TSIG-authenticated zone transfers with keys made by `tsig-keygen`
+- Configure a Response Policy Zone fed by zone transfer, with a local override zone
 
 **Evaluation (Evaluate):**
-- Assess DNS infrastructure vulnerabilities
-- Evaluate the effectiveness of DNS security measures
+- Assess a server's exposure from its configuration, logs and statistics
+- Identify the signs of tunnelling and random-subdomain floods in a capture and choose a response
 
 ### Theory Content
-- DNS threat landscape overview
-- Cache poisoning and Kaminsky attack
-- DNS DDoS attacks and mitigation
-- DNS tunneling and covert channels
-- Rate limiting and access control strategies
-- Resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
+- Threat landscape: RFC 3833; attack classes; where attacks land; dated history from primary sources only (CVE-2008-1447 and CERT/CC VU#800113; CISA ED 19-01; CVE-2020-8616 NXNSAttack; CVE-2020-25705 SAD DNS; CVE-2023-50387 KeyTrap, CVE-2023-50868)
+- Cache poisoning: RFC 5452 matching rules and arithmetic; the Kaminsky attack; source-port and ID randomisation; 0x20 (expired draft); TCP; DNSSEC as the data check (Module 7); SAD DNS
+- Hijacking at the registrar or registry (registry lock, Module 9), the server, BGP (RFC 6811) and the stub; CISA ED 19-01 actions
+- Reflection and amplification (RFC 5358, BCP 38/84, RFC 8482 `minimal-any`); open resolvers and BIND 9.20 ACL defaults (localnets; `allow-recursion` inherits `allow-query`; `allow-transfer` none since BIND 9.20)
+- Response rate limiting (BIND `rate-limit`: slip, cookies, log-only); query floods, random-subdomain attacks and NXNSAttack; resolver fetch limits; response size (1232, RFC 9715, TCP per RFC 7766)
+- Authoritative and recursive hardening checklists; resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
+- TSIG (RFC 8945, STD 93): algorithms, fudge, key handling with `tsig-keygen`, failures; XoT pointer to Module 8
+- RPZ (draft-vixie-dnsop-dns-rpz-00, expired; BIND `response-policy`, Unbound `rpz:`): triggers, actions, order, EDE 17; DNS tunnelling and covert channels: signs and responses; BIND logging categories, `rndc stats`, dnstap; monitoring is Module 11
+- DoT, DoH and DoQ are Module 8; DNSSEC is Module 7 (pointers only)
 
 ### Practical Lab
-- Simulate DNS attacks in controlled environment
-- Configure BIND rate limiting
-- Implement TSIG authentication
-- Deploy DNS monitoring and alerting
+- Close the open doors: Debian defaults seen from a neighbouring team, then ACLs, `recursion no`, `version none` (Lab 6.1)
+- Watch the resolver defend itself: source ports, IDs, QNAME minimisation and cookies in a capture and the query log (Lab 6.2)
+- Rate limiting under load: measured amplification, RRL in log-only and enforcing mode with a capped `dnsperf` load against the team's own server (Lab 6.3)
+- TSIG-protected zone transfer and its failure modes (Lab 6.4)
+- RPZ with an instructor feed and a local zone; spotting a tunnel-like pattern in a capture (Lab 6.5)
 
 ---
 
@@ -723,6 +731,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1 and 6-9 use them; the "Participant VMs" lines of Modules 2-5 below still give other counts and are to be reconciled when those decks are written
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -735,45 +744,50 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 1: Introduction to DNS - Lab Requirements
 
+All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 stand-in VM (bind9-dnsutils and bind9-host 9.20.30, tcpdump 4.99.5, tshark 4.4.19) against the instructor stack (`labs/module01/test/rehearse.sh`, 39 of 39 checks; `labs/instructor/test/run.sh`, 56 of 56); the Internet steps on a Debian 13 host (bind9-dnsutils 9.20.29). Lab kit: `labs/module01/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 1 Debian desktop VM per participant
-- **Shared Infrastructure:** 1 root server simulator, 1 TLD server simulator
-- **Tools Pre-installed:** dig, nslookup, host, wireshark, tcpdump
+- **Participant VMs:** the two Debian 13 VMs each participant (team `NN`) keeps all week. On Day 1 only VM 1 is used (the future authoritative server for `teamNN.example`, 192.0.2.30 on the slides; the client in Modules 6-8). It has `bind9-dnsutils`, `bind9-host`, `tcpdump` and `tshark` and no DNS server. VM 2 (the resolver, 192.0.2.10) waits for Module 3
+- **Instructor stack (`labs/instructor`, profile `m01`):** lab root 192.0.2.52 (`.` and `root-servers.test`), registry/lab TLD 192.0.2.53 (`example.`, as in Modules 6-9), lab child 192.0.2.54 (`good.example`, `charlie.example`, `delta.example`), lab resolver 192.0.2.55 (recursive for the lab subnet, root hints = lab root). This is the "root server simulator" and "TLD server simulator"
+- **Broken delegations for Lab 1.3** (default labels; `M01_FAULT_LABELS` renames them, and a graded run uses names the class has not seen): `alpha.example` (server does not serve the zone: REFUSED), `bravo.example` (no server at 198.51.100.53), `charlie.example` (stale glue for ns2), `delta.example` (parent NS set differs from the zone's), `echo.example` (not delegated); the DNSSEC-broken zones are not used on Day 1
+- **Captures:** `sudo tcpdump` on the VM, read with `tshark -r`; the Wireshark GUI only on a participant's laptop, with the copied file
+- **Offline path:** if outbound port 53 is blocked, Lab 1.1 walks the lab hierarchy with `+norec` instead of the real one, without `dig +trace` (dig 9.20 resolves each server name through the VM's resolver and ignores glue); Labs 1.2 and 1.3 use only lab servers either way
+- **Not tested:** real VMs (`sudo`, SSH, capture on a VM interface), the Wireshark GUI, ipvlan on a real classroom NIC, IPv6 transport inside the lab hierarchy
 
 ### Lab Exercises
 
-#### Lab 1.1: DNS Hierarchy Exploration (30 minutes)
-**Objective:** Understand DNS hierarchy through practical queries
-**Resources Needed:**
-- Access to real DNS infrastructure via internet
-- Pre-configured dig and nslookup tools
+#### Lab 1.1: Walk the Hierarchy (30 minutes)
+**Objective:** Follow a lookup from the root to an authoritative answer
 **Exercise Steps:**
-1. Query root servers using `dig . NS`
-2. Query TLD servers for various TLDs
-3. Trace resolution path using `dig +trace example.com`
-4. Compare IPv4 and IPv6 root servers
+1. `dig . NS` through the classroom resolver: server, flags, TTL
+2. `dig -4 @a.root-servers.net . NS +norec`: compare flags (aa) and TTL
+3. Walk `www.example.com` by hand with `+norec`, taking each next address from the glue
+4. `dig -4 +trace www.example.com`, and a name in the participant's own ccTLD
+5. Referrals for `org.`, a ccTLD, `xn--p1ai.` and `arpa.`
+6. Root instances with `hostname.bind CH TXT` over IPv4 (and IPv6 where available)
+**Offline:** steps 1-3 against 192.0.2.55, .52, .53, .54 for `www.good.example`; `com.` at the lab root (NXDOMAIN); AAAA and `dig -x` names
+**Success Criteria:** each reply identified as referral or authoritative answer, with its sender
 
-#### Lab 1.2: DNS Response Analysis (30 minutes)
-**Objective:** Analyse DNS responses and understand flags
-**Resources Needed:**
-- Packet capture capability (Wireshark)
-- Sample DNS queries and responses
+#### Lab 1.2: Read the Response (30 minutes)
+**Objective:** Read flags, response codes and sections in `dig` and in a capture
 **Exercise Steps:**
-1. Capture DNS queries using Wireshark
-2. Analyse DNS response codes and flags
-3. Compare authoritative vs non-authoritative responses
-4. Examine DNS over IPv4 vs IPv6
+1. Start `sudo tcpdump -i any -n -U -w m01.pcap port 53` (wait a few seconds before stopping it)
+2. Authoritative (`aa`) vs resolver (`ra`, TTL counting down) answers for `www.good.example`
+3. NXDOMAIN (`nosuch.good.example`), NODATA (`www.good.example TXT`), REFUSED (`www.example.com` at 192.0.2.54), SERVFAIL (`www.teamNN.example` through the resolver: no server on VM 1 yet)
+4. A CNAME answer and a referral (authority and additional sections)
+5. Truncation at `+bufsize=512 +ignore`, the TCP retry, `+tcp`
+6. Read the capture with `tshark -T fields` (flags as True/False, RCODE as a number); with Internet access, an IPv4 and an IPv6 query to a root server
+**Success Criteria:** QR, AA, TC, RD, RA and the RCODE named for every reply; NXDOMAIN told from NODATA; TCP retry explained
 
-#### Lab 1.3: DNS Debugging Fundamentals (30 minutes)
-**Objective:** Learn basic DNS troubleshooting
-**Resources Needed:**
-- Broken DNS scenarios (pre-configured)
-- Multiple DNS tools
+#### Lab 1.3: Debug a Delegation (30 minutes)
+**Objective:** Find the fault in five lab delegations with a written method
 **Exercise Steps:**
-1. Diagnose non-responsive domains
-2. Identify delegation issues
-3. Compare results from different DNS servers
-4. Document troubleshooting methodology
+1. Ask the lab resolver (status, time)
+2. Ask the parent with `+norec`: NS names and glue
+3. Ask each listed address with `+norec +tries=1 +timeout=2`
+4. Compare the parent's NS and glue with the zone's own NS and addresses
+5. Worksheet per zone: symptom, evidence, cause, who fixes it, how to check the fix
+**Success Criteria:** one cause per zone with evidence (answer key, instructor only: `labs/instructor/module01/README.md`); the worksheet is Practical Assessment 1A task 2
 
 ---
 
@@ -966,48 +980,62 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 6: DNS Security Fundamentals - Lab Requirements
 
+All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-utils, bind9-dnsutils 9.20.29 from trixie-security, dnsperf 2.14.0, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace with no route out (`labs/module06/test/rehearse.sh`). Lab kit: `labs/module06/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 2 Debian server VMs per participant
-- **Security Tools:** nmap, tcpdump, DNS security scanners
-- **Attack Simulation:** Controlled environment for security testing
+- **Participant VMs:** the two Debian 13 VMs used again in Modules 7 and 8: the authoritative server for `teamNN.example` (also the client) and the BIND 9.20 resolver
+- **Registry server (instructor):** serves `example.` (as in Module 7: delegations with glue for every team, signed with the `lab` policy) with four extra A records, and the RPZ feed zone `feed.rpz.test`, transferable from the lab subnet only (`labs/module06/instructor/`)
+- **Packages:** `bind9`, `bind9-utils`, `bind9-dnsutils`, `dnsperf`, `tcpdump`, `tshark`
+- **Containment:** all traffic stays on the isolated lab network; the only load is `dnsperf -Q 50 -l 10` from the team's resolver VM to its own authoritative VM; no spoofing, no poisoning tool
+- **Set up here and kept for Module 7:** the resolver's `static-stub` zone for `example` (Module 7 Lab 7.3 step 2) and `validate-except { "example"; };`, which Module 7 Lab 7.3 step 1 deletes when it adds the `example.` trust anchor
+- **Secrets:** each team makes its own TSIG key with `tsig-keygen` during Lab 6.4; nothing secret is in the kit
+- **Not tested:** the `sudo`/`systemctl` steps and `journalctl` on real VMs; queries from real neighbouring or outside machines (emulated with a second address and a child namespace); the shipped `dnssec-validation auto` with `validate-except`, which was run only with Internet access (slirp4netns) while the harness uses `dnssec-validation no`; Debian 12. Configuration changes were rehearsed with `rndc reconfig`, as in class
 
 ### Lab Exercises
 
-#### Lab 6.1: DNS Attack Simulation and Detection (45 minutes)
-**Objective:** Understand DNS attacks and detection methods
-**Resources Needed:**
-- Vulnerable DNS server setup
-- Attack simulation tools
-- Network monitoring capabilities
+#### Lab 6.1: Close the Open Doors (20 minutes)
+**Objective:** See what Debian's defaults expose, then restrict both VMs
 **Exercise Steps:**
-1. Simulate DNS cache poisoning attempts
-2. Conduct DNS amplification attack demonstration
-3. Implement rate limiting and access controls
-4. Monitor and analyse attack patterns
+1. From a neighbouring team's VM: query the authoritative VM for its own zone (note `ra`), `version.bind TXT CH`, and an AXFR
+2. Install `auth/named.conf.options` (recursion no, `allow-transfer { none; }`, `version none`, minimal responses, RRL in log-only mode) and the logging file; `named-checkconf`; `rndc reconfig`
+3. Install the resolver's `named.conf.options` (`acl "trusted"`, ACLs, validation with `validate-except` for `example`) and `named.conf.local` (static-stub for `example`)
+4. Repeat step 1 against both VMs; query the resolver from the team's own authoritative VM; read the "queries rejected" counters from `rndc stats`
+**Success criteria:** the neighbour gets REFUSED for recursion on both VMs (EDE 20) and no version string; the team's own VM resolves through its resolver; zone transfers fail (BIND 9.20's default)
 
-#### Lab 6.2: DNS Security Hardening (30 minutes)
-**Objective:** Implement DNS security best practices
-**Resources Needed:**
-- BIND 9 with security features
-- Firewall configuration tools
-- Security configuration templates
+#### Lab 6.2: Watch the Resolver Defend Itself (15 minutes)
+**Objective:** Observe the cache-poisoning defences on the wire
 **Exercise Steps:**
-1. Configure DNS server access controls
-2. Implement response rate limiting
-3. Set up secure zone transfers with TSIG
-4. Enable security logging and monitoring
+1. `rndc flush`; capture `udp port 53` on the resolver while the client looks up three names
+2. List the resolver's queries to the team's authoritative VM and the registry with `tshark` (destination, source port, ID, type, name, client and server cookie)
+3. Turn on the query log on the authoritative VM, flush the resolver, repeat the lookups and read the `K` and `V` cookie flags
+4. Read the COOKIE line in `dig` output; repeat with `+cookie=<value>`
+**Success criteria:** a different source port and ID per query; only `teamNN.example NS` sent to the registry (QNAME minimisation); a different client cookie per server and the server cookie returned once learned
 
-#### Lab 6.3: DNS Filtering and Response Policy Zones (15 minutes)
-**Objective:** Implement DNS-based security filtering
-**Resources Needed:**
-- RPZ-enabled DNS server
-- Threat intelligence feeds
-- Policy configuration examples
+#### Lab 6.3: Rate Limiting Under Load (20 minutes)
+**Objective:** Measure amplification and show RRL removing it
 **Exercise Steps:**
-1. Configure Response Policy Zones (RPZ)
-2. Implement DNS filtering policies
-3. Test malware domain blocking
-4. Monitor and analyse filtered queries
+1. Add the `big` TXT records (`auth/db.additions`); compare query and response sizes with `dig +qr`; ANY over UDP with `minimal-any`
+2. `dnsperf -s <auth VM> -e -d big.txt -l 10 -Q 50` from the resolver VM with `log-only yes`, then with `log-only no`; read the `rate-limit` log and `rndc stats`
+3. During a third run, `dig +nocookie +ignore` (truncated reply) and `dig` with cookies (BADCOOKIE, retry, full answer)
+**Success criteria:** in the test lab, log-only answered 500/500 at 1077 octets on average; enforcing answered 205 of 405 (mostly small truncated replies, average 72 octets), "200 responses dropped / 200 truncated for rate limits"
+
+#### Lab 6.4: TSIG-Protected Zone Transfer (20 minutes)
+**Objective:** Authenticate zone transfers and NOTIFY with a team key
+**Exercise Steps:**
+1. `tsig-keygen -a hmac-sha256 teamNN-xfr` into `/etc/bind/teamNN-xfr.key` (root:bind, 640, created under `umask 077`); `allow-transfer { key "teamNN-xfr"; };` and `also-notify` with the key on the primary
+2. Copy the key to the resolver VM over SSH (same owner and mode); there, **as root** (`sudo dig`, because `dig -k` on a key it cannot read sends the query unsigned), AXFR with no key, the right key, a wrong secret and an unknown key name
+3. Make the resolver VM a TSIG secondary (`resolver/named.conf.secondary`); change the zone and watch NOTIFY and the transfer
+4. Remove the secondary zone from the resolver (Module 7 needs the resolver to resolve, not serve, the zone)
+**Success criteria:** "Transfer failed" without a key, BADSIG with a wrong secret, BADKEY with an unknown name, the full zone with the right key; the secondary logs "transferred serial 2: TSIG 'teamNN-xfr'"
+
+#### Lab 6.5: RPZ and Spotting a Tunnel (15 minutes)
+**Objective:** Filter with a policy feed and recognise covert-channel traffic
+**Exercise Steps:**
+1. Before: resolve `malware.example`, `phish.example`, `tracker.example` and `c2.teamNN.example`
+2. Add the feed secondary, the local policy zone and the `response-policy` block (local first, feed with `ede filtered`)
+3. Repeat step 1, then `malware.example` with `+dnssec`; read the `rpz` log lines
+4. Capture while sending 30 TXT queries for random base32 labels under `t.teamNN.example`; summarise with `tools/dns-signs.sh`
+**Success criteria:** malware NXDOMAIN with EDE 17 (but its real address with `+dnssec`, because the signed `example.` is not rewritten for DO=1 queries), phish redirected to the walled garden, tracker allowed by the local PASSTHRU, c2 blocked by its address (rpz-ip); the summary shows 30 unique 32-character labels, all TXT and NXDOMAIN, under one parent
 
 ---
 
@@ -1071,7 +1099,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 #### Lab 7.3: Validate and Troubleshoot (25 minutes)
 **Objective:** Configure DNSSEC validation and diagnose validation failures
 **Exercise Steps:**
-1. Configure the resolver: `dnssec-validation auto;`, the `example.` trust anchor, and a `static-stub` zone for `example` pointing at the registry server
+1. Configure the resolver: remove `validate-except { "example"; }` from Module 6, keep `dnssec-validation auto;`, add the `example.` trust anchor; the `static-stub` zone for `example` is already there from Lab 6.1
 2. Confirm the AD flag for `isc.org` and `www.teamNN.example`, and SERVFAIL for `dnssec-failed.org`
 3. Diagnose `expired.example` and `wrongds.example` with `dig +cd`, Extended DNS Errors, `delv @registry -a anchors.conf +root=example +vtrace` (pointed at the registry, which holds both the broken zones and their DS) and the resolver log
 4. Add and remove a negative trust anchor (`rndc nta`)

@@ -1,0 +1,12 @@
+// Module 6, Lab 6.4: a TSIG-protected secondary copy of your zone on the
+// resolver VM (you have only two VMs; in production the secondary is
+// another authoritative server). Add to /etc/bind/named.conf.local, then
+// REMOVE it at the end of Lab 6.4: Module 7 needs this resolver to resolve
+// and validate teamNN.example, not to serve it.
+include "/etc/bind/teamNN-xfr.key";
+
+zone "teamNN.example" {
+    type secondary;
+    primaries { 192.0.2.30 key "teamNN-xfr"; };   // your authoritative VM
+    file "/var/cache/bind/teamNN.example.db";
+};

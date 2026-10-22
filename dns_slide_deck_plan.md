@@ -3,127 +3,47 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~725 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~770 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
 
 ## Module 1: Introduction to DNS - Foundations and Concepts
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 45-50
+**Slides:** 70 (64 theory, 6 lab); deck: `modules/module01-dns-foundations.marp.md`
 
-### Opening & Course Introduction (10 slides)
-1. **Welcome & Introductions**
-   - Course overview and objectives
-   - Instructor credentials and experience
-   - Participant introductions and expectations
+### Opening (9 slides)
+- Title; welcome (instructor, participant introductions, venue placeholders for the instructor to fill in); the course (12 modules over Days 1-7, shorter programmes); how each day runs (daily schedule, assessment from Program Facts); the lab VMs for the week
+- Module overview, learning objectives
+- What changed recently: RFC 9499 terminology (BCP 219, 2024); TCP MUST (RFC 7766, RFC 9210); glue MUST (RFC 9471); b.root-servers.net renumbered 27 November 2023; IANA stewardship transition 1 October 2016 (PTI)
+- Agenda (theory and lab)
 
-2. **Course Structure & Logistics**
-   - Modular program overview (6 days + Day 7 Final Project)
-   - Daily schedule and breaks
-   - Assessment methodology and certification paths
+### 1. From HOSTS.TXT to the DNS (5 slides)
+- Names before the DNS (RFC 608, RFC 952, RFC 1034 §2.1); the design (RFC 882/883, RFC 1034/1035 STD 13, design goals); a sourced timeline; other ways hosts find names (`/etc/hosts` and nsswitch, mDNS, LLMNR)
 
-3. **Learning Objectives for Module 1**
-   - Knowledge, comprehension, application, and analysis goals
-   - Bloom's taxonomy alignment
+### 2. The Namespace (8 slides)
+- Tree of labels and size limits (RFC 1035 §2.3.4, RFC 4343); FQDNs, trailing dot, search lists; TLD types with IANA counts as of 22 October 2026; IDNA2008 A-labels; special-use names; domains and zones; delegation and glue (RFC 9471; in-domain, sibling, unrelated; RFC 1034 §4.2.2)
 
-### DNS History & Evolution (8 slides)
-4. **The Pre-DNS Era**
-   - HOSTS.TXT file limitations
-   - Centralised management problems
-   - Scalability challenges
+### 3. Records, Servers and Caching (6 slides)
+- Resource records and RRsets; A, AAAA, NS, SOA, CNAME as a preview (Module 2 owns the details); server roles (RFC 9499; primary/secondary); caching and TTL; the stub resolver on Debian 13
 
-5. **Birth of DNS (1980s)**
-   - Paul Mockapetris and RFC 882/883
-   - Distributed naming system concept
-   - Early implementation challenges
+### 4. Resolution (9 slides)
+- Resolution walk-through; recursive and iterative queries; a real referral line by line; walking the lab hierarchy by hand; `dig +trace` and its limits; the root server system (anycast, instance identity, instances as of a date); root hints and priming (RFC 9609, current IANA root hints); what the resolver remembers
 
-6. **DNS Evolution Timeline**
-   - Key RFC milestones
-   - Technology advancement integration
-   - Modern DNS ecosystem development
+### 5. The DNS Message (7 slides)
+- Message format (RFC 1035 §4.1); header flags; RCODEs, NODATA and EDE (pointer); reading `dig` output; UDP, TCP, EDNS(0) and truncation (lab output); IPv6 (AAAA, ip6.arpa, root service over IPv6)
 
-### DNS Fundamentals (15 slides)
-7. **What is DNS?**
-   - Domain Name System definition
-   - Primary purpose and functions
-   - Internet infrastructure role
+### 6. Who Runs the DNS (7 slides)
+- The map; ICANN and IANA/PTI; changing the root zone (RSSAC037 roles; root signed since 15 July 2010); root server operators and RSSAC; registries, registrars, resellers, registrants, DNS operators (Module 9 terms); RIRs and reverse DNS
 
-8. **DNS Namespace Hierarchy**
-   - Tree structure visualisation
-   - Root domain concept
-   - Top-level domains (TLDs)
-   - Second-level and subdomain organisation
+### 7. Tools and a Debugging Method (7 slides)
+- Tools and their Debian 13 packages; `dig` options; `host` and `nslookup`; a seven-step debugging method; delegation faults and their evidence; worked example: the participant's own zone on Day 1 (connection refused)
 
-9. **DNS Components Overview**
-   - Domain names and labels
-   - Zones vs domains
-   - Name servers and resolvers
-   - Resource records introduction
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (Day 1 topology, lab hierarchy), online or offline, Labs 1.1-1.3 (walk the hierarchy, read the response, debug a delegation)
 
-10. **The DNS Resolution Process**
-    - Step-by-step resolution walkthrough
-    - Recursive vs iterative queries
-    - Caching mechanisms
-
-### DNS Stakeholder Ecosystem (8 slides)
-11. **ICANN and Internet Governance**
-    - ICANN's role and responsibilities
-    - Policy development process
-    - Multi-stakeholder model
-
-12. **IANA Functions**
-    - Root zone management
-    - Number resource allocation
-    - Protocol parameter assignment
-
-13. **Root Server Operators**
-    - 13 root server system
-    - Anycast deployment
-    - Operational responsibilities
-
-14. **TLD Operators and Registries**
-    - Generic TLD (gTLD) operators
-    - Country code TLD (ccTLD) managers
-    - Registry operational model
-
-15. **Registrars and Resellers**
-    - Registrar accreditation process
-    - Customer interface role
-    - Reseller channel model
-
-### Technical Deep Dive (10 slides)
-16. **DNS Query Types**
-    - Recursive queries
-    - Iterative queries
-    - Query flags and response codes
-
-17. **IPv4 vs IPv6 in DNS**
-    - A records vs AAAA records
-    - Dual-stack considerations
-    - IPv6 transition challenges
-
-18. **DNS and Network Protocols**
-    - UDP and TCP: TCP support is mandatory (RFC 7766, RFC 9210)
-    - EDNS(0) and response size (RFC 6891); avoiding IP fragmentation (RFC 9715)
-    - Port 53 significance
-    - Protocol selection criteria
-
-### Practical Lab Introduction (4 slides)
-19. **Lab Environment Overview**
-    - Virtual machine setup
-    - Network topology
-    - Available tools and software
-
-20. **DNS Lookup Tools Introduction**
-    - dig command basics
-    - nslookup usage
-    - host command overview
-
-21. **Lab Exercises Preview**
-    - DNS hierarchy exploration
-    - Query tracing with dig +trace
-    - Response analysis workshop
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -621,97 +541,53 @@
 
 ## Module 6: DNS Security Fundamentals and Threat Landscape
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 50-55
+**Slides:** 70 (62 theory, 8 lab); deck: `modules/module06-dns-security-fundamentals.marp.md`
 
-### DNS Threat Landscape Overview (12 slides)
-1. **DNS Security Challenges**
-   - Protocol inherent vulnerabilities
-   - Trust model limitations
-   - Attack surface analysis
-   - Evolution of threats over time
+### Opening (5 slides)
+- Title, module overview, learning objectives
+- What changed recently: TSIG is RFC 8945 (STD 93; HMAC-MD5 MUST NOT); interoperable server cookies (RFC 9018); QNAME minimisation RFC 9156 obsoletes Experimental RFC 7816; BIND 9.20 `allow-transfer` defaults to none (9.18: any); 1232-octet EDNS buffer defaults and RFC 9715
+- Agenda (theory and lab)
 
-2. **DNS Attack Classifications**
-   - Data manipulation attacks
-   - Denial of service attacks
-   - Information disclosure attacks
-   - Infrastructure compromise attacks
+### 1. The Threat Landscape (6 slides)
+- Why DNS is a target; RFC 3833 threat analysis
+- Attack classes (forgery, hijacking, denial of service, abuse as a channel, data exposure) and where in the course each is defended
+- Where attacks land (registrar/registry, server, off-path forgery, reflection, stub and LAN)
+- Dated history from primary sources only: CVE-2008-1447 and CERT/CC VU#800113 (Kaminsky, 2008); CISA ED 19-01 (DNS infrastructure tampering, 2019); CVE-2020-8616 (NXNSAttack, 2020); CVE-2020-25705 (SAD DNS, 2020); CVE-2023-50387 and CVE-2023-50868 (KeyTrap, NSEC3, 2024)
+- Defence map: which measure covers which class
 
-3. **Cache Poisoning Attacks**
-   - Kaminsky attack methodology
-   - Source port randomisation
-   - Query ID randomisation
-   - 0x20 encoding defences
+### 2. Cache Poisoning and Hijacking (9 slides)
+- How a resolver accepts an answer (RFC 5452 §9.1; RFC 2181 §5.4.1); the arithmetic of guessing (RFC 5452 §8.1: 7 seconds with one port, about 116 hours with 64,000)
+- The Kaminsky attack; source-port and ID randomisation (RFC 5452 §9.2), 0x20 (expired draft; Unbound `use-caps-for-id`), cookies, TCP, DNSSEC; NAT de-randomisation
+- Lab 6.2 capture: ports, IDs, per-server client cookies
+- SAD DNS (side channel, kernel fix); hijacking at the registrar, the server, BGP (RFC 6811) and the stub, with registry lock (Module 9); CISA ED 19-01 actions
 
-4. **DNS Hijacking Techniques**
-   - Registrar account compromise
-   - Authoritative server compromise
-   - BGP hijacking impact on DNS
-   - Resolver manipulation attacks
+### 3. Floods and Amplification (11 slides)
+- Reflection and amplification (RFC 5358 factor; BCP 38, BCP 84); measured amplification on the team's own server; `minimal-any` (RFC 8482)
+- Open resolvers (RFC 5358, BCP 140); BIND 9.20 access controls and their defaults (`allow-recursion` inherits `allow-query`; localnets); the localnets trap (Lab 6.1 output)
+- Response rate limiting (`rate-limit`, slip, cookies, log-only) and its lab measurements; what a legitimate client sees (TC, BADCOOKIE)
+- Query floods and random-subdomain attacks; NXNSAttack; resolver fetch limits; response size and fragmentation (1232, RFC 9715, RFC 7766)
 
-### DNS DDoS Attacks and Mitigation (10 slides)
-5. **DNS Amplification Attacks**
-   - Attack mechanism explanation
-   - Amplification factor analysis
-   - Open resolver abuse
-   - Rate limiting countermeasures
+### 4. Hardening Servers (11 slides)
+- Authoritative checklist and lab configuration (recursion no, transfers by TSIG, version none, minimal responses, RRL, hidden primary pointer to Module 5)
+- Recursive resolver checklist and lab configuration (ACLs, validation, `validate-except` for the lab TLD until Module 7, static-stub for `example`)
+- QNAME minimisation (RFC 9156, obsoletes 7816): algorithm, QTYPE choice, iteration limit, BIND relaxed and Unbound defaults; seen in the lab capture; Module 8 points here
+- DNS Cookies (RFC 7873, updated by 9018): client and server cookies, SipHash-2-4 server cookie, BADCOOKIE; seen in `dig` and the query log; BIND and Unbound options; Module 8 points here
+- Pointers: DNSSEC and aggressive NSEC caching (Module 7); DoT, DoH, DoQ and DDR (Module 8)
 
-6. **Volumetric Attack Mitigation**
-   - Anycast distribution benefits
-   - Rate limiting implementations
-   - Response size limitation
-   - Traffic filtering strategies
+### 5. TSIG and Zone Transfers (6 slides)
+- TSIG (RFC 8945): fudge 300, one key per pair, algorithm table
+- Making a key with `tsig-keygen`; TSIG-protected transfers in BIND; failures (BADSIG, BADKEY, BADTIME, NOTAUTH) from the lab; beyond TSIG (rotation, XoT pointer, SIG(0), GSS-TSIG, catalog zones)
 
-7. **DNS Query Flooding**
-   - Random subdomain attacks
-   - Water torture attacks
-   - Mitigation strategies
-   - Monitoring and detection
+### 6. RPZ, Tunnelling and Detection (8 slides)
+- Response Policy Zones: status (expired individual draft `draft-vixie-dnsop-dns-rpz-00`, not an RFC), triggers and actions, BIND configuration (order, `ede filtered`, RD and DO rules), lab output
+- DNS tunnelling and covert channels: mechanism, detection signs, responses; summary of a lab capture (`tools/dns-signs.sh`)
+- Logging and detection signs in BIND (categories, `rndc stats` counters, dnstap); Module 11 for monitoring
 
-### DNS Security Best Practices (15 slides)
-8. **Authoritative Server Security**
-   - Access control implementation
-   - Zone transfer security
-   - Hidden primary strategies
-   - Monitoring and logging
+### Practical Lab (8 slides)
+- Lab introduction, lab environment, lab rules (containment), Labs 6.1-6.5 (close the open doors, watch the resolver defend itself, rate limiting under load, TSIG-protected zone transfer, RPZ and spotting a tunnel)
 
-9. **Recursive Resolver Security**
-   - Open resolver prevention
-   - Client access controls
-   - Response policy zones (RPZ)
-   - DNS filtering implementation
-   - Resolver hardening without encryption: QNAME minimisation (RFC 9156, obsoletes 7816) and DNS Cookies (RFC 7873, updated by 9018); Module 8 points here
-
-10. **Transaction Security (TSIG)**
-    - TSIG mechanism overview
-    - Key management procedures
-    - Implementation best practices
-    - Troubleshooting TSIG issues
-
-11. **DNS over Encrypted Channels**
-    - DNS over TLS (DoT) introduction
-    - DNS over HTTPS (DoH) overview
-    - Implementation considerations
-    - Privacy and security tradeoffs
-
-### Incident Response and Forensics (8 slides)
-12. **DNS Incident Detection**
-    - Monitoring strategies
-    - Anomaly detection techniques
-    - Alert correlation methods
-    - Automated response systems
-
-13. **DNS Forensics Techniques**
-    - Log analysis methodologies
-    - Query pattern analysis
-    - Timeline reconstruction
-    - Evidence preservation
-
-### Practical Lab Introduction (5 slides)
-14. **Security Testing Workshop**
-    - Attack simulation exercises
-    - Security control implementation
-    - Monitoring and detection setup
-    - Incident response scenarios
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1271,12 +1147,12 @@
 
 | Module | Theory Slides | Lab Intro | Total |
 |--------|---------------|-----------|-------|
-| Module 1: DNS Foundations | 41 | 4 | 45 |
+| Module 1: DNS Foundations | 64 | 6 | 70 |
 | Module 2: DNS Operations | 45 | 5 | 50 |
 | Module 3: DNS Server Types | 50 | 5 | 55 |
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
-| Module 6: DNS Security | 45 | 5 | 50 |
+| Module 6: DNS Security | 62 | 8 | 70 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
 | Module 8: DNS Privacy | 56 | 7 | 63 |
 | Module 9: Registry Operations | 60 | 7 | 67 |
@@ -1284,9 +1160,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **619** | **61** | **680** |
+| **Total Core Content** | **659** | **66** | **725** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **725** |
+| **Grand Total** | | | **770** |
 
 ---
 

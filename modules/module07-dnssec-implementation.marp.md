@@ -743,6 +743,10 @@ trust-anchors {
 
 - `static-ds` and `static-key` are fixed; `initial-ds` and `initial-key` are then tracked with RFC 5011
 
+<!--
+validate-except overrides trust anchors: the BIND 9.20 ARM says validation is not performed under those names "regardless of the presence of a trust anchor at or above those names". Module 6 set validate-except { "example"; }; Lab 7.3 step 1 removes it.
+-->
+
 ---
 <!-- _class: dense -->
 ## Validating with Unbound
@@ -907,7 +911,7 @@ In BIND, most of this policy becomes one `dnssec-policy` block.
 ## Lab Environment
 
 - **Registry server** (instructor): hosts the signed `example.` zone, the "TLD" for the lab, at 192.0.2.53 (your lab sheet has the real address)
-- **Your VMs:** an authoritative server for `teamNN.example` and `manualNN.example`, and a validating resolver
+- **Your VMs:** an authoritative server for `teamNN.example` and `manualNN.example`, and a validating resolver; the resolver must not be a secondary for `teamNN.example` (Lab 6.4 step 6 removed it)
 - **Software:** BIND 9.20 on Debian 13; Unbound as an optional second resolver
 - **Tools:** dig, delv, dnssec-keygen, dnssec-signzone, dnssec-verify, rndc (Debian packages bind9-dnsutils, bind9-utils)
 - **Timings:** the lab policy uses 60-second TTLs and 30-minute signatures, so a ZSK rollover takes about 7 minutes, not 10 days
@@ -943,8 +947,8 @@ In BIND, most of this policy becomes one `dnssec-policy` block.
 <!-- _class: dense -->
 ## Lab 7.3: Validate and Troubleshoot (25 min)
 
-1. On your resolver: `dnssec-validation auto;` plus a `trust-anchors` entry for `example.` (DS on your lab sheet)
-2. Add a `static-stub` zone for `example` pointing at the registry server
+1. On your resolver: **delete `validate-except { "example"; };`** (Module 6 added it; BIND skips validation under a validate-except name even when a trust anchor exists), keep `dnssec-validation auto;`, and add a `trust-anchors` entry for `example.` (DS on your lab sheet)
+2. Keep the `static-stub` zone for `example` from Module 6 Lab 6.1 (add it if your resolver is fresh); `rndc reconfig`
 3. Check: `isc.org` and `www.teamNN.example` return the AD flag; `dnssec-failed.org` returns SERVFAIL
 4. Diagnose the two broken zones the instructor provides, `expired.example` and `wrongds.example`:
    - `dig +cd`, then the EDE, then `delv @registry +vtrace`, then the resolver log

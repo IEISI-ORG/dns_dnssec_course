@@ -1,0 +1,6 @@
+    // Module 6, Lab 6.5: paste inside options { } in named.conf.options.
+    // Zones are checked in this order; the first match wins.
+    response-policy {
+        zone "local.rpz";
+        zone "feed.rpz.test" ede filtered;   // Extended DNS Error 17 (RFC 8914)
+    };

@@ -1,0 +1,5 @@
+; root-servers.test: the names of the lab root servers (Module 1).
+$TTL 3600
+@     SOA a.root-servers.test. hostmaster.root-servers.test. 1 1800 900 604800 300
+      NS  a
+a     A   @M01_ROOT_ADDR@

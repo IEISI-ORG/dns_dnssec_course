@@ -1,0 +1,12 @@
+; Lab root zone (Module 1). Built from this template by m01-run.
+; As in the real root zone, the server names live in their own delegated
+; zone (here root-servers.test, served by this server too) and the root zone
+; carries their glue.
+$TTL 3600
+@                     SOA a.root-servers.test. hostmaster.root-servers.test. 1 1800 900 604800 300
+                      NS  a.root-servers.test.
+root-servers.test.    NS  a.root-servers.test.
+a.root-servers.test.  A   @M01_ROOT_ADDR@
+; the lab TLD, served by the parent ("registry") server
+example.              NS  ns1.example.
+ns1.example.          A   @PARENT_ADDR@

@@ -790,7 +790,7 @@ TLS itself keeps moving: TLS 1.3 is now RFC 9846 (July 2026), new TLS protocols 
 3. Stop the capture; list the queries:
    `tshark -r plain.pcap -T fields -e ip.src -e ip.dst -e dns.qry.name`
 4. Find the client's query, the resolver's queries to your authoritative server, and the answers
-5. Note which query shows QNAME minimisation (if Module 6 has not covered it yet: the resolver asks for `teamNN.example NS` before `secret-project.teamNN.example A`)
+5. Note which query shows QNAME minimisation (Module 6 Lab 6.2: the `teamNN.example NS` query to the registry)
 
 > **Checkpoint:** you can point to the line that shows who asked for `secret-project`, and the lines that show the resolver asking on its behalf
 

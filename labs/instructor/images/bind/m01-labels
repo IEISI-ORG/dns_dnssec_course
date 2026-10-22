@@ -1,0 +1,27 @@
+# m01-labels: sourced by make-example-zone and m01-run. Reads
+# M01_FAULT_LABELS (comma-separated, five labels, default
+# alpha,bravo,charlie,delta,echo) and sets, in this fixed order of faults:
+#   M01_L_NOTSERVED  delegated to the child, which does not serve the zone
+#   M01_L_DEAD       delegated to an address where nothing answers
+#   M01_L_GLUE       two servers; the parent's glue for ns2 is stale
+#   M01_L_NSSET      the parent's NS set differs from the zone's
+#   M01_L_NODELEG    not delegated at all
+# For an assessed run, choose labels the participants have not seen.
+m01_labels() {
+    local raw=${M01_FAULT_LABELS:-alpha,bravo,charlie,delta,echo} l seen=" good "
+    local -a L
+    IFS=, read -r -a L <<< "${raw// /}"
+    if [ "${#L[@]}" -ne 5 ]; then
+        echo "M01_FAULT_LABELS: need five comma-separated labels, got: $raw" >&2; return 1
+    fi
+    for l in "${L[@]}"; do
+        if ! [[ $l =~ ^[a-z][a-z0-9-]{0,30}[a-z0-9]$ ]] \
+           || [[ $l =~ ^(team|manual)[0-9]{2}$ ]] \
+           || [[ " ns1 doq expired wrongds " == *" $l "* ]] \
+           || [[ $seen == *" $l "* ]]; then
+            echo "M01_FAULT_LABELS: bad, reserved or repeated label: $l" >&2; return 1
+        fi
+        seen+="$l "
+    done
+    M01_L_NOTSERVED=${L[0]} M01_L_DEAD=${L[1]} M01_L_GLUE=${L[2]} M01_L_NSSET=${L[3]} M01_L_NODELEG=${L[4]}
+}

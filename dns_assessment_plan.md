@@ -47,11 +47,11 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Query tracing and analysis (Apply/Analyse)
 - Tool usage proficiency (Apply)
 
-**Tasks:**
-1. Trace DNS resolution for a complex domain (5 points)
-2. Identify delegation issues in provided scenario (5 points)
-3. Analyse DNS response codes and explain their meaning (5 points)
-4. Compare IPv4 and IPv6 DNS resolution paths (5 points)
+**Tasks** (assessed from the Module 1 labs; see Appendix A of `dns_dnssec_workshop_plan.md` and `labs/module01/README.md`):
+1. Trace the resolution of a name from the root to an authoritative answer, by hand with `dig +norec`, naming the server, referral or answer, and glue at each step (Lab 1.1; offline: `www.good.example` through the lab hierarchy) (5 points)
+2. Identify the fault in each of the five lab delegations with evidence and the party that must fix it: the Lab 1.3 worksheet (5 points). The default zone names (`alpha` to `echo.example`) and the answer key are public in the course repository, so for a graded run the instructor sets `M01_FAULT_LABELS` to five names the class has not seen and puts them on the lab sheet (`labs/instructor/module01/README.md`)
+3. Analyse response codes and flags: NOERROR, NODATA, NXDOMAIN, REFUSED, SERVFAIL, `aa`/`ra`/`tc`, in `dig` and in a `tshark` reading of the participant's own capture (Lab 1.2) (5 points)
+4. Compare IPv4 and IPv6: A and AAAA data, the `in-addr.arpa` and `ip6.arpa` names `dig -x` builds, root server addresses, and the same query over `-4` and `-6` where the classroom has IPv6 (Labs 1.1-1.2) (5 points)
 
 **Assessment Criteria:**
 - **Excellent (18-20 points):** Complete accurate analysis with detailed explanations
@@ -158,11 +158,11 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Security implementation (Apply)
 - Attack mitigation (Apply/Evaluate)
 
-**Tasks:**
-1. Configure DNS security controls (rate limiting, ACLs) (8 points)
-2. Implement TSIG authentication (6 points)
-3. Set up DNS monitoring and alerting (6 points)
-4. Analyse and respond to simulated attack scenario (5 points)
+**Tasks:** (same tools and lab kit as Labs 6.1-6.5, on the participant's own VMs; any load stays within `dnsperf -Q 50 -l 10` against the participant's own server)
+1. Restrict a resolver to its clients and make an authoritative server non-recursive; show REFUSED from an outside address and the "queries rejected" counters; enable RRL and show the drop and truncation counters under the capped load (8 points)
+2. Set up a TSIG-protected zone transfer with a key made by `tsig-keygen`; show a refused unsigned transfer and a successful signed one, and explain BADSIG and BADTIME (6 points)
+3. Configure security logging (`security`, `rate-limit`, `rpz`, `xfer-out`) and an RPZ zone that blocks a given name; show the log line for a rewrite (6 points)
+4. From a provided capture or log, identify the attack (amplification, random-subdomain flood or tunnelling), the signs that show it, and the response (5 points)
 
 #### Mid-Course Assessment: Integrated Practical (30 minutes)
 **Assessment Type:** Integrated skills demonstration
