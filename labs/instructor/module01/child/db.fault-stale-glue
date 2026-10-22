@@ -1,0 +1,10 @@
+; Stale-glue zone for Lab 1.3 (label: M01_FAULT_LABELS, third). Two name
+; servers; the parent's glue for ns2 still has the old address
+; (198.51.100.54), the zone has the current one.
+$TTL 300
+@     SOA ns1 hostmaster 1 3600 600 86400 60
+      NS  ns1
+      NS  ns2
+ns1   A   @M01_CHILD_ADDR@
+ns2   A   @M01_CHILD_ADDR@
+www   A   192.0.2.83

@@ -2,6 +2,8 @@
 #   docker compose up -d --build                 parent server (Modules 7-9)
 #   docker compose --profile m08 up -d --build   adds the Knot DoQ demo
 #     (or COMPOSE_PROFILES=m08 and DOQ_ADDR in .env)
+#   docker compose --profile m01 up -d --build   adds the Module 1 lab root,
+#     child and resolver (or COMPOSE_PROFILES=m01 and the M01_* addresses)
 name: dnslab
 
 x-bind-image: &bind-image
@@ -14,6 +16,11 @@ x-bind-image: &bind-image
 x-lab-env: &lab-env
   PARENT_ADDR: ${PARENT_ADDR:?set PARENT_ADDR in .env}
   DOQ_ADDR: ${DOQ_ADDR:-}
+  # empty M01_CHILD_ADDR: the Module 1 zones are not delegated (other days)
+  M01_CHILD_ADDR: ${M01_CHILD_ADDR:-}
+  M01_ROOT_ADDR: ${M01_ROOT_ADDR:-}
+  M01_RESOLVER_ADDR: ${M01_RESOLVER_ADDR:-}
+  M01_FAULT_LABELS: ${M01_FAULT_LABELS:-}
   TEAMS_FILE: /etc/lab-classroom/teams.conf
   HANDOUT_UID: ${HANDOUT_UID:-1000}
   HANDOUT_GID: ${HANDOUT_GID:-1000}
@@ -81,10 +88,58 @@ services:
       - ./knot:/etc/lab:ro
       - ${HANDOUT_DIR:-./handout}:/handout
     networks:
-      lab: { ipv4_address: "${DOQ_ADDR:-}" }
+      lab: { ipv4_address: "${DOQ_ADDR:-set-DOQ_ADDR-in-.env}" }
     security_opt: [no-new-privileges:true]
     restart: unless-stopped
 
+  # Module 1: lab root, second-level child zones and a lab resolver
+  m01-root:
+    <<: *bind-image
+    profiles: [m01]
+    command: ["/opt/lab/bin/m01-run", "root"]
+    init: true
+    environment: &m01-env
+      PARENT_ADDR: ${PARENT_ADDR:?set PARENT_ADDR in .env}
+      M01_ROOT_ADDR: ${M01_ROOT_ADDR:-}
+      M01_CHILD_ADDR: ${M01_CHILD_ADDR:-}
+      M01_RESOLVER_ADDR: ${M01_RESOLVER_ADDR:-}
+      M01_FAULT_LABELS: ${M01_FAULT_LABELS:-}
+      LAB_SUBNET: ${LAB_SUBNET:?set LAB_SUBNET in .env}
+    volumes: ["./module01/root:/etc/lab/root:ro"]
+    networks:
+      lab: { ipv4_address: "${M01_ROOT_ADDR:-set-M01_ROOT_ADDR-in-.env}" }
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+  m01-child:
+    <<: *bind-image
+    profiles: [m01]
+    command: ["/opt/lab/bin/m01-run", "child"]
+    init: true
+    environment: *m01-env
+    volumes: ["./module01/child:/etc/lab/child:ro"]
+    networks:
+      lab: { ipv4_address: "${M01_CHILD_ADDR:-set-M01_CHILD_ADDR-in-.env}" }
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+  m01-resolver:
+    <<: *bind-image
+    profiles: [m01]
+    command: ["/opt/lab/bin/m01-run", "resolver"]
+    init: true
+    environment: *m01-env
+    volumes: ["./module01/resolver:/etc/lab/resolver:ro"]
+    networks:
+      lab: { ipv4_address: "${M01_RESOLVER_ADDR:-set-M01_RESOLVER_ADDR-in-.env}" }
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+# A profile's address left empty in .env must stop `up`: Docker would
+# otherwise pick a free address itself, possibly one that belongs to another
+# host on the classroom LAN. The placeholder default is not an address, so
+# creating the container fails; with the profile off it is never used.
+# (`:?` cannot be used here: Compose checks it even for inactive profiles.)
 # Each service gets its own address on the classroom LAN. ipvlan L2 shares the
 # host NIC's MAC address, so the hypervisor's virtual switch needs no
 # promiscuous mode or MAC learning. The host itself cannot reach these

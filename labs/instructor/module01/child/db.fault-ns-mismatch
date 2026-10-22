@@ -1,0 +1,10 @@
+; NS-mismatch zone for Lab 1.3 (label: M01_FAULT_LABELS, fourth). The zone
+; lists ns1 and ns3; the parent still delegates to ns1 and ns2. Resolution
+; works; the two NS sets disagree.
+$TTL 300
+@     SOA ns1 hostmaster 1 3600 600 86400 60
+      NS  ns1
+      NS  ns3
+ns1   A   @M01_CHILD_ADDR@
+ns3   A   @M01_CHILD_ADDR@
+www   A   192.0.2.84
