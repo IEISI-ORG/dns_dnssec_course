@@ -1,0 +1,8 @@
+// Module 6, resolver VM: /etc/bind/named.conf.local
+// The lab "TLD" example. is not in the real root: send those queries
+// straight to the instructor's registry server (lab sheet address).
+// Module 7 (Lab 7.3) keeps this zone and adds a trust anchor for example.
+zone "example" {
+    type static-stub;
+    server-addresses { 192.0.2.53; };
+};

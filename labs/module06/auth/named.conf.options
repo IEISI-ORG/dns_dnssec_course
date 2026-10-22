@@ -1,0 +1,29 @@
+// Module 6, authoritative VM: replaces /etc/bind/named.conf.options
+// (Debian's file sets only "directory"; everything else is BIND's default).
+// Lab 6.1 (access), Lab 6.3 (rate limiting).
+options {
+    directory "/var/cache/bind";
+
+    // Authoritative only: no recursion, so no cache for clients either
+    recursion no;
+    allow-query { any; };          // the zone is public data
+    allow-transfer { none; };      // BIND 9.20 default; Lab 6.4 adds a TSIG key per zone
+    allow-update { none; };
+
+    // Say less about the software and the host
+    version none;
+    hostname none;
+    server-id none;
+
+    // Smaller answers: no optional records, one RRset for ANY over UDP (RFC 8482)
+    minimal-responses yes;
+    minimal-any yes;
+
+    // Response rate limiting (Lab 6.3): start with log-only yes, then set it to no
+    rate-limit {
+        responses-per-second 5;
+        window 5;
+        slip 2;
+        log-only yes;
+    };
+};

@@ -1,0 +1,7 @@
+; Rehearsal only: the registry's example. zone (the instructor's, Module 7)
+$TTL 60
+@          SOA ns1.example. admin.example. 1 300 60 86400 60
+           NS  ns1.example.
+ns1        A   192.0.2.53
+team01     NS  ns1.team01.example.
+ns1.team01 A   192.0.2.30

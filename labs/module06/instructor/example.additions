@@ -1,0 +1,6 @@
+; Module 6, Lab 6.5: add to the registry's db.example (raise the SOA serial).
+; Without RPZ these names resolve; with the feed they are rewritten.
+malware        IN A  192.0.2.66
+phish          IN A  192.0.2.67
+walled-garden  IN A  192.0.2.68
+tracker        IN A  192.0.2.69

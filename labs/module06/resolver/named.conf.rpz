@@ -1,0 +1,14 @@
+// Module 6, Lab 6.5: policy zones. Add to /etc/bind/named.conf.local.
+// The instructor's feed, transferred from the registry server:
+zone "feed.rpz.test" {
+    type secondary;
+    primaries { 192.0.2.53; };
+    file "/var/cache/bind/feed.rpz.test.db";
+    allow-query { localhost; };
+};
+// Your own overrides, checked first:
+zone "local.rpz" {
+    type primary;
+    file "/etc/bind/db.local.rpz";
+    allow-query { localhost; };
+};

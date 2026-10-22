@@ -4,6 +4,7 @@ Configs, scripts and EPP frames used to test each module's labs. Each kit's READ
 
 | Kit | Module | Contents |
 |-----|--------|----------|
+| `module06/` | 6: DNS security fundamentals | Hardened BIND options for the authoritative and resolver VMs, security logging, TSIG and RPZ snippets, the instructor's RPZ feed, `dns-signs.sh` capture summary, rehearsal harness |
 | `module07/` | 7: DNSSEC implementation | BIND authoritative and validating-resolver configs, Unbound resolver config, team and broken zones |
 | `module08/` | 8: DNS privacy and encryption | `make-certs.sh` for the lab CA and resolver certificate, BIND DoT/DoH/padding and Unbound forward-tls snippets, DDR records, rehearsal harness |
 | `module09/` | 9: Registry operations and EPP | Namingo EPP server settings, `epp-send` client, EPP frames for Labs 9.1-9.5, instructor seeding and zone-publishing scripts |
