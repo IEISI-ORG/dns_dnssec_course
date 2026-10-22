@@ -128,40 +128,42 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 1: Introduction to DNS - Foundations and Concepts
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module01-dns-foundations.marp.md` (70 slides: 64 theory, 6 lab). Module 1 also opens the course (welcome, course structure and assessment from Program Facts). Lab kit: `labs/module01/`; lab servers: `labs/instructor` profile `m01`.
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall the purpose and history of the Domain Name System
-- Identify the components of the DNS hierarchy and namespace
-- List the key stakeholders in DNS management (ICANN, IANA, registries, registrars)
+- Recall why the DNS replaced HOSTS.TXT (RFC 1034 §2.1) and the milestones from RFC 882/883 (1983) to RFC 1034/1035 (STD 13, 1987) and RFC 9499 (2024)
+- Identify the parts of the namespace: labels, FQDNs, the root, TLD types (generic, country code, IDN, `arpa`), domains, zones, delegation and glue
+- List who runs each part: IETF, ICANN, IANA (PTI), the Root Zone Maintainer, the 12 root server operators and RSSAC, registries, registrars, resellers, registrants, DNS operators, RIRs
 
 **Comprehension (Understand):**
-- Explain how DNS translates domain names to IP addresses
-- Describe the distributed and hierarchical nature of DNS
-- Compare DNS with other naming systems
+- Explain how a recursive resolver turns a name into an address by following referrals from the root, and what it caches
+- Describe authoritative servers (primary, secondary), recursive resolvers, stub resolvers and forwarders (RFC 9499 terms)
+- Compare the DNS with other ways hosts look up names (`/etc/hosts` and nsswitch, multicast DNS, LLMNR)
 
 **Application (Apply):**
-- Use basic DNS lookup tools (nslookup, dig, host)
-- Trace DNS resolution from root to authoritative servers
+- Use `dig`, `host` and `nslookup` (Debian 13 packages `bind9-dnsutils`, `bind9-host`), and capture DNS traffic with `tcpdump` and `tshark`
+- Trace a lookup from the root by hand with `dig +norec`, and with `dig +trace` when the classroom has Internet access
 
 **Analysis (Analyse):**
-- Analyse the DNS resolution process step-by-step
-- Examine the relationship between different DNS components
+- Read a DNS message: header flags (QR, AA, TC, RD, RA), RCODEs (NOERROR, NXDOMAIN, SERVFAIL, REFUSED), NODATA, sections, UDP and TCP, IPv4 and IPv6
+- Diagnose a broken delegation (server does not serve the zone, unreachable server, stale glue, parent/child NS mismatch, missing delegation) and name who must fix it
 
 ### Theory Content
-- DNS history and evolution from HOSTS.TXT
-- DNS namespace structure and hierarchy (root, TLD, second-level domains)
-- DNS stakeholder ecosystem (ICANN, IANA, root operators, TLD operators)
-- Basic DNS concepts: zones, domains, subdomains
-- DNS and the broader Internet infrastructure
-- Introduction to IPv4 and IPv6 address resolution
+- Course opening: welcome, the 12 modules over 6.5 days, daily schedule, assessment (Program Facts), the lab VMs for the week
+- From HOSTS.TXT to the DNS: RFC 608, 952; RFC 882/883; RFC 1034/1035 design goals; a sourced timeline (RFC 920, 1591, 3596; ICANN 1998; root signed 15 July 2010; IANA stewardship transition 1 October 2016; RFC 9499); other naming systems
+- The namespace: labels and size limits, FQDNs and the trailing dot, search lists; TLD types with IANA counts (as of 22 October 2026: 1,437 TLDs, 1,127 generic, 309 country code, 1 special use, 151 IDN); IDNA2008 A-labels; special-use names (RFC 6761 and others); domains vs zones; delegation and glue (RFC 9471; in-domain, sibling, unrelated)
+- Records, servers and caching: RR format and RRsets; A, AAAA, NS, SOA, CNAME as a preview (Module 2 owns the details); server roles; TTL and caching at concept level; the stub resolver on Debian 13
+- Resolution: walk-through, recursive vs iterative queries, referrals, walking the tree by hand, `dig +trace` and its limits, the root server system (13 names, 12 operators, anycast instances as of a date), root hints and priming (RFC 9609; current IANA root hints), what a resolver caches
+- The DNS message: sections, header flags, RCODEs, NODATA, Extended DNS Errors (pointer), reading `dig` output, UDP/TCP/EDNS(0) and truncation (RFC 1035, 6891, 7766, 9210), IPv6 (AAAA, ip6.arpa, root service over IPv6)
+- Who runs the DNS: ICANN and IANA/PTI, root zone change process (Root Zone Administrator and Maintainer, RSSAC037), root server operators and RSSAC, registries/registrars/resellers/registrants (Module 9 terms), RIRs and reverse DNS
+- Tools and a debugging method: `dig` options, `host`, `nslookup`, a seven-step method, delegation faults and their evidence (RFC 9499: "lame delegation" is historic), a worked example on the participant's own not-yet-served zone
+- Pointers, not content: Module 2 (record types, zone files, TTL strategy), 3 (server types), 4 (software), 6 (security, QNAME minimisation, cookies), 7 (DNSSEC, AD/CD/DO), 8 (encrypted transports), 9 (registry operations, EPP)
 
 ### Practical Lab
-- Basic DNS lookups using command-line tools
-- Tracing DNS resolution paths
-- Exploring the DNS hierarchy with dig +trace
-- Understanding DNS response codes and flags
-- Introduction to DNS debugging methodology
+- Lab 1.1 Walk the hierarchy (30 min): real root, TLD and authoritative servers; `dig +trace`; TLD types; anycast instances; offline path on the lab hierarchy
+- Lab 1.2 Read the response (30 min): flags, RCODEs, NODATA, sections, truncation and TCP, read back from a `tcpdump` capture with `tshark`
+- Lab 1.3 Debug a delegation (30 min): five lab zones, one fault each (zone names configurable by the instructor); worksheet assessed as Practical Assessment 1A task 2
 
 ---
 
@@ -729,6 +731,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1 and 6-9 use them; the "Participant VMs" lines of Modules 2-5 below still give other counts and are to be reconciled when those decks are written
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -741,45 +744,50 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 1: Introduction to DNS - Lab Requirements
 
+All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 stand-in VM (bind9-dnsutils and bind9-host 9.20.30, tcpdump 4.99.5, tshark 4.4.19) against the instructor stack (`labs/module01/test/rehearse.sh`, 39 of 39 checks; `labs/instructor/test/run.sh`, 56 of 56); the Internet steps on a Debian 13 host (bind9-dnsutils 9.20.29). Lab kit: `labs/module01/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 1 Debian desktop VM per participant
-- **Shared Infrastructure:** 1 root server simulator, 1 TLD server simulator
-- **Tools Pre-installed:** dig, nslookup, host, wireshark, tcpdump
+- **Participant VMs:** the two Debian 13 VMs each participant (team `NN`) keeps all week. On Day 1 only VM 1 is used (the future authoritative server for `teamNN.example`, 192.0.2.30 on the slides; the client in Modules 6-8). It has `bind9-dnsutils`, `bind9-host`, `tcpdump` and `tshark` and no DNS server. VM 2 (the resolver, 192.0.2.10) waits for Module 3
+- **Instructor stack (`labs/instructor`, profile `m01`):** lab root 192.0.2.52 (`.` and `root-servers.test`), registry/lab TLD 192.0.2.53 (`example.`, as in Modules 6-9), lab child 192.0.2.54 (`good.example`, `charlie.example`, `delta.example`), lab resolver 192.0.2.55 (recursive for the lab subnet, root hints = lab root). This is the "root server simulator" and "TLD server simulator"
+- **Broken delegations for Lab 1.3** (default labels; `M01_FAULT_LABELS` renames them, and a graded run uses names the class has not seen): `alpha.example` (server does not serve the zone: REFUSED), `bravo.example` (no server at 198.51.100.53), `charlie.example` (stale glue for ns2), `delta.example` (parent NS set differs from the zone's), `echo.example` (not delegated); the DNSSEC-broken zones are not used on Day 1
+- **Captures:** `sudo tcpdump` on the VM, read with `tshark -r`; the Wireshark GUI only on a participant's laptop, with the copied file
+- **Offline path:** if outbound port 53 is blocked, Lab 1.1 walks the lab hierarchy with `+norec` instead of the real one, without `dig +trace` (dig 9.20 resolves each server name through the VM's resolver and ignores glue); Labs 1.2 and 1.3 use only lab servers either way
+- **Not tested:** real VMs (`sudo`, SSH, capture on a VM interface), the Wireshark GUI, ipvlan on a real classroom NIC, IPv6 transport inside the lab hierarchy
 
 ### Lab Exercises
 
-#### Lab 1.1: DNS Hierarchy Exploration (30 minutes)
-**Objective:** Understand DNS hierarchy through practical queries
-**Resources Needed:**
-- Access to real DNS infrastructure via internet
-- Pre-configured dig and nslookup tools
+#### Lab 1.1: Walk the Hierarchy (30 minutes)
+**Objective:** Follow a lookup from the root to an authoritative answer
 **Exercise Steps:**
-1. Query root servers using `dig . NS`
-2. Query TLD servers for various TLDs
-3. Trace resolution path using `dig +trace example.com`
-4. Compare IPv4 and IPv6 root servers
+1. `dig . NS` through the classroom resolver: server, flags, TTL
+2. `dig -4 @a.root-servers.net . NS +norec`: compare flags (aa) and TTL
+3. Walk `www.example.com` by hand with `+norec`, taking each next address from the glue
+4. `dig -4 +trace www.example.com`, and a name in the participant's own ccTLD
+5. Referrals for `org.`, a ccTLD, `xn--p1ai.` and `arpa.`
+6. Root instances with `hostname.bind CH TXT` over IPv4 (and IPv6 where available)
+**Offline:** steps 1-3 against 192.0.2.55, .52, .53, .54 for `www.good.example`; `com.` at the lab root (NXDOMAIN); AAAA and `dig -x` names
+**Success Criteria:** each reply identified as referral or authoritative answer, with its sender
 
-#### Lab 1.2: DNS Response Analysis (30 minutes)
-**Objective:** Analyse DNS responses and understand flags
-**Resources Needed:**
-- Packet capture capability (Wireshark)
-- Sample DNS queries and responses
+#### Lab 1.2: Read the Response (30 minutes)
+**Objective:** Read flags, response codes and sections in `dig` and in a capture
 **Exercise Steps:**
-1. Capture DNS queries using Wireshark
-2. Analyse DNS response codes and flags
-3. Compare authoritative vs non-authoritative responses
-4. Examine DNS over IPv4 vs IPv6
+1. Start `sudo tcpdump -i any -n -U -w m01.pcap port 53` (wait a few seconds before stopping it)
+2. Authoritative (`aa`) vs resolver (`ra`, TTL counting down) answers for `www.good.example`
+3. NXDOMAIN (`nosuch.good.example`), NODATA (`www.good.example TXT`), REFUSED (`www.example.com` at 192.0.2.54), SERVFAIL (`www.teamNN.example` through the resolver: no server on VM 1 yet)
+4. A CNAME answer and a referral (authority and additional sections)
+5. Truncation at `+bufsize=512 +ignore`, the TCP retry, `+tcp`
+6. Read the capture with `tshark -T fields` (flags as True/False, RCODE as a number); with Internet access, an IPv4 and an IPv6 query to a root server
+**Success Criteria:** QR, AA, TC, RD, RA and the RCODE named for every reply; NXDOMAIN told from NODATA; TCP retry explained
 
-#### Lab 1.3: DNS Debugging Fundamentals (30 minutes)
-**Objective:** Learn basic DNS troubleshooting
-**Resources Needed:**
-- Broken DNS scenarios (pre-configured)
-- Multiple DNS tools
+#### Lab 1.3: Debug a Delegation (30 minutes)
+**Objective:** Find the fault in five lab delegations with a written method
 **Exercise Steps:**
-1. Diagnose non-responsive domains
-2. Identify delegation issues
-3. Compare results from different DNS servers
-4. Document troubleshooting methodology
+1. Ask the lab resolver (status, time)
+2. Ask the parent with `+norec`: NS names and glue
+3. Ask each listed address with `+norec +tries=1 +timeout=2`
+4. Compare the parent's NS and glue with the zone's own NS and addresses
+5. Worksheet per zone: symptom, evidence, cause, who fixes it, how to check the fix
+**Success Criteria:** one cause per zone with evidence (answer key, instructor only: `labs/instructor/module01/README.md`); the worksheet is Practical Assessment 1A task 2
 
 ---
 
