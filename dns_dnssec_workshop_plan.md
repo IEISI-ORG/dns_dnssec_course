@@ -264,89 +264,50 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 4: DNS Software Platforms - BIND, Unbound, PowerDNS, and Alternatives
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module04-dns-software-platforms.marp.md` (57 slides: 51 theory, 6 lab). Day 2 Session 3: 75 minutes of content, then Knowledge Check 2 (15 minutes, on paper, Modules 3-4). Lab kit: `labs/module04/`; lab servers: the registry and the `m01` profile's lab resolver (kept on through Day 2).
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall the major DNS software platforms and their characteristics
-- Identify configuration file formats for different DNS software
-- List the strengths and use cases for each platform
+- Recall the maintainers, roles, licences and Debian 13 versions of BIND, Unbound, NSD, PowerDNS (Authoritative, Recursor, dnsdist), Knot DNS and Knot Resolver
+- Identify each program's configuration files and control tools on Debian 13 (`named.conf`/`rndc`, `unbound.conf.d`/`unbound-control`, `pdns.d`/`pdnsutil`/`pdns_control`/HTTP API)
 
 **Comprehension (Understand):**
-- Explain the architectural differences between DNS software platforms
-- Describe the configuration approaches for each major platform
-- Compare performance and feature capabilities
+- Explain one program for both roles versus one program per role, and implementation diversity
+- Describe vendor and distribution support lifecycles and where security advisories are published
+- Describe PowerDNS backends, its caches and zone cache, native replication versus primary/secondary
 
 **Application (Apply):**
-- Install and configure BIND for both authoritative and recursive roles
-- Set up Unbound as a high-performance recursive resolver
-- Deploy PowerDNS with database backends
+- Read BIND 9.20's effective configuration, `rndc status` and the statistics channel; add and delete a zone with `rndc addzone`/`delzone`
+- Run Unbound as a resolver next to BIND (port 5300): `access-control`, stub and forward zones, local data, `unbound-control`
+- Deploy PowerDNS Authoritative with the SQLite backend and change a zone through its HTTP API
 
 **Analysis (Analyse):**
-- Analyse configuration requirements for different use cases
-- Compare software platforms for specific deployment scenarios
+- Compare what two servers answer for the same zone (`zonediff.sh`) and explain the difference
+- Compare BIND and Unbound behaviour for the same configuration (query flags, a forwarder that is not a resolver)
 
 **Evaluation (Evaluate):**
-- Evaluate DNS software selection criteria for different environments
-- Assess migration strategies between DNS platforms
+- Evaluate software for an organisation from roles, data path, support life, advisories and own measurements (no vendor benchmarks)
+- Assess a migration path (file import, AXFR, parallel running, switch-over)
 
 **Synthesis (Create):**
-- Design DNS software deployment strategies
-- Develop standardised configuration templates
+- Design the software choice for four organisation types (exercise)
+- Develop configuration templates checked by each server's own tool (`named-checkconf -z`, `unbound-checkconf`, `pdnsutil check-zone`)
 
 ### Theory Content
-- **BIND (Berkeley Internet Name Domain):**
-  - History and market position
-  - Authoritative and recursive capabilities
-  - Configuration file structure (named.conf, zone files)
-  - Advanced features (views, DNSSEC, statistics)
-
-- **Unbound:**
-  - High-performance recursive resolver design
-  - Security-focused architecture
-  - Configuration methodology
-  - Integration with system resolvers
-
-- **PowerDNS:**
-  - Authoritative and recursive products
-  - Database backend capabilities (MySQL, PostgreSQL, etc.)
-  - API-driven management
-  - Performance characteristics
-
-- **Alternative Solutions:**
-  - NSD (Name Server Daemon)
-  - Knot DNS and Knot Resolver
-  - Microsoft DNS Server
-  - Cloud DNS services (Route 53, CloudDNS, etc.)
-
-- **Selection Criteria:**
-  - Performance requirements
-  - Management complexity
-  - Security features
-  - Integration capabilities
+- Day 2 so far and what changed (as of 28 October 2026): BIND 9.18 end of life, 9.20 ESV to Q2 2028; `auto-dnssec` removed in 9.20.0; Debian 13's move from Unbound 1.22 to upstream 1.26; PowerDNS Authoritative 5.1 upstream versus 4.9.17 in Debian; dnsdist 2.0/2.1 and Knot Resolver 6 upstream versus 1.9 and 5.7 in Debian
+- The software landscape: who makes what (maintainer, roles, licence from Debian's `copyright` files, Debian 13 version); one program for both jobs or one per job; implementation diversity (NLnet Labs on NSD at root servers and TLDs); vendor and distribution support; the 21 October 2026 advisories from ISC, NLnet Labs and PowerDNS
+- BIND 9: history (ARM appendix), release branches, threads; files and paths on Debian 13 (`named-checkconf -p`, AppArmor); `named.conf` building blocks with module pointers; `named -V` build features; `rndc` (commands, `controls`), `rndc status` read line by line; `rndc addzone`/`delzone` and the NZD database (tested); the statistics channel (tested, ARM access warning); logging channels and categories, the query-log flags
+- Unbound: NLnet Labs, design (validator and iterator modules), defaults (unbound.conf(5) 1.26.2); Debian 13 files, `unbound-helper`, the port 53 clash with BIND (tested); the lab's file; BIND and Unbound side by side (including a forwarder that is not a resolver: BIND SERVFAIL, Unbound passes the referral on, tested); `local-zone`/`local-data` and default local zones (RFC 8375); `unbound-control`
+- PowerDNS: Authoritative, Recursor, dnsdist; backends and caches; native replication versus primary/secondary; Debian 13 files and defaults (`launch=` empty, security polling off); `pdnsutil`, `pdns_control` and the zone cache (REFUSED until `rediscover`, tested); the HTTP API and SOA-EDIT-API (tested); a migration finding: `pdnsutil load-zone` 4.9.17 changes a relative HTTPS AliasMode target (tested; NSD, Knot, AXFR and absolute-name import correct)
+- Alternatives and hosted DNS: NSD and Knot DNS (same zone served and compared, tested); Knot Resolver, PowerDNS Recursor, dnsdist, dnsmasq, CoreDNS, systemd-resolved; Microsoft DNS (AD-integrated zones); hosted DNS services and vendor extensions (Route 53 alias records) versus RFC 9460
+- Choosing and migrating: selection questions; measuring instead of copying benchmarks (`dnsperf`, `resperf`; no numbers quoted); moving a zone (inventory, AXFR or absolute-name import, compare answers, parallel running, switch, signed zones); configuration templates; exercise: which software where (answers in presenter notes)
+- Pointers, not content: views and split horizon, anycast, load balancing (Module 5); TSIG, RPZ, logging files, hardening (Module 6); signing and validation (Module 7); DoT, DoH, DoQ (Module 8); monitoring (Module 11)
 
 ### Practical Lab
-- **BIND Workshop:**
-  - Install and configure BIND as authoritative server
-  - Set up BIND as recursive resolver
-  - Configure BIND views for split-horizon
-  - Implement zone transfers and TSIG authentication
-
-- **Unbound Workshop:**
-  - Install and configure Unbound
-  - Set up local zones and forwarding
-  - Configure DNS-over-TLS support
-  - Performance tuning and optimisation
-
-- **PowerDNS Workshop:**
-  - Install PowerDNS Authoritative with MySQL backend
-  - Configure PowerDNS Recursor
-  - Use PowerDNS API for zone management
-  - Set up web-based administration
-
-- **Comparative Analysis:**
-  - Performance benchmarking between platforms
-  - Configuration migration exercises
-  - Feature comparison in real scenarios
+- Lab 4.1 BIND under the hood (20 min): `named -V`, `named-checkconf -p`, `rndc status`; the statistics channel on VM 2; `rndc addzone`/`showzone`/`delzone -clean` on VM 1
+- Lab 4.2 Unbound next to BIND (25 min): Unbound on VM 2 port 5300 with a stub zone for `example`; the two resolvers in VM 1's query log; `unbound-control`; local data; forwarding to the lab resolver and to the registry
+- Lab 4.3 PowerDNS with a database (30 min): SQLite backend on VM 1 port 5300; `teamNN.example` imported from BIND's file; zone cache; `zonediff.sh`; the HTTP API (fix, SOA-EDIT-API, a new record)
+- Lab 4.4 Compare, then clean up (15 min): Unbound's stub zone to PowerDNS; counters from all three; Unbound and PowerDNS stopped and disabled, BIND as Module 3 left it
 
 ---
 
@@ -722,7 +683,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
-- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-3 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary). The "Participant VMs" lines of Modules 4-5 below still give other counts and are to be reconciled when those decks are written
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-4 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary); Module 4 adds Unbound on VM 2 and PowerDNS on VM 1 on port 5300 for its labs and disables them again. The "Participant VMs" line of Module 5 below still gives another count, to be reconciled when that deck is written
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -901,49 +862,64 @@ All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs (bind9, b
 
 ## Module 4: DNS Software Platforms - Lab Requirements
 
+All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs (bind9 1:9.20.30-1~deb13u1, unbound 1.26.2-0+deb13u1, pdns-server and pdns-backend-sqlite3 4.9.17-0+deb13u1, sqlite3, curl, jq) against the instructor stack with the `m01` profile (`labs/module04/test/rehearse.sh`, 45 checks). Lab kit: `labs/module04/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 3 Debian server VMs per participant
-- **Software:** BIND 9, Unbound, PowerDNS Authoritative and Recursor
-- **Databases:** MySQL/PostgreSQL for PowerDNS backend
+- **Participant VMs:** the two Debian 13 VMs from Module 1, as Module 3 left them: VM 1 (192.0.2.30) BIND primary for `teamNN.example`, VM 2 (192.0.2.10) BIND resolver with Module 3's files. No extra VMs: Unbound runs on VM 2 and PowerDNS on VM 1, each on port 5300 next to BIND (which keeps port 53); Lab 4.4 stops and disables both
+- **Packages:** added to the VM image with the services disabled: `unbound`, `pdns-server`, `pdns-backend-sqlite3`, `sqlite3`, `curl`, `jq`, installed with `--no-install-recommends` (the recommended `pdns-backend-bind` adds a `pdns.d/bind.conf` that stops PowerDNS with the kit's settings) (`sudo systemctl disable --now unbound pdns`, then `sudo /usr/libexec/unbound-helper root_trust_anchor_update` so that `unbound-checkconf` works before Unbound's first start, as Module 8 Lab 8.3 needs on VM 1; with BIND running both fail to start anyway: Unbound on port 53, PowerDNS with no backend configured). Offline path: the pre-installed image; with a mirror, `sudo apt install` the same list
+- **Instructor stack:** the registry (192.0.2.53) and the `m01` profile's lab resolver (192.0.2.55, Unbound's forwarder in Lab 4.2), kept on until the end of Day 2. No instructor-stack change
+- **Database:** SQLite (`gsqlite3`), not MySQL/MariaDB: no database server or database password per team; the generic SQL backends share one schema. MySQL/PostgreSQL are in theory only
+- **Secrets:** the PowerDNS API key is made on VM 1 in Lab 4.3 and deleted in Lab 4.4; nothing secret in the kit
+- **End state (what Modules 5-8 start from):** BIND alone on port 53 on both VMs with Module 3's configuration (VM 2's own `named.conf.local`, saved in Lab 4.1, moved back, which removes the statistics channel and keeps the team's lab-sheet addresses; PowerDNS's `module04.conf` deleted; VM 1's `allow-new-zones` removed and the `rndc addzone` zone deleted); nothing on ports 5300, 8053, 8081; Unbound and PowerDNS disabled. Module 8 Lab 8.3 later puts Unbound on VM 1's 127.0.0.1 port 5300
+- **Not tested:** real VMs (`sudo`, `systemctl`, `journalctl`, AppArmor; Docker does not enforce AppArmor); `apt install` on a VM with BIND running; IPv6 transport; MySQL/PostgreSQL backends
 
 ### Lab Exercises
 
-#### Lab 4.1: BIND Deep Dive (30 minutes)
-**Objective:** Advanced BIND configuration and management
-**Resources Needed:**
-- BIND 9 with all modules
-- RNDC configuration
-- Statistics and logging configuration
+#### Lab 4.1: BIND Under the Hood (20 minutes)
+**Objective:** Read what BIND is running and change it without editing zone files
 **Exercise Steps:**
-1. Configure BIND with views and ACLs
-2. Set up RNDC for remote management
-3. Enable query logging and statistics
-4. Implement TSIG for secure communication
+1. `named -V` on VM 2: json-c, libxml2, LMDB, maxminddb, nghttp2 and what each enables
+2. `named-checkconf -p`: Debian's four files as one configuration
+3. `rndc status`: worker threads, zones (100 automatic), recursive clients
+4. Save `named.conf.local` as `named.conf.local.m03`, add `vm2/named.conf.stats`; three lookups of one name: `Requestv4` up by 3, cache `QueryHits` up by 2
+5. On VM 1: `allow-new-zones yes;`, `rndc addzone lab4.teamNN.example`, query with `aa`, `rndc showzone`, `_default.nzd`
+6. `rndc delzone -clean`, then remove `allow-new-zones`
+**Success Criteria:** the counters explained; the added zone served, then gone with its file; VM 1's options as Debian installs them
 
-#### Lab 4.2: Unbound Configuration (30 minutes)
-**Objective:** Configure high-performance recursive resolver
-**Resources Needed:**
-- Unbound software
-- Local zone configuration files
-- Performance testing tools
+#### Lab 4.2: Unbound Next to BIND (25 minutes)
+**Objective:** Run a second resolver implementation and compare it with BIND
 **Exercise Steps:**
-1. Install and configure Unbound
-2. Set up local zones and forwarding
-3. Configure DNS-over-TLS support
-4. Performance optimisation and tuning
+1. Debian's Unbound files; the kit's `vm2/module04.conf` (port 5300, `access-control`, `domain-insecure`, stub zone for `example`); start; `unbound-control status`
+2. The same name through Unbound and BIND; VM 1's query log (`rndc querylog on`): Unbound `-E(0)DC`, BIND `-E(0)DK`/`DV`
+3. From VM 1 through Unbound; `+norec` REFUSED
+4. `unbound-control stats_noreset`, `dump_cache`, `flush`
+5. `local-data` in `home.arpa`, `local-zone ... always_nxdomain`
+6. `forward-zone` to the lab resolver: the lab resolver in VM 1's log
+7. Forward to the registry: NOERROR with the referral (BIND: SERVFAIL, Module 3); stub zone restored
+**Success Criteria:** the same answers from both resolvers; the flags read; the forwarder difference explained (Practical Assessment 2A task 2)
 
-#### Lab 4.3: PowerDNS with Database Backend (30 minutes)
-**Objective:** Implement PowerDNS with MySQL backend
-**Resources Needed:**
-- PowerDNS Authoritative server
-- MySQL database server
-- PowerDNS API tools
-- Web management interface
+#### Lab 4.3: PowerDNS with a Database (30 minutes)
+**Objective:** Serve the team zone from PowerDNS with the SQLite backend and change it through the API
 **Exercise Steps:**
-1. Install PowerDNS with MySQL backend
-2. Configure database schema and zones
-3. Use PowerDNS API for zone management
-4. Set up web-based administration interface
+1. Debian's `pdns.conf` (`launch=` empty); create the SQLite database from Debian's schema
+2. The kit's `vm1/module04.conf` (port 5300, API on 127.0.0.1:8081) and an API key made on the VM (`api-key.conf` 640 root:pdns; the header file `~/pdns-api.hdr` 600, read by `curl -H @file`)
+3. Start; journal; REFUSED (no zones)
+4. `pdnsutil load-zone` from `/var/lib/bind/db.teamNN.example`; `check-zone`; still REFUSED until `pdns_control rediscover` and `purge`
+5. `zonediff.sh`: the HTTPS AliasMode target differs (`0 www.` instead of `0 www.teamNN.example.`)
+6. The API: zones listed with the key, 401 without
+7. Fix the HTTPS record with `PATCH`: "same", serial unchanged
+8. `PUT` SOA-EDIT-API `INCREASE` (`DEFAULT` would jump to the day's YYYYMMDD01), `PATCH` a new record: the serial one higher, `zonediff.sh` shows the two differences
+**Success Criteria:** the zone served with `aa`; the import difference found and fixed; the API change visible with a new serial (Practical Assessment 2A task 3)
+
+#### Lab 4.4: Compare, Then Clean Up (15 minutes)
+**Objective:** See one delegation with two sources of truth, then restore the course state
+**Exercise Steps:**
+1. Unbound's stub zone for `teamNN.example` to PowerDNS (192.0.2.30@5300): Unbound answers `api`, BIND NXDOMAIN; PowerDNS logs VM 2's query
+2. Counters from Unbound, BIND's statistics channel and PowerDNS's API
+3. The comparison sheet `labs/module04/comparison-sheet.md`, one per team; the discussion question to the group, one minute per team
+4. VM 2: disable Unbound, remove its file, move the saved `named.conf.local.m03` back; VM 1: disable PowerDNS, delete `module04.conf` and the API key
+5. Nothing on ports 5300, 8053, 8081; BIND answers on both VMs
+**Success Criteria:** each answer explained by which server gave it; the end state above (Practical Assessment 2B)
 
 ---
 
@@ -1169,7 +1145,7 @@ All steps below were run on 2026-10-21 with Debian 13 packages (bind9 9.20.29, u
 #### Lab 8.3: Forward over TLS with Unbound (15 minutes)
 **Objective:** Send all of a client's queries over authenticated DoT
 **Exercise Steps:**
-1. Install `module08-forward.conf` (listens on 127.0.0.1 port 5300; `forward-tls-upstream`, `forward-addr <resolver>@853#resolver.teamNN.example`) and the team `ca.crt`; restart Unbound. After `apt install unbound` the service shows as failed (BIND owns port 53 on this VM); expected until the lab file is installed
+1. Install `module08-forward.conf` (listens on 127.0.0.1 port 5300; `forward-tls-upstream`, `forward-addr <resolver>@853#resolver.teamNN.example`) and the team `ca.crt`; restart Unbound. Unbound is in the VM image from Module 4, disabled; installed instead with `apt install unbound`, the service shows as failed (BIND owns port 53 on this VM), expected until the lab file is installed
 2. `dig @127.0.0.1 -p 5300 www.teamNN.example`, with a capture on the client
 3. Set a wrong name after `#`, restart, query, read the log
 **Success criteria:** answers through Unbound; only TCP 853 to the resolver, queries padded to 147-octet TLS records; wrong name gives SERVFAIL and "hostname mismatch" in the log

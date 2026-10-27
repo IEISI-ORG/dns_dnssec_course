@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~783 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~780 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -118,146 +118,34 @@
 
 ## Module 4: DNS Software Platforms - BIND, Unbound, PowerDNS, and Alternatives
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 60-65
+**Slides:** 57 (51 theory, 6 lab); deck: `modules/module04-dns-software-platforms.marp.md`. Day 2 Session 3: 75 minutes of content, then Knowledge Check 2 (15 minutes, on paper, not in the deck)
 
-### DNS Software Landscape Overview (8 slides)
-1. **DNS Software Categories**
-   - Open source vs commercial solutions
-   - Authoritative vs recursive specialisation
-   - Performance and feature comparisons
-   - Market share and adoption trends
+### Opening (6 slides)
+- Title; module overview; learning objectives; where Day 2 stands (VM 1 and VM 2 as Module 3 left them; Unbound and PowerDNS on port 5300 this afternoon); what changed recently (BIND 9.18 EOL and 9.20 ESV, `auto-dnssec` removed, Debian's Unbound 1.26, PowerDNS 5.1 upstream, dnsdist 2.x, Knot Resolver 6; as of 28 October 2026); agenda (theory with the Knowledge Check 2 slot, and lab)
 
-2. **Selection Criteria Framework**
-   - Performance requirements
-   - Security features
-   - Management complexity
-   - Integration capabilities
-   - Support and community
+### 1. The Software Landscape (5 slides)
+- Who makes what (maintainer, roles, licence from Debian's `copyright`, Debian 13 version); one program for both jobs or one per job (NSD by design, diversity, NLnet Labs on root and TLD use); who fixes the bugs and for how long (vendor branches against Debian 13's versions); 21 October 2026: ISC, NLnet Labs and PowerDNS advisories on one day
 
-### BIND (Berkeley Internet Name Domain) (18 slides)
-3. **BIND History and Evolution**
-   - Development timeline since 1980s
-   - Version history and major releases
-   - Current BIND 9 architecture
-   - Future development roadmap
+### 2. BIND 9 (10 slides)
+- BIND 9 in brief (ARM history, branches, threads); files and paths on Debian 13 (`named-checkconf -p`, AppArmor); `named.conf` building blocks with module pointers; `named -V` build features; `rndc` commands and `controls`; reading `rndc status`; `rndc addzone`/`delzone` and the NZD (tested); the statistics channel (tested); logging and the query-log flags
 
-4. **BIND Architecture and Components**
-   - named daemon functionality
-   - Configuration file structure
-   - Zone file management
-   - RNDC remote control
+### 3. Unbound (7 slides)
+- Unbound in brief (NLnet Labs, modules, defaults); Unbound on Debian 13 (files, `unbound-helper`, the port 53 clash, tested); the lab's file; BIND and Unbound side by side (including a forwarder that is not a resolver, tested); `local-zone` and `local-data` (RFC 8375); `unbound-control`
 
-5. **BIND Configuration Deep Dive**
-   - named.conf structure and syntax
-   - Options, logging, and zone statements
-   - ACL (Access Control List) implementation
-   - Views for split-horizon DNS
+### 4. PowerDNS (8 slides)
+- The PowerDNS family (Authoritative, Recursor, dnsdist); backends and caches; native replication or zone transfers; PowerDNS on Debian 13; `pdnsutil`, `pdns_control` and the zone cache (tested); the HTTP API and SOA-EDIT-API (tested); a migration finding (relative HTTPS target changed by `pdnsutil load-zone` 4.9.17; NSD, Knot, AXFR and absolute-name import correct)
 
-6. **BIND Security Features**
-   - TSIG (Transaction Signature) authentication
-   - DNS64 and RPZ (Response Policy Zones)
-   - Rate limiting capabilities
-   - Chroot jail deployment
+### 5. Alternatives and Hosted DNS (4 slides)
+- NSD and Knot DNS (same zone, `zonediff.sh` "same", tested); resolvers and front ends (Knot Resolver 6, PowerDNS Recursor, dnsdist, dnsmasq, CoreDNS, systemd-resolved); Microsoft DNS and hosted DNS services (AD-integrated zones, Route 53 alias records against RFC 9460, a checklist)
 
-7. **BIND Performance Tuning**
-   - Memory management optimisation
-   - Query processing efficiency
-   - Cache tuning parameters
-   - Multi-threading configuration
+### 6. Choosing and Migrating (5 slides)
+- Selection questions (table); measure, do not copy benchmarks (no numbers quoted); moving a zone and configuration templates; exercise: which software where (four organisations; answers in presenter notes)
 
-8. **BIND Operational Management**
-   - Zone transfer configuration
-   - Dynamic updates with nsupdate
-   - Statistics and monitoring
-   - Logging and debugging
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (two VMs, port 5300, packages in the image, offline path, end state), Labs 4.1-4.4 (BIND under the hood; Unbound next to BIND; PowerDNS with a database; compare, then clean up)
 
-### Unbound Recursive Resolver (12 slides)
-9. **Unbound Design Philosophy**
-   - Security-focused architecture
-   - High-performance resolver design
-   - Minimal attack surface
-   - Standards compliance emphasis
-
-10. **Unbound Configuration Management**
-    - Configuration file structure
-    - Local zones and data
-    - Forwarding configurations
-    - Access control implementation
-
-11. **Unbound Security Features**
-    - DNS-over-TLS support
-    - DNSSEC validation
-    - DNS filtering capabilities
-    - Privacy protection features
-
-12. **Unbound Performance Characteristics**
-    - Multi-threading architecture
-    - Memory usage optimisation
-    - Cache management efficiency
-    - Benchmarking results
-
-### PowerDNS Platform (15 slides)
-13. **PowerDNS Product Portfolio**
-    - PowerDNS Authoritative Server
-    - PowerDNS Recursor
-    - PowerDNS Admin web interface
-    - Commercial support options
-
-14. **PowerDNS Authoritative Architecture**
-    - Backend system design
-    - Database integration options
-    - API-driven management
-    - Multi-primary capabilities
-
-15. **PowerDNS Database Backends**
-    - MySQL/MariaDB integration
-    - PostgreSQL support
-    - SQLite for smaller deployments
-    - LDAP and other backends
-
-16. **PowerDNS API and Automation**
-    - RESTful API functionality
-    - Zone management automation
-    - Integration with provisioning systems
-    - Monitoring and metrics
-
-17. **PowerDNS Recursor Features**
-    - High-performance recursive resolution
-    - Lua scripting capabilities
-    - Advanced filtering options
-    - Cloud deployment optimisation
-
-### Alternative DNS Solutions (8 slides)
-18. **NSD (Name Server Daemon)**
-    - Authoritative-only design
-    - High-performance characteristics
-    - Security-focused implementation
-    - Use cases and deployment scenarios
-
-19. **Knot DNS and Knot Resolver**
-    - Modern DNS server implementation
-    - Advanced DNSSEC features
-    - High-performance resolver
-    - CZ.NIC development and support
-
-20. **Microsoft DNS Server**
-    - Windows Server integration
-    - Active Directory dependency
-    - Enterprise feature set
-    - Management and automation tools
-
-21. **Cloud DNS Services**
-    - Amazon Route 53
-    - Google Cloud DNS
-    - Cloudflare DNS
-    - Azure DNS service comparison
-
-### Practical Lab Introduction (4 slides)
-22. **Multi-Platform Workshop**
-    - BIND full configuration walkthrough
-    - Unbound resolver setup
-    - PowerDNS with database backend
-    - Performance comparison testing
+### Closing (6 slides)
+- References, knowledge check (review questions, answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -979,7 +867,7 @@
 | Module 1: DNS Foundations | 64 | 6 | 70 |
 | Module 2: DNS Operations | 52 | 6 | 58 |
 | Module 3: DNS Server Types | 54 | 6 | 60 |
-| Module 4: DNS Software Platforms | 56 | 4 | 60 |
+| Module 4: DNS Software Platforms | 51 | 6 | 57 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
 | Module 6: DNS Security | 62 | 8 | 70 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
@@ -989,9 +877,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **670** | **68** | **738** |
+| **Total Core Content** | **665** | **70** | **735** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **783** |
+| **Grand Total** | | | **780** |
 
 ---
 

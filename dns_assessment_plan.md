@@ -101,11 +101,11 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Configuration skills (Apply)
 - Architecture implementation (Apply/Analyse)
 
-**Tasks** (task 1 and part of task 4 are assessed from the Module 3 labs, tasks 2-3 from the Module 4 labs; see Appendix A of `dns_dnssec_workshop_plan.md`, `labs/module03/README.md`):
+**Tasks** (task 1 and part of task 4 are assessed from the Module 3 labs, tasks 2-3 and the rest of task 4 from the Module 4 labs; see Appendix A of `dns_dnssec_workshop_plan.md`, `labs/module03/README.md`, `labs/module04/README.md`):
 1. Configure BIND authoritative servers with a primary/secondary setup: VM 2 as a secondary for `teamNN.example` (Lab 3.3): `allow-transfer` and `also-notify` on VM 1, the transfer and NOTIFY shown in both servers' logs, the same serial with `aa` from both, and an explanation of why VM 2 is a stealth server (not in the NS set) and what Lab 3.4 showed about it (10 points). Assess before the Lab 3.4 clean-up
-2. Set up Unbound recursive resolver with forwarding (8 points)
-3. Implement PowerDNS with database backend (7 points)
-4. Test and validate all configurations: for the Module 3 part, the participant shows from VM 1's query log who queried VM 1 with a static-stub zone and with conditional forwarding (Labs 3.1-3.2) (5 points)
+2. Set up an Unbound recursive resolver with forwarding (Lab 4.2): Unbound on VM 2 next to BIND (port 5300) with `access-control`, `domain-insecure` and a stub zone for the lab TLD, then a forward zone to the lab resolver; the participant shows the same answer from Unbound and BIND, points out Unbound's query in VM 1's query log (`-E(0)DC`) and who asked VM 1 when forwarding, and explains why forwarding to the registry hands the client a referral where BIND gives SERVFAIL (8 points)
+3. Implement PowerDNS with a database backend (Lab 4.3): PowerDNS Authoritative with the SQLite backend (`gsqlite3`) on VM 1 port 5300, `teamNN.example` imported from BIND's zone file and served with `aa` (after `pdns_control rediscover`), the `zonediff.sh` migration check showing the changed HTTPS record and its fix through the API, and a record added through the API with the serial one higher (SOA-EDIT-API set to `INCREASE`); the API key made on the VM, never shown on screen or written to the kit (7 points). SQLite replaces the original MySQL: the generic SQL backends share one schema, and a database server per team would add a database password to manage
+4. Test and validate all configurations: for the Module 3 part, the participant shows from VM 1's query log who queried VM 1 with a static-stub zone and with conditional forwarding (Labs 3.1-3.2); for the Module 4 part, Unbound's answer from PowerDNS against BIND's NXDOMAIN for the API-added name, and the Lab 4.4 clean-up (nothing on port 5300, BIND as Module 3 left it) (5 points)
 
 **Assessment Criteria:**
 - Configuration accuracy and completeness
@@ -121,12 +121,15 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Technical communication (Create)
 
 **Tasks:**
-1. Compare performance characteristics of different DNS software (8 points)
-2. Recommend appropriate software for given scenarios (7 points)
-3. Document configuration differences and migration considerations (5 points)
-4. Present findings to group (5 points)
+Assessed from Lab 4.4's comparison sheet (`labs/module04/comparison-sheet.md`, one per team, with the assessor's notes) and discussion, and the deck's "Which Software Where?" exercise (Module 4 section 6).
+1. Compare the characteristics of BIND, Unbound and PowerDNS from the labs and the vendors' documentation: roles, data store, control tool, statistics, defaults, support life. Performance claims only from measurements on the participant's own servers with the set-up stated (date, versions, hardware, query file); no vendor benchmark figures (8 points)
+2. Recommend software for given scenarios (the four organisations of the exercise, or the instructor's own), naming the data path and one accepted risk (7 points)
+3. Document configuration differences (the BIND and Unbound side-by-side table) and migration considerations (the HTTPS import finding, AXFR or absolute-name import, comparing answers before moving the delegation) (5 points)
+4. Answer the Lab 4.4 discussion question to the group: which software for a zone the participant runs, and what to test before switching (about one minute per team, at the end of Lab 4.4) (5 points)
 
 #### Knowledge Check 2: Infrastructure Quiz (15 minutes)
+**Timing:** the last 15 minutes of Day 2 Session 3 (Module 4 theory: 75 minutes of content, then the quiz on paper; the questions are not in the deck)
+**Question bank:** `assessment/knowledge-check-2.md` (12 questions, two variants each; the instructor picks one of each). **Answer key:** `assessment/instructor/knowledge-check-2-key.md`, not handed out; the repository is public, so for a graded paper the instructor also changes names or addresses in some questions. Pass: 9 of 12
 **Assessment Type:** Scenario-based questions
 **Focus Areas:**
 - DNS server roles and relationships
