@@ -229,7 +229,7 @@ step vm2 "3.3.7 both servers answer aa with the same serial" \
     '^both-aa-same-serial$'
 step vm2 "3.3.8 the secondary's file is in raw format (not text)" "named-compilezone -f raw -F text -o - team01.example /var/cache/bind/db.team01.example 2>/dev/null | grep SOA; head -c 200 /var/cache/bind/db.team01.example | grep -ac 'IN[[:space:]]SOA'; stat -c '%U %a' /var/cache/bind/db.team01.example" \
     'team01\.example\..*SOA.*2026102701' '^0$' '^bind 644$'
-on vm1 "sed -i -e 's/2026102701 ; serial/2026102702 ; serial/' \"$Z\" && echo 'app     IN A     192.0.2.84' >> \"$Z\""
+on vm1 "sed -i -e 's/2026102701 ; serial/2026102702 ; serial/' \"$Z\" && echo 'lab33   IN A     192.0.2.84' >> \"$Z\""
 step vm1 "3.3.9 a change on VM 1: reload, NOTIFY to VM 2" \
     "named-checkzone team01.example $Z && rndc reload team01.example && waitlog 'AXFR-style IXFR ended: .*serial 2026102702'; grep -E 'notif|transfer of' /var/log/named.out | tail -5" \
     'loaded serial 2026102702' 'zone team01\.example/IN: sending notify to 192\.0\.2\.10#53' \
@@ -238,7 +238,7 @@ step vm2 "3.3.10 VM 2: notify received, new serial transferred" "waitlog 'transf
     'zone team01\.example/IN: notify from 192\.0\.2\.30#[0-9]+: serial 2026102702' 'zone team01\.example/IN: transferred serial 2026102702'
 q7=$(queries)
 step vm2 "3.3.11 the resolver on VM 2 answers the team's names from its own copy (aa)" \
-    "dig @127.0.0.1 app.team01.example" 'status: NOERROR' 'flags: qr aa rd ra;' '192\.0\.2\.84'
+    "dig @127.0.0.1 lab33.team01.example" 'status: NOERROR' 'flags: qr aa rd ra;' '192\.0\.2\.84'
 q8=$(queries); log "VM 1 query-log lines before and after: $q7 $q8"
 if [ "$q7" = "$q8" ]; then ok "3.3.11b no query reached VM 1"; else bad "3.3.11b no query reached VM 1 ($q7 -> $q8)"; fi
 
