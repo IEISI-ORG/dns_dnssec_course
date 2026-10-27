@@ -3,5 +3,7 @@
 // and include the key file at the top level of named.conf.local:
 //   include "/etc/bind/teamNN-xfr.key";
 // Use your resolver's address from the lab sheet in place of 192.0.2.10.
+// Module 3 Lab 3.4 removed its address-only allow-transfer and also-notify
+// lines; delete them first if they are still there (one of each per zone).
         allow-transfer { key "teamNN-xfr"; };
         also-notify { 192.0.2.10 key "teamNN-xfr"; };

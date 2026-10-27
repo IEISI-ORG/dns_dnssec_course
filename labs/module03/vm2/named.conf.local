@@ -1,0 +1,9 @@
+// Module 3, VM 2 (the resolver): /etc/bind/named.conf.local (Lab 3.1).
+// The lab TLD example. is not in the real root: send the iterative queries
+// for it straight to the instructor's registry, an authoritative server
+// (lab sheet address; 192.0.2.53 on the slides). Module 6 Lab 6.1 installs
+// the same zone, and Module 7 Lab 7.3 keeps it.
+zone "example" {
+    type static-stub;
+    server-addresses { 192.0.2.53; };
+};

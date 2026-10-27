@@ -1,0 +1,16 @@
+// Module 3, VM 2 (the resolver): replaces /etc/bind/named.conf.options
+// (Lab 3.1). Debian's file sets only "directory"; the next three settings
+// are BIND 9.20's defaults, written out because Module 3 talks about them.
+// Module 6 Lab 6.1 replaces this file with a hardened one.
+options {
+    directory "/var/cache/bind";
+
+    recursion yes;                               // default
+    allow-recursion { localnets; localhost; };   // default: this host and its own subnets
+    dnssec-validation auto;                      // default: the built-in root trust anchor (Module 7)
+
+    // The lab TLD example. is not in the real root, so validation would
+    // fail for every lab name. No validation at or below example.; Module 7
+    // (Lab 7.3) replaces this line with a trust anchor for example.
+    validate-except { "example"; };
+};

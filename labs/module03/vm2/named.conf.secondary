@@ -1,0 +1,11 @@
+// Module 3, Lab 3.3: VM 2 as a secondary for teamNN.example. Add to
+// /etc/bind/named.conf.local on VM 2 and set NN. VM 2 is not in the
+// zone's NS set (a stealth server, RFC 1996; RFC 2182 section 5.1), so VM 1
+// must name it in also-notify (vm1/zone-transfer.snippet).
+// Lab 3.4 removes this zone and its file again: Module 6 Lab 6.4 builds a
+// TSIG-protected secondary, and Module 7 needs VM 2 as a resolver only.
+zone "teamNN.example" {
+    type secondary;
+    primaries { 192.0.2.30; };                 // VM 1 (lab sheet address)
+    file "/var/cache/bind/db.teamNN.example";  // AppArmor lets named write here
+};

@@ -1,0 +1,23 @@
+// Module 3, Lab 3.2: in /etc/bind/named.conf.local on VM 2, replace the
+// static-stub zone "example" with one of these at a time, then run
+// "named-checkconf", "sudo rndc reconfig" and "sudo rndc flush" (without
+// the flush the next answer may come from the cache). Put the static-stub
+// zone back at the end of the lab.
+
+// (a) Conditional forwarding to a resolver: the Module 1 lab resolver
+//     (lab sheet address; 192.0.2.55 on the slides) resolves for you.
+zone "example" {
+    type forward;
+    forward only;
+    forwarders { 192.0.2.55; };
+};
+
+// (b) The same, pointed at the registry. It is an authoritative-only
+//     server, so it answers with a referral, which a forwarder must not do:
+//     expect SERVFAIL and "non-improving referral" in the log.
+//     forwarders { 192.0.2.53; };
+
+// (c) A forwarder that does not answer: the unused address on your lab
+//     sheet (192.0.2.250 on the slides). With "forward only" there is no
+//     fallback: expect SERVFAIL after a timeout.
+//     forwarders { 192.0.2.250; };

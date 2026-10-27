@@ -971,7 +971,7 @@ If something behaves unexpectedly, stop the load and ask the instructor.
 ## Lab 6.4: TSIG-Protected Zone Transfer (20 min)
 
 1. On the authoritative VM: `sudo sh -c 'umask 077; tsig-keygen -a hmac-sha256 teamNN-xfr > /etc/bind/teamNN-xfr.key'`; `sudo chown root:bind /etc/bind/teamNN-xfr.key; sudo chmod 640 /etc/bind/teamNN-xfr.key`
-2. Include the key in `named.conf.local`; add the two lines from `auth/zone-tsig.snippet` to your zone; check, `rndc reconfig`
+2. Include the key in `named.conf.local`; add the two lines from `auth/zone-tsig.snippet` to your zone (Module 3 Lab 3.4 removed its address-only lines); check, `rndc reconfig`
 3. Copy the key to the resolver VM: `sudo cat /etc/bind/teamNN-xfr.key | ssh <resolver> 'sudo sh -c "umask 077; cat > /etc/bind/teamNN-xfr.key; chown root:bind /etc/bind/teamNN-xfr.key; chmod 640 /etc/bind/teamNN-xfr.key"'`. On the resolver, **as root**: `sudo dig @<auth VM> teamNN.example AXFR` with no key, with `-k /etc/bind/teamNN-xfr.key`, with a second key of the same name (`tsig-keygen teamNN-xfr > wrong.key`) and with a key of another name (`tsig-keygen teamNN-other > other.key`)
 4. Add `resolver/named.conf.secondary` to the resolver's `named.conf.local`; reconfigure; read `xfer-in` in its `security.log`
 5. On the authoritative VM: add a record, raise the serial, `rndc reload teamNN.example`; watch the NOTIFY and the new transfer arrive
