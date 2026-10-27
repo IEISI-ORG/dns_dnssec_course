@@ -67,7 +67,8 @@ checked with `named-checkconf` only), and the Unbound forwarder sends from
 
 2026-10-21 on Debian 13 packages: bind9 9.20.29-1~deb13u1, unbound
 1.26.1-0+deb13u1, knot-dnsutils and knot 3.4.6-2, openssl 3.5.7, curl 8.14.1,
-tcpdump 4.99.5, tshark 4.4.19. The transcripts are kept in the instructor's notes, not in this repository.
+tcpdump 4.99.5, tshark 4.4.19. Re-run 2026-10-27 with bind9 1:9.20.30-1~deb13u1
+and unbound 1.26.2-0+deb13u1: every lab step gave the expected result. The transcripts are kept in the instructor's notes, not in this repository.
 
 Not tested: the `systemctl` steps on real VMs; Debian 12 (BIND 9.18, Unbound
 1.17); DNR (DHCP option 162/144), which is discussion only.
