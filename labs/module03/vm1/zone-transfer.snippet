@@ -1,0 +1,7 @@
+// Module 3, Lab 3.3: add these two lines inside the existing
+//   zone "teamNN.example" { type primary; file "/var/lib/bind/db.teamNN.example"; };
+// in /etc/bind/named.conf.local on VM 1, with VM 2's address from the lab
+// sheet. Lab 3.4 removes them again (Module 6 Lab 6.4 replaces them with
+// TSIG-protected lines).
+        allow-transfer { 192.0.2.10; };   // BIND 9.20's default is none
+        also-notify { 192.0.2.10; };      // VM 2 is not in the NS set
