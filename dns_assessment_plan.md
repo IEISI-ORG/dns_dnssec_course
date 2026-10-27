@@ -212,6 +212,7 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 
 #### Knowledge Check 4: Security and Privacy Quiz (20 minutes)
 **Assessment Type:** Technical scenarios and analysis
+**Question bank:** `assessment/knowledge-check-4.md` (12 questions, two variants each; the instructor picks one of each). **Answer key:** `assessment/instructor/knowledge-check-4-key.md`, not handed out; the repository is public, so for a graded paper the instructor also changes names or numbers in some questions. Pass: 9 of 12 (75%, the Security Specialist threshold). The security best practices questions also draw on Module 6, because Day 3 has no quiz
 **Topics:**
 - DNSSEC validation chain
 - Key rollover procedures
