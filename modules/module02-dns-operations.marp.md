@@ -697,7 +697,7 @@ $ dig @192.0.2.55 -x 2001:db8:1::81 \
  example.org                  public names: www, mail, SPF/DKIM/DMARC   your primary + two secondaries
    ├─ eng.example.org         delegated: engineering runs its own servers
    ├─ shop.example.org        CNAME or HTTPS alias to a provider's name
-   └─ internal names          split horizon (Module 3): never on the public servers
+   └─ internal names          split horizon (Module 5): never on the public servers
  reverse: 2.0.192.in-addr.arpa, 1.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa   delegated to you by your RIR or ISP
 ```
 
