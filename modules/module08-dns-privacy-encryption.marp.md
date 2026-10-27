@@ -811,7 +811,7 @@ TLS itself keeps moving: TLS 1.3 is now RFC 9846 (July 2026), new TLS protocols 
 <!-- _class: dense -->
 ## Lab 8.3: Forward over TLS with Unbound (15 min)
 
-1. On the client: copy `ca.crt` to `/etc/unbound/team-ca.crt` and `module08-forward.conf` to `/etc/unbound/unbound.conf.d/`; set `NN` and the resolver address. (After `apt install unbound` the service shows as failed: BIND owns port 53 on this VM. That is expected until step 2.)
+1. On the client: copy `ca.crt` to `/etc/unbound/team-ca.crt` and `module08-forward.conf` to `/etc/unbound/unbound.conf.d/`; set `NN` and the resolver address. (Unbound is in the VM image since Module 4, disabled. If you installed it with `apt install unbound`, the service shows as failed: BIND owns port 53 on this VM. That is expected until step 2.)
 2. `sudo unbound-checkconf` and `sudo systemctl restart unbound`
 3. `dig @127.0.0.1 -p 5300 www.teamNN.example`
 4. Capture on the client: only TCP 853 leaves the VM; Unbound's queries are 147 octets on the wire (padded)
