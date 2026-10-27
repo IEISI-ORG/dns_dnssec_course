@@ -612,7 +612,7 @@ dnssec-policy "standard" {
 
 zone "team1.example" {
     type primary;
-    file "db.team1.example";
+    file "/var/lib/bind/db.team1.example";
     dnssec-policy "standard";
 };
 ```
