@@ -66,11 +66,11 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Record type implementation (Apply)
 - DNS data management (Apply/Analyse)
 
-**Tasks:**
-1. Create complete zone file for assigned domain with all record types (10 points)
-2. Implement reverse DNS configuration (5 points)
-3. Configure email-related DNS records (SPF, DKIM, DMARC) (5 points)
-4. Validate zone file syntax and troubleshoot errors (5 points)
+**Tasks** (assessed from the Module 2 labs; see Appendix A of `dns_dnssec_workshop_plan.md` and `labs/module02/README.md`):
+1. Write `teamNN.example` with every record type of Lab 2.1 (A, AAAA, CNAME, MX, CAA, HTTPS, SRV) and load it on VM 1: `named-checkzone` OK with no warnings, `aa` from VM 1, NOERROR through the lab resolver, the registry's NS and glue matching the zone (10 points)
+2. Implement reverse DNS: `2.0.192.in-addr.arpa` and the team's `ip6.arpa` zone, PTR records that match the forward data (Lab 2.2) (5 points)
+3. Configure the email records: MX, SPF, a null MX for a name that takes no mail, DKIM (key made on VM 1, published as split strings, read back unchanged) and DMARC (Lab 2.4) (5 points)
+4. Validate and troubleshoot: name and fix the seven mistakes in `broken/db.broken.example` until it passes `named-checkzone -k fail` with no warnings (Lab 2.2) (5 points). The file and its answers are public in the course repository (kit, presenter notes, harness), so the task is assessed by observation, not by the result alone: the participant shows each `named-checkzone` pass and explains each mistake and its fix in their own words
 
 **Assessment Criteria:**
 - Syntax accuracy and completeness
@@ -79,6 +79,7 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Best practice implementation
 
 #### Knowledge Check 1: DNS Fundamentals Quiz (15 minutes)
+**Timing:** the last 15 minutes of Session 3 on Day 1, which is the Module 2 theory session; the Module 2 deck reserves them in its agenda. The quiz is handed out on paper and is not in the deck. Question bank: `assessment/knowledge-check-1.md` (two variants per question; the instructor picks one of each). Answer key: `assessment/instructor/knowledge-check-1-key.md`, not handed out; the repository is public, so for a graded paper the instructor also changes names or numbers in some questions
 **Assessment Type:** Multiple choice and short answer
 **Question Categories:**
 - DNS hierarchy and delegation (5 questions)
