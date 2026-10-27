@@ -1,15 +1,23 @@
 #!/bin/bash
 # make-example-zone: write the unsigned example. zone (db.example) from
 #   - the teams file: one "NN address" line per team (teamNN.example and
-#     manualNN.example are delegated to that address), and
+#     manualNN.example are delegated to that address),
+#   - DOQ_ADDR and M01_CHILD_ADDR, when set: the Module 8 DoQ demo and the
+#     Module 1 lab zones (fault zone names from M01_FAULT_LABELS), and
 #   - ds/*.ds: the DS records published so far (publish-ds, lab-init).
 # named signs it with the lab policy (inline signing); run `rndc reload
 # example` afterwards if named is already running.
+# LAB_STATE (default /var/lib/lab) is for tests: build into another directory.
 set -euo pipefail
 : "${PARENT_ADDR:?set PARENT_ADDR in .env}"
-S=/var/lib/lab
+S=${LAB_STATE:-/var/lib/lab}
 TEAMS=${TEAMS_FILE:-/etc/lab-classroom/teams.conf}
-ipv4='^([0-9]{1,3}\.){3}[0-9]{1,3}$'
+ipv4='^((25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])$'
+if [ -n "${M01_CHILD_ADDR:-}" ]; then
+    [[ $M01_CHILD_ADDR =~ $ipv4 ]] || { echo "make-example-zone: bad M01_CHILD_ADDR: $M01_CHILD_ADDR" >&2; exit 1; }
+    . /opt/lab/bin/m01-labels
+    m01_labels || exit 1
+fi
 
 # The serial must grow on every rewrite, even twice in one second.
 prev=$(cat "$S/serial" 2>/dev/null || true)
@@ -32,6 +40,27 @@ trap 'rm -f "$tmp"' EXIT
         echo "doq       NS  ns1.doq.example."
         echo "ns1.doq   A   $DOQ_ADDR"
     fi
+    if [ -n "${M01_CHILD_ADDR:-}" ]; then
+        # Module 1 lab hierarchy, served by the m01 child server: good is
+        # correct; one fault per zone for Lab 1.3 (labels: m01-labels);
+        # 198.51.100.0/24 (TEST-NET-2) has no server.
+        n=$M01_L_NOTSERVED d=$M01_L_DEAD g=$M01_L_GLUE m=$M01_L_NSSET
+        echo "; Module 1 lab zones"
+        echo "good        NS  ns1.good.example."
+        echo "ns1.good    A   $M01_CHILD_ADDR"
+        echo "$n NS ns1.$n.example."
+        echo "ns1.$n A $M01_CHILD_ADDR"
+        echo "$d NS ns1.$d.example."
+        echo "ns1.$d A 198.51.100.53"
+        echo "$g NS ns1.$g.example."
+        echo "$g NS ns2.$g.example."
+        echo "ns1.$g A $M01_CHILD_ADDR"
+        echo "ns2.$g A 198.51.100.54"
+        echo "$m NS ns1.$m.example."
+        echo "$m NS ns2.$m.example."
+        echo "ns1.$m A $M01_CHILD_ADDR"
+        echo "ns2.$m A $M01_CHILD_ADDR"
+    fi
     echo "; teams"
     teams=" "
     while IFS= read -r line || [ -n "$line" ]; do
@@ -42,6 +71,10 @@ trap 'rm -f "$tmp"' EXIT
             exit 1
         fi
         teams+="$nn "
+        # a team VM on an instructor address breaks that team's delegation
+        for v in PARENT_ADDR DOQ_ADDR M01_ROOT_ADDR M01_CHILD_ADDR M01_RESOLVER_ADDR; do
+            [ "${!v:-}" != "$addr" ] || echo "make-example-zone: warning: team $nn uses $v ($addr)" >&2
+        done
         for z in team manual; do
             echo "$z$nn    NS  ns1.$z$nn.example."
             echo "ns1.$z$nn A   $addr"

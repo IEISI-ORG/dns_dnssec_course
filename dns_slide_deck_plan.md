@@ -3,127 +3,47 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~745 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~770 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
 
 ## Module 1: Introduction to DNS - Foundations and Concepts
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 45-50
+**Slides:** 70 (64 theory, 6 lab); deck: `modules/module01-dns-foundations.marp.md`
 
-### Opening & Course Introduction (10 slides)
-1. **Welcome & Introductions**
-   - Course overview and objectives
-   - Instructor credentials and experience
-   - Participant introductions and expectations
+### Opening (9 slides)
+- Title; welcome (instructor, participant introductions, venue placeholders for the instructor to fill in); the course (12 modules over Days 1-7, shorter programmes); how each day runs (daily schedule, assessment from Program Facts); the lab VMs for the week
+- Module overview, learning objectives
+- What changed recently: RFC 9499 terminology (BCP 219, 2024); TCP MUST (RFC 7766, RFC 9210); glue MUST (RFC 9471); b.root-servers.net renumbered 27 November 2023; IANA stewardship transition 1 October 2016 (PTI)
+- Agenda (theory and lab)
 
-2. **Course Structure & Logistics**
-   - Modular program overview (6 days + Day 7 Final Project)
-   - Daily schedule and breaks
-   - Assessment methodology and certification paths
+### 1. From HOSTS.TXT to the DNS (5 slides)
+- Names before the DNS (RFC 608, RFC 952, RFC 1034 §2.1); the design (RFC 882/883, RFC 1034/1035 STD 13, design goals); a sourced timeline; other ways hosts find names (`/etc/hosts` and nsswitch, mDNS, LLMNR)
 
-3. **Learning Objectives for Module 1**
-   - Knowledge, comprehension, application, and analysis goals
-   - Bloom's taxonomy alignment
+### 2. The Namespace (8 slides)
+- Tree of labels and size limits (RFC 1035 §2.3.4, RFC 4343); FQDNs, trailing dot, search lists; TLD types with IANA counts as of 22 October 2026; IDNA2008 A-labels; special-use names; domains and zones; delegation and glue (RFC 9471; in-domain, sibling, unrelated; RFC 1034 §4.2.2)
 
-### DNS History & Evolution (8 slides)
-4. **The Pre-DNS Era**
-   - HOSTS.TXT file limitations
-   - Centralised management problems
-   - Scalability challenges
+### 3. Records, Servers and Caching (6 slides)
+- Resource records and RRsets; A, AAAA, NS, SOA, CNAME as a preview (Module 2 owns the details); server roles (RFC 9499; primary/secondary); caching and TTL; the stub resolver on Debian 13
 
-5. **Birth of DNS (1980s)**
-   - Paul Mockapetris and RFC 882/883
-   - Distributed naming system concept
-   - Early implementation challenges
+### 4. Resolution (9 slides)
+- Resolution walk-through; recursive and iterative queries; a real referral line by line; walking the lab hierarchy by hand; `dig +trace` and its limits; the root server system (anycast, instance identity, instances as of a date); root hints and priming (RFC 9609, current IANA root hints); what the resolver remembers
 
-6. **DNS Evolution Timeline**
-   - Key RFC milestones
-   - Technology advancement integration
-   - Modern DNS ecosystem development
+### 5. The DNS Message (7 slides)
+- Message format (RFC 1035 §4.1); header flags; RCODEs, NODATA and EDE (pointer); reading `dig` output; UDP, TCP, EDNS(0) and truncation (lab output); IPv6 (AAAA, ip6.arpa, root service over IPv6)
 
-### DNS Fundamentals (15 slides)
-7. **What is DNS?**
-   - Domain Name System definition
-   - Primary purpose and functions
-   - Internet infrastructure role
+### 6. Who Runs the DNS (7 slides)
+- The map; ICANN and IANA/PTI; changing the root zone (RSSAC037 roles; root signed since 15 July 2010); root server operators and RSSAC; registries, registrars, resellers, registrants, DNS operators (Module 9 terms); RIRs and reverse DNS
 
-8. **DNS Namespace Hierarchy**
-   - Tree structure visualisation
-   - Root domain concept
-   - Top-level domains (TLDs)
-   - Second-level and subdomain organisation
+### 7. Tools and a Debugging Method (7 slides)
+- Tools and their Debian 13 packages; `dig` options; `host` and `nslookup`; a seven-step debugging method; delegation faults and their evidence; worked example: the participant's own zone on Day 1 (connection refused)
 
-9. **DNS Components Overview**
-   - Domain names and labels
-   - Zones vs domains
-   - Name servers and resolvers
-   - Resource records introduction
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (Day 1 topology, lab hierarchy), online or offline, Labs 1.1-1.3 (walk the hierarchy, read the response, debug a delegation)
 
-10. **The DNS Resolution Process**
-    - Step-by-step resolution walkthrough
-    - Recursive vs iterative queries
-    - Caching mechanisms
-
-### DNS Stakeholder Ecosystem (8 slides)
-11. **ICANN and Internet Governance**
-    - ICANN's role and responsibilities
-    - Policy development process
-    - Multi-stakeholder model
-
-12. **IANA Functions**
-    - Root zone management
-    - Number resource allocation
-    - Protocol parameter assignment
-
-13. **Root Server Operators**
-    - 13 root server system
-    - Anycast deployment
-    - Operational responsibilities
-
-14. **TLD Operators and Registries**
-    - Generic TLD (gTLD) operators
-    - Country code TLD (ccTLD) managers
-    - Registry operational model
-
-15. **Registrars and Resellers**
-    - Registrar accreditation process
-    - Customer interface role
-    - Reseller channel model
-
-### Technical Deep Dive (10 slides)
-16. **DNS Query Types**
-    - Recursive queries
-    - Iterative queries
-    - Query flags and response codes
-
-17. **IPv4 vs IPv6 in DNS**
-    - A records vs AAAA records
-    - Dual-stack considerations
-    - IPv6 transition challenges
-
-18. **DNS and Network Protocols**
-    - UDP and TCP: TCP support is mandatory (RFC 7766, RFC 9210)
-    - EDNS(0) and response size (RFC 6891); avoiding IP fragmentation (RFC 9715)
-    - Port 53 significance
-    - Protocol selection criteria
-
-### Practical Lab Introduction (4 slides)
-19. **Lab Environment Overview**
-    - Virtual machine setup
-    - Network topology
-    - Available tools and software
-
-20. **DNS Lookup Tools Introduction**
-    - dig command basics
-    - nslookup usage
-    - host command overview
-
-21. **Lab Exercises Preview**
-    - DNS hierarchy exploration
-    - Query tracing with dig +trace
-    - Response analysis workshop
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1227,7 +1147,7 @@
 
 | Module | Theory Slides | Lab Intro | Total |
 |--------|---------------|-----------|-------|
-| Module 1: DNS Foundations | 41 | 4 | 45 |
+| Module 1: DNS Foundations | 64 | 6 | 70 |
 | Module 2: DNS Operations | 45 | 5 | 50 |
 | Module 3: DNS Server Types | 50 | 5 | 55 |
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
@@ -1240,9 +1160,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **636** | **64** | **700** |
+| **Total Core Content** | **659** | **66** | **725** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **745** |
+| **Grand Total** | | | **770** |
 
 ---
 

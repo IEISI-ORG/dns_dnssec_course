@@ -4,6 +4,7 @@ Configs, scripts and EPP frames used to test each module's labs. Each kit's READ
 
 | Kit | Module | Contents |
 |-----|--------|----------|
+| `module01/` | 1: Introduction to DNS | Day 1 topology, online and offline paths, rehearsal harness for Labs 1.1-1.3 (stand-in participant VM against the instructor stack's `m01` profile; the Lab 1.3 answer key is in `instructor/module01/`) |
 | `module06/` | 6: DNS security fundamentals | Hardened BIND options for the authoritative and resolver VMs, security logging, TSIG and RPZ snippets, the instructor's RPZ feed, `dns-signs.sh` capture summary, rehearsal harness |
 | `module07/` | 7: DNSSEC implementation | BIND authoritative and validating-resolver configs, Unbound resolver config, team and broken zones |
 | `module08/` | 8: DNS privacy and encryption | `make-certs.sh` for the lab CA and resolver certificate, BIND DoT/DoH/padding and Unbound forward-tls snippets, DDR records, rehearsal harness |
