@@ -1,0 +1,2 @@
+{"rrsets": [{"name": "api.teamNN.example.", "type": "A", "ttl": 60, "changetype": "REPLACE",
+  "records": [{"content": "192.0.2.85", "disabled": false}]}]}

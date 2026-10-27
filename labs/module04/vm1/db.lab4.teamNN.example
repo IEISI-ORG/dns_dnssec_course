@@ -1,0 +1,8 @@
+; /var/lib/bind/db.lab4.teamNN.example: a zone added to the running BIND
+; with rndc addzone (Module 4, Lab 4.1 step 5) and deleted again with
+; rndc delzone -clean. Set the team number with sed.
+$TTL 60
+@       IN SOA  ns1.teamNN.example. hostmaster.teamNN.example. (
+                2026102801 3600 600 1209600 60 )
+        IN NS   ns1.teamNN.example.
+www     IN A    192.0.2.80

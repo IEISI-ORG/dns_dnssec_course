@@ -1,0 +1,2 @@
+{"rrsets": [{"name": "teamNN.example.", "type": "HTTPS", "ttl": 60, "changetype": "REPLACE",
+  "records": [{"content": "0 www.teamNN.example.", "disabled": false}]}]}
