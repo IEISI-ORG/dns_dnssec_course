@@ -349,7 +349,7 @@ Debian's defaults, queried from a neighbouring team's VM on the same lab subnet:
 $ dig @192.0.2.30 www.team01.example      # the authoritative VM
 ;; flags: qr aa rd ra; ...                    # ra: recursion offered
 $ dig @192.0.2.30 version.bind TXT CH +short
-"9.20.29-1~deb13u1-Debian"
+"9.20.30-1~deb13u1-Debian"
 ```
 
 After the Module 6 configuration (the VM still answers for its own zone, `qr aa rd`):
