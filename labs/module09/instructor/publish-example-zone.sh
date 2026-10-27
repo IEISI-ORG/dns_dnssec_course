@@ -4,6 +4,7 @@
 # file the instructor's BIND loads for example. (the Module 7 parent, signed
 # inline by dnssec-policy), set the TTL to the lab value and reload.
 # Tested 2026-10-21: Namingo v1.0.34 writer + BIND 9.20.29.
+# Re-tested 2026-10-27 on BIND 9.20.30 with a stand-in for the writer's output.
 #   SRC=/var/lib/bind/example.zone DST=/var/lib/bind/db.example TTL=60 ./publish-example-zone.sh
 # Why the TTL edit: the writer always writes "$TTL 3600"; the lab policy has
 # max-zone-ttl 300 (named refuses the zone otherwise: "TTL 3600 exceeds

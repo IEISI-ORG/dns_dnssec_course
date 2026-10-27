@@ -129,7 +129,9 @@ It needs, in `PATH`: `unshare`, `nsenter`, `ip`, BIND 9.20 (`named`, `rndc`,
 
 2026-10-21 on Debian 13 packages: bind9, bind9-utils, bind9-dnsutils and
 bind9-libs 1:9.20.29-1~deb13u1 (trixie-security), dnsperf 2.14.0-5,
-tcpdump 4.99.5, tshark 4.4.19. The `validate-except` behaviour was checked
+tcpdump 4.99.5, tshark 4.4.19. Re-run 2026-10-27 with 1:9.20.30-1~deb13u1
+(DSA-6576-1, an RPZ crash fix, CVE-2026-97313): every lab step gave the
+expected result. The `validate-except` behaviour was checked
 separately with Internet access (the namespace connected through
 `slirp4netns`): without the line `www.team01.example` gave SERVFAIL, with it
 NOERROR, while `isc.org` validated (AD) and `dnssec-failed.org` gave SERVFAIL.

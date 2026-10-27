@@ -980,7 +980,7 @@ All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 st
 
 ## Module 6: DNS Security Fundamentals - Lab Requirements
 
-All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-utils, bind9-dnsutils 9.20.29 from trixie-security, dnsperf 2.14.0, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace with no route out (`labs/module06/test/rehearse.sh`). Lab kit: `labs/module06/`.
+All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-utils, bind9-dnsutils 9.20.29 from trixie-security, dnsperf 2.14.0, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace with no route out (`labs/module06/test/rehearse.sh`). Re-run 2026-10-27 with bind9 9.20.30 (DSA-6576-1): same lab results. Lab kit: `labs/module06/`.
 
 ### Lab Environment Setup
 - **Participant VMs:** the two Debian 13 VMs used again in Modules 7 and 8: the authoritative server for `teamNN.example` (also the client) and the BIND 9.20 resolver
@@ -1041,7 +1041,7 @@ All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-uti
 
 ## Module 7: DNSSEC Implementation - Lab Requirements
 
-All steps below were tested on BIND 9.20.29 and Unbound 1.26.1 (Debian 13 packages).
+All steps below were tested on BIND 9.20.29 and Unbound 1.26.1 (Debian 13 packages), and re-run on 2026-10-27 with BIND 9.20.30 and Unbound 1.26.2: same lab results.
 
 ### Lab Environment Setup
 - **Participant VMs:** 2 Debian 13 VMs per participant: an authoritative server for `teamNN.example` and `manualNN.example`, and a validating resolver
@@ -1119,7 +1119,7 @@ Lab zone files use `$TTL 60` to match `max-zone-ttl`. With this policy (measured
 
 ## Module 8: DNS Privacy and Encryption - Lab Requirements
 
-All steps below were run on 2026-10-21 with Debian 13 packages (bind9 9.20.29, unbound 1.26.1, knot-dnsutils 3.4.6, openssl 3.5.7, curl 8.14.1, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace that put the lab addresses on one loopback. Lab kit: `labs/module08/` (certificate script, BIND and Unbound snippets, DDR zone, and the rehearsal harness `test/rehearse.sh`).
+All steps below were run on 2026-10-21 with Debian 13 packages (bind9 9.20.29, unbound 1.26.1, knot-dnsutils 3.4.6, openssl 3.5.7, curl 8.14.1, tcpdump 4.99.5, tshark 4.4.19), inside an unprivileged user and network namespace that put the lab addresses on one loopback. Re-run 2026-10-27 with bind9 9.20.30 and unbound 1.26.2: same lab results. Lab kit: `labs/module08/` (certificate script, BIND and Unbound snippets, DDR zone, and the rehearsal harness `test/rehearse.sh`).
 
 ### Lab Environment Setup
 - **Participant VMs:** the two Debian 13 VMs from Module 7: the BIND 9.20 validating resolver (gets DoT, DoH and DDR) and the authoritative server for `teamNN.example` (used as the client)

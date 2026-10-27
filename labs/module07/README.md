@@ -1,6 +1,6 @@
 # Module 7 lab configs (DNSSEC implementation)
 
-The configs used to run every Module 7 command and lab step, tested on 2026-10-19 with BIND 9.20.29 and Unbound 1.26.1 (Debian 13 packages from trixie-security). All paths assume the kit is unpacked at `/srv/dnslab/module07` (`env.sh` sets `$L` to that path). rndc.key, private keys, signed zones and logs are not kept: generate them on the lab server.
+The configs used to run every Module 7 command and lab step, tested on 2026-10-19 with BIND 9.20.29 and Unbound 1.26.1 (Debian 13 packages from trixie-security). Re-run 2026-10-27 with BIND 9.20.30 and Unbound 1.26.2: Labs 7.1-7.4, including both rollovers, gave the expected results. All paths assume the kit is unpacked at `/srv/dnslab/module07` (`env.sh` sets `$L` to that path). rndc.key, private keys, signed zones and logs are not kept: generate them on the lab server.
 
 - `env.sh`: sets `$L`, the kit root used in the lab commands.
 - `auth/`: authoritative server on 127.0.0.1:5300. Holds `example.` (the lab "registry") and the team zones under the `lab` dnssec-policy.
