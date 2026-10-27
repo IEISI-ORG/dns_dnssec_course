@@ -1,0 +1,10 @@
+// Module 4, VM 2: BIND's statistics channel (Lab 4.1).
+// Save a copy of /etc/bind/named.conf.local first (named.conf.local.m03),
+// then append this file to it (a top-level statement, outside any zone);
+// named-checkconf and sudo rndc reconfig. Read it with
+// curl -s http://127.0.0.1:8053/json/v1/server | jq ...
+// Only this host may connect. Lab 4.4 moves the saved copy back, which
+// removes it and keeps your own edits (lab-sheet addresses).
+statistics-channels {
+    inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+};

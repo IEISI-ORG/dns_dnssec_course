@@ -739,8 +739,8 @@ Rehearsed 28 October 2026 (3.2.1-3.2.7): step 2 NOERROR 192.0.2.82; VM 1's journ
 2. Add `vm2/named.conf.secondary` (with your `NN`) to VM 2's `named.conf.local`; check; reconfigure. Read VM 2's journal, then VM 1's: what do they say?
 3. On VM 1: add the two lines of `vm1/zone-transfer.snippet` inside your zone statement; check; reconfigure. On VM 2: `sudo rndc retransfer teamNN.example`; journal; `sudo rndc zonestatus teamNN.example`
 4. `dig @192.0.2.10 teamNN.example SOA +norec` and the same at 192.0.2.30: flags and serial
-5. On VM 1: add `app IN A 192.0.2.84`, raise the serial, `named-checkzone`, `sudo rndc reload teamNN.example`. In both journals: the NOTIFY, and IXFR or AXFR?
-6. On VM 2: `dig @127.0.0.1 app.teamNN.example`: flags? Did VM 1's query log see it?
+5. On VM 1: add `lab33 IN A 192.0.2.84` (a new name: Module 2 already has `app`), raise the serial, `named-checkzone`, `sudo rndc reload teamNN.example`. In both journals: the NOTIFY, and IXFR or AXFR?
+6. On VM 2: `dig @127.0.0.1 lab33.teamNN.example`: flags? Did VM 1's query log see it?
 
 > **Checkpoint:** VM 1 logs `sending notify to` VM 2 and the transfer; VM 2 logs `transferred serial` with your new serial; both answer the SOA with `aa` and the same serial (Practical Assessment 2A, task 1)
 

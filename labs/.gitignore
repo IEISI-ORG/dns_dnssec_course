@@ -9,6 +9,13 @@ secrets/
 *.jnl
 *.log
 *.pid
+# PowerDNS API key (Module 4), databases and BIND's new-zone database
+api-key.conf
+pdns-api.hdr
+*.sqlite
+*.sqlite3
+*.nzd
+*.nzd-lock
 # instructor stack: per-classroom settings and generated files
 instructor/.env
 instructor/classroom/teams.conf
