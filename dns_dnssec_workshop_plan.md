@@ -216,53 +216,49 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 3: DNS Server Types - Recursive, Authoritative, and Specialised Roles
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module03-dns-server-types.marp.md` (60 slides: 54 theory, 6 lab). Day 2 Session 1, so no knowledge-check slot (Knowledge Check 2 closes Module 4's Session 3). Lab kit: `labs/module03/`; lab servers: the instructor stack's registry and the `m01` profile's lab resolver, kept on through Day 2.
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall the different types of DNS servers and their functions
-- Identify the components of DNS infrastructure architecture
-- List DNS server deployment patterns
+- Recall the server roles of RFC 9499: primary, secondary, stealth server, hidden primary, recursive (full-service) resolver, forwarder, stub resolver, authoritative-only server
+- Identify the BIND 9.20 statements for each role (`type primary`/`secondary`, `primaries`, `allow-transfer`, `also-notify`, `allow-recursion`, `forwarders`, `forward`, `type forward`/`static-stub`/`stub`/`mirror`, `dns64`)
 
 **Comprehension (Understand):**
-- Explain the difference between recursive and authoritative name servers
-- Describe DNS caching mechanisms and cache hierarchies
-- Compare different DNS server architectures
+- Explain what the `aa` and `ra` flags say about a server, and why authoritative and recursive service belong on separate servers
+- Describe NOTIFY, IXFR and AXFR as BIND logs them, the SOA timers on a secondary, and EXPIRE
+- Describe what a resolver caches (answers, negative answers, failures per RFC 9520, server round-trip times) and how clients choose among resolvers
 
 **Application (Apply):**
-- Configure basic recursive and authoritative servers
-- Implement DNS forwarding and conditional forwarding
-- Set up DNS server redundancy and load balancing
+- Configure a stealth secondary for `teamNN.example` on VM 2 and read the transfer in both servers' logs
+- Configure VM 2 as a resolver on Debian 13 with a static-stub zone and `validate-except` for the lab TLD; inspect and flush its cache
+- Implement conditional forwarding, and observe who queries the authoritative server with and without it
 
 **Analysis (Analyse):**
-- Analyse DNS query flows in complex infrastructures
-- Evaluate DNS server placement strategies
+- Analyse failures: refused transfers, missing NOTIFY, an unreachable primary, an expired zone, a forwarder that is not a resolver, a dead forwarder
+- Analyse query flows from the authoritative server's query log (client address, RD flag)
 
 **Evaluation (Evaluate):**
-- Assess DNS infrastructure requirements for different organisations
-- Compare architectural approaches for scalability and reliability
+- Evaluate stealth secondaries, hidden primaries, forwarding, DNS64, a local root mirror and policy-implementing resolvers for a given network
+- Compare server counts and placements against RFC 2182 (three listed servers, one well removed)
+
+**Synthesis (Create):**
+- Design the authoritative and resolver servers for a two-site organisation
 
 ### Theory Content
-- DNS server types and roles:
-  - Recursive resolvers (full resolvers, caching servers)
-  - Authoritative name servers (primary, secondary)
-  - Forwarders and conditional forwarders
-  - Root name servers and TLD servers
-- DNS server architectures:
-  - Split-brain/split-horizon DNS
-  - Hidden primary configurations
-  - Anycast deployment patterns
-  - Cloud-based DNS services
-- DNS caching strategies and cache poisoning prevention
-- DNS server security considerations
-- Performance and scalability planning
+- Day 2 start (VM 1 primary since Module 2, VM 2 empty) and what changed recently: RFC 9499 terms (March 2024), RFC 9520 failure caching (December 2023), catalog zones RFC 9432 (July 2023), local root RFC 8806 (obsoletes RFC 7706) and BIND's `mirror` zone, BIND 9.20 `forwarders ... tls`
+- Server roles: RFC 9499 definitions; reading `aa`/`ra` (tested against the registry, VM 1, the lab resolver); why the two jobs are separated (RFC 5358 pointer); who runs which servers; the two VMs after today (VM 2 as a stealth secondary, RFC 2182 §5.1)
+- Primary and secondary servers: how many and where (RFC 1034 §4.1; RFC 2182 §3.1, §3.2, §5); a real zone (`isc.org`, five servers in three TLDs, hidden primary in the SOA MNAME; queried 28 October 2026); the primary's and the secondary's configuration (BIND 9.20 defaults: `allow-transfer` none, NOTIFY set, raw secondary files, `min-refresh-time`/`min-retry-time`); a transfer in the logs; AXFR or IXFR (`ixfr-from-differences`, "AXFR-style IXFR"); when the primary is down (refresh failure, EXPIRE, RFC 1035 §3.3.13; tested expiry); stealth servers and hidden primaries (RFC 1996 §2.1, RFC 2182 §5.1, RFC 9499); transfer problems and their log lines; catalog zones (RFC 9432), `rndc addzone`, secondary services, multi-provider (RFC 8901)
+- Recursive resolvers: inside a resolver (access, cache, server choice, validator); who may use it (`allow-recursion` defaults, Unbound's `access-control`, open resolvers); the cache dump; failure caching (RFC 9520, `servfail-ttl`) and server memory (BIND address database, Unbound host cache, RFC 2182 §4); serve-stale (RFC 8767) and prefetch; clients and resolv.conf (MAXNS 3, timeout 5, attempts 2, rotate; RFC 8106); a resolver for a private TLD (`static-stub`, `validate-except`, tested offline and online)
+- Forwarding: definitions (RFC 9499, RFC 2308 §1); `forward only` and `forward first` (ARM; dead forwarder tested); `type forward` vs `static-stub` vs `stub`; a forwarder must be a resolver ("non-improving referral", tested); when to forward; DNS proxies (RFC 5625, BCP 152)
+- Specialised roles: a map with course pointers; DNS64 (RFC 6147, RFC 6052, RFC 7050, RFC 8880; tested on BIND); a local root mirror (RFC 8806; tested online); policy-implementing resolvers, split DNS and views (RFC 9499; built in Modules 5 and 6)
+- Choosing and placing servers: needs by organisation type; placement (RFC 2182 §3.1, §4); capacity (`max-cache-size`, `recursive-clients`, `dnsperf`/`resperf`, statistics; Modules 5, 6, 11); a design exercise
+- Pointers, not content: software comparison and BIND in depth (Module 4); anycast, hidden-primary architecture, views and split horizon, load balancing (Module 5); hardening, TSIG, RPZ (Module 6); DNSSEC validation (Module 7); encrypted transports and XoT (Module 8); monitoring (Module 11)
 
 ### Practical Lab
-- Set up authoritative name servers (primary and secondary)
-- Configure recursive resolvers with forwarding
-- Implement split-horizon DNS configurations
-- Test DNS failover and redundancy mechanisms
-- Monitor DNS server performance and query patterns
-- Troubleshoot common DNS server issues
+- Lab 3.1 A resolver on VM 2 (20 min): Debian's defaults, then the kit's static-stub zone and `validate-except`; VM 1's query log; the cache dump; `flushname`
+- Lab 3.2 Forwarding (20 min): conditional forwarding to the lab resolver; forwarding to the registry (fails); a dead forwarder; back to the static-stub zone
+- Lab 3.3 A secondary on VM 2 (30 min): refused transfer, `allow-transfer` and `also-notify`, NOTIFY and the transfer in both logs, `rndc zonestatus`
+- Lab 3.4 Failure and clean-up (20 min): VM 1 stopped (VM 2 still answers, the lab resolver does not), refresh failure and EXPIRE; the secondary and the transfer lines removed, leaving the state Modules 4-6 start from
 
 ---
 
@@ -726,7 +722,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
-- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1, 2 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there. The "Participant VMs" lines of Modules 3-5 below still give other counts and are to be reconciled when those decks are written
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-3 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary). The "Participant VMs" lines of Modules 4-5 below still give other counts and are to be reconciled when those decks are written
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -845,49 +841,61 @@ All steps below were run on 2026-10-27 from a Debian 13 stand-in VM 1 (bind9, bi
 
 ## Module 3: DNS Server Types - Lab Requirements
 
+All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs (bind9, bind9-utils and bind9-dnsutils 1:9.20.30-1~deb13u1) against the instructor stack with the `m01` profile (`labs/module03/test/rehearse.sh`, 53 checks after the review fixes); the online-only behaviour (real root, root mirror) was checked in a Docker container with Internet access. Lab kit: `labs/module03/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 2 Debian server VMs per participant
-- **From Modules 2 and 6-7 (to reconcile when this deck is written):** VM 1 already serves `teamNN.example` as primary (Module 2). A secondary built here on VM 2 must be removed at the end of Module 3: Module 6 Lab 6.4 builds VM 2's TSIG secondary from scratch and removes it, because Module 7 needs VM 2 as a validating resolver. The registry delegates `teamNN.example` to one address per team (`teams.conf`); a second NS for VM 2 needs an instructor-stack change
-- **Software:** BIND 9, systemd-resolved
-- **Network:** Multi-segment lab network for testing
+- **Participant VMs:** the two Debian 13 VMs from Module 1. VM 1 (192.0.2.30 on the slides) is the primary for `teamNN.example` as Module 2 left it (zone file in `/var/lib/bind`). VM 2 (192.0.2.10) has `bind9`, `bind9-utils` and `bind9-dnsutils` in its image with `named` disabled and no rndc key, like VM 1 before Module 2; Lab 3.1 runs `sudo rndc-confgen -a -u bind; sudo systemctl enable --now named`
+- **Instructor stack:** the registry (192.0.2.53) as every day, and the `m01` profile kept on through Day 2: Lab 3.2 forwards to the lab resolver (192.0.2.55), and Lab 3.4 uses it as "a resolver elsewhere". The lab sheet names one unused address on the classroom subnet for Lab 3.2's dead forwarder (192.0.2.250 on the slides; 192.0.2.9 is the slides' classroom resolver in Module 1). The lab root (192.0.2.52) is that resolver's root
+- **No second delegation:** the registry delegates `teamNN.example` to one address per team (`teams.conf`, VM 1). VM 2 is a stealth secondary (RFC 1996 §2.1, RFC 2182 §5.1): it holds the zone and answers with `aa`, but is in neither the parent's nor the zone's NS set, so VM 1 notifies it through `also-notify`. Lab 3.4 shows the consequence (resolvers elsewhere still fail when VM 1 is down) and asks what a real `ns2` would need. No instructor-stack change
+- **Configuration:** VM 2 gets the kit's `named.conf.options` (Debian's `directory` plus BIND's recursion defaults written out and `validate-except { "example"; }`) and `named.conf.local` (static-stub for `example` to the registry); the lab TLD is not in the real root, so without them VM 2 answers SERVFAIL offline and NXDOMAIN online for lab names. The secondary's file is `/var/cache/bind/db.teamNN.example` (AppArmor allows `named` to write there; a different name from Module 6's `teamNN.example.db`)
+- **End state (what Modules 4-8 start from):** Lab 3.4 removes the secondary zone and its file from VM 2 and the `allow-transfer`/`also-notify` lines from VM 1. VM 2 is a BIND resolver with the kit's two files; VM 1 is the primary with Module 2's zone statement. Module 6 Lab 6.1 replaces VM 2's two files with its hardened ones (same static-stub zone and `validate-except`), and Lab 6.4 adds TSIG lines to a zone statement that has none
+- **Offline path:** every step uses the VMs, the registry and the lab resolver. With Internet access, VM 2 also resolves real names (with `ad`), and Lab 3.1 step 2 shows NXDOMAIN instead of SERVFAIL
+- **Not tested:** real VMs (`sudo`, `systemctl`, `journalctl`, AppArmor); the harness runs `named -g` and reads its log file where a VM has the journal; ipvlan on a real classroom NIC (the dead-forwarder timing, 3067 ms on the Docker bridge, depends on the network); IPv6 transport
 
 ### Lab Exercises
 
-#### Lab 3.1: Authoritative Server Setup (45 minutes)
-**Objective:** Configure primary and secondary authoritative servers
-**Resources Needed:**
-- Pre-installed BIND 9
-- Zone transfer configuration templates
-- Monitoring scripts
+#### Lab 3.1: A Resolver on VM 2 (20 minutes)
+**Objective:** Run BIND on VM 2 as a recursive resolver that can reach the lab TLD
 **Exercise Steps:**
-1. The primary on VM 1 exists from Module 2 (`teamNN.example` in `/var/lib/bind`); review it and allow transfers to VM 2
-2. Set up the secondary on VM 2 with zone transfers
-3. Test automatic zone synchronisation
-4. Implement notify mechanisms
+1. Start BIND on VM 2; `named -v`; Debian's `named.conf.options` has only `directory`
+2. `dig @127.0.0.1 www.teamNN.example`: SERVFAIL offline (NXDOMAIN online): VM 2 knows only the real root
+3. Install the kit's `vm2/named.conf.options` and `vm2/named.conf.local`; `named-checkconf`; `rndc reconfig`
+4. Query log on VM 1; resolve the team's name twice through VM 2: `ra` without `aa`, the TTL counting down, one query from 192.0.2.10 without RD in VM 1's log
+5. From VM 1 through VM 2 (allowed: `localnets`); `+norec` to VM 2 answers REFUSED under the static-stub zone
+6. NXDOMAIN, `rndc dumpdb -cache` (answer, negative entry, address database with `srtt`), `rndc flushname`
+**Success Criteria:** answers from VM 2 with `ra`; VM 1's query log shows VM 2 iterating, once per TTL; the dump read and explained
 
-#### Lab 3.2: Recursive Resolver Configuration (30 minutes)
-**Objective:** Set up and configure recursive DNS resolvers
-**Resources Needed:**
-- BIND 9 or Unbound
-- Forwarder configuration examples
-- Client test machines
+#### Lab 3.2: Forwarding (20 minutes)
+**Objective:** Compare conditional forwarding with a static-stub zone, and two broken forwarders
 **Exercise Steps:**
-1. Configure basic recursive resolver
-2. Implement DNS forwarding
-3. Set up conditional forwarding
-4. Test resolution from client machines
+1. Replace the static-stub zone with `type forward` to the lab resolver (`vm2/named.conf.forward`); reconfig and flush
+2. Resolve a fresh team name: VM 1's query log shows the lab resolver (192.0.2.55), not VM 2; `+norec` at the lab resolver shows its cache
+3. Forward to the registry instead: SERVFAIL, "non-improving referral" in VM 2's log
+4. Forward to an unused address on the lab sheet (192.0.2.250 on the slides): SERVFAIL after the forwarder times out (`forward only`)
+5. Restore the kit's static-stub zone
+**Success Criteria:** who queried VM 1 in each case; why a forwarder must be a resolver; VM 2 back on the static-stub zone
 
-#### Lab 3.3: Split-Horizon DNS Implementation (15 minutes)
-**Objective:** Configure different responses for internal/external clients
-**Resources Needed:**
-- BIND views configuration
-- Internal and external network segments
-- Test domains
+#### Lab 3.3: A Secondary on VM 2 (30 minutes)
+**Objective:** Make VM 2 a stealth secondary for `teamNN.example`
 **Exercise Steps:**
-1. Configure BIND views for internal/external
-2. Create different zone content for each view
-3. Test resolution from different network segments
-4. Verify proper view matching
+1. `dig @VM1 teamNN.example AXFR` from VM 2: "Transfer failed." (BIND 9.20's `allow-transfer` default is none)
+2. Add the secondary zone (`vm2/named.conf.secondary`): REFUSED on VM 2, "denied" on VM 1
+3. Add `allow-transfer` and `also-notify` for VM 2 on VM 1 (`vm1/zone-transfer.snippet`); `rndc retransfer` on VM 2; `rndc zonestatus`
+4. SOA from both servers: `aa`, same serial
+5. Change the zone on VM 1: NOTIFY, "IXFR version not in journal, falling back to AXFR", "transferred serial" on VM 2
+6. VM 2's resolver answers the team's names with `aa` from its own copy; VM 1 sees no query
+**Success Criteria:** NOTIFY and transfer lines in both logs, the same serial on both servers (Practical Assessment 2A task 1)
+
+#### Lab 3.4: Failure and Clean-up (20 minutes)
+**Objective:** See what a secondary does and does not protect, then return both VMs to their roles
+**Exercise Steps:**
+1. Stop `named` on VM 1: VM 2 still answers with `aa`
+2. The lab resolver answers SERVFAIL for a fresh team name: the registry lists only `ns1`
+3. `rndc refresh` on VM 2: "refresh: failure trying primary"; `rndc zonestatus` shows when the copy expires (SOA EXPIRE, two weeks)
+4. Start VM 1 again; refresh; same serial on both
+5. Remove the secondary zone and its file from VM 2, and the two transfer lines from VM 1; check and reconfigure
+6. VM 2 resolves the team's name without `aa`; an AXFR from VM 2 is refused again
+**Success Criteria:** each answer explained by which server gave it; VM 2 a resolver only and VM 1 allowing no transfers (the state Modules 4-6 start from)
 
 ---
 
@@ -996,6 +1004,7 @@ All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-uti
 - **Packages:** `bind9`, `bind9-utils`, `bind9-dnsutils`, `dnsperf`, `tcpdump`, `tshark`
 - **Containment:** all traffic stays on the isolated lab network; the only load is `dnsperf -Q 50 -l 10` from the team's resolver VM to its own authoritative VM; no spoofing, no poisoning tool
 - **Set up here and kept for Module 7:** the resolver's `static-stub` zone for `example` (Module 7 Lab 7.3 step 2) and `validate-except { "example"; };`, which Module 7 Lab 7.3 step 1 deletes when it adds the `example.` trust anchor
+- **Starting state from Module 3:** VM 2 already runs BIND as a resolver with the same static-stub zone and `validate-except` (Module 3 Lab 3.1); Lab 6.1 replaces both files. Module 3 Lab 3.4 removed its stealth secondary (`/var/cache/bind/db.teamNN.example`) and VM 1's address-based `allow-transfer` and `also-notify` lines, so Lab 6.4 adds its TSIG lines to a zone statement that has none (two `allow-transfer` lines in one zone are a configuration error)
 - **Secrets:** each team makes its own TSIG key with `tsig-keygen` during Lab 6.4; nothing secret is in the kit
 - **Not tested:** the `sudo`/`systemctl` steps and `journalctl` on real VMs; queries from real neighbouring or outside machines (emulated with a second address and a child namespace); the shipped `dnssec-validation auto` with `validate-except`, which was run only with Internet access (slirp4netns) while the harness uses `dnssec-validation no`; Debian 12. Configuration changes were rehearsed with `rndc reconfig`, as in class
 

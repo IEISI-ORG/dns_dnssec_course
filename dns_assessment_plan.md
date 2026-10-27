@@ -101,11 +101,11 @@ This assessment plan sets out how the Advanced DNS/DNSSEC Workshop is assessed, 
 - Configuration skills (Apply)
 - Architecture implementation (Apply/Analyse)
 
-**Tasks:**
-1. Configure BIND authoritative server with primary/secondary setup (10 points)
+**Tasks** (task 1 and part of task 4 are assessed from the Module 3 labs, tasks 2-3 from the Module 4 labs; see Appendix A of `dns_dnssec_workshop_plan.md`, `labs/module03/README.md`):
+1. Configure BIND authoritative servers with a primary/secondary setup: VM 2 as a secondary for `teamNN.example` (Lab 3.3): `allow-transfer` and `also-notify` on VM 1, the transfer and NOTIFY shown in both servers' logs, the same serial with `aa` from both, and an explanation of why VM 2 is a stealth server (not in the NS set) and what Lab 3.4 showed about it (10 points). Assess before the Lab 3.4 clean-up
 2. Set up Unbound recursive resolver with forwarding (8 points)
 3. Implement PowerDNS with database backend (7 points)
-4. Test and validate all configurations (5 points)
+4. Test and validate all configurations: for the Module 3 part, the participant shows from VM 1's query log who queried VM 1 with a static-stub zone and with conditional forwarding (Labs 3.1-3.2) (5 points)
 
 **Assessment Criteria:**
 - Configuration accuracy and completeness

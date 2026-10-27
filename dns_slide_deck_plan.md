@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~778 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~783 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -85,114 +85,34 @@
 
 ## Module 3: DNS Server Types - Recursive, Authoritative, and Specialised Roles
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 55-60
+**Slides:** 60 (54 theory, 6 lab); deck: `modules/module03-dns-server-types.marp.md`. Day 2 Session 1: no knowledge-check slot (Knowledge Check 2 is in Module 4's Session 3)
 
-### DNS Server Architecture Overview (10 slides)
-1. **DNS Infrastructure Components**
-   - Recursive resolvers
-   - Authoritative name servers
-   - Forwarders and conditional forwarders
-   - Caching servers
+### Opening (6 slides)
+- Title; module overview; learning objectives; where Day 1 left off (VM 1 primary since Module 2, VM 2 not started, registry and lab resolver); what changed recently (RFC 9499 terms, RFC 9520 failure caching, catalog zones RFC 9432, RFC 8806 and BIND's `mirror`, `forwarders ... tls`); agenda (theory and lab)
 
-2. **Recursive Resolver Deep Dive**
-   - Full resolver functionality
-   - Caching mechanisms
-   - Query processing workflow
-   - Client interface responsibilities
+### 1. Server Roles (6 slides)
+- One protocol, many jobs (RFC 9499 roles table); reading `aa` and `ra` from four servers (tested); two jobs, two servers (BIND and Unbound defaults, RFC 5358 pointer); who runs which servers; your two VMs after today (VM 2 as a stealth secondary, RFC 2182 §5.1; Module 6 and 7 hand-over)
 
-3. **Authoritative Server Roles**
-   - Primary server functions
-   - Secondary server operations
-   - Hidden primary architectures
-   - Stealth secondary configurations
+### 2. Primary and Secondary Servers (11 slides)
+- How many servers and where (RFC 1034 §4.1, RFC 2182 §3.1, §3.2, §5); a real zone's servers (`isc.org`, hidden primary in the MNAME, 28 October 2026); the primary's side (`allow-transfer`, NOTIFY set, `also-notify`); the secondary's side (`primaries`, raw files, AppArmor, timer clamps); a transfer line by line (tested logs); AXFR or IXFR (`ixfr-from-differences`); when the primary is down (refresh failure, EXPIRE, tested expiry); stealth servers and hidden primaries (RFC 1996, RFC 2182 §5.1, RFC 9499); transfer problems and their log lines; many zones, many secondaries (catalog zones RFC 9432, `rndc addzone`, secondary services, RFC 8901)
 
-### DNS Query Resolution Process (12 slides)
-4. **Step-by-Step Query Resolution**
-   - Client query initiation
-   - Recursive resolver processing
-   - Root server consultation
-   - TLD server interaction
-   - Authoritative server response
+### 3. Recursive Resolvers (8 slides)
+- Inside a resolver (access, cache, server choice, validator; `recursive-clients`, `max-cache-size`); who may use it (`allow-recursion`, Unbound `access-control`, open resolvers); looking into the cache (`rndc dumpdb -cache`, flush commands); remembering failures and servers (RFC 9520, `servfail-ttl`, address database, Unbound host cache, RFC 2182 §4); staying useful when servers fail (RFC 8767 serve-stale, prefetch, local copies); clients and their resolvers (resolv.conf defaults, RFC 8106); a resolver for a private TLD (`static-stub`, `validate-except`, tested offline and online)
 
-5. **Caching Strategies and Optimisation**
-   - Positive caching mechanisms
-   - Negative caching (NXDOMAIN)
-   - TTL-based cache expiration
-   - Cache pollution prevention
+### 4. Forwarding (7 slides)
+- Forwarders (RFC 9499, RFC 2308 §1; who appears in the authoritative server's log); `forward only` and `forward first` (ARM; dead forwarder); three ways to send a domain elsewhere (`type forward`, `static-stub`, `stub`); a forwarder must be a resolver ("non-improving referral"); should you forward?; DNS proxies at the edge (RFC 5625)
 
-6. **DNS Forwarding Configurations**
-   - Forward-only mode
-   - Forward-first mode
-   - Conditional forwarding
-   - Split-brain DNS implementations
+### 5. Specialised Roles (5 slides)
+- A map of specialised roles with course pointers; DNS64 (RFC 6147, RFC 6052, RFC 7050, RFC 8880; tested); a local copy of the root (RFC 8806, BIND `type mirror`, tested online); policy, views and split DNS (RFC 9499; Modules 5-6)
 
-### Advanced DNS Architectures (15 slides)
-7. **Split-Horizon DNS Design**
-   - Internal vs external views
-   - BIND views configuration
-   - Security and access control
-   - Use case scenarios
+### 6. Choosing and Placing Servers (5 slides)
+- What each organisation needs (table); where to put servers (RFC 2182 §3.1, §4; anycast in Module 5); capacity (cache memory, `recursive-clients`, `dnsperf`/`resperf`, statistics; Modules 5, 6, 11); design exercise (two offices; answer in presenter notes)
 
-8. **Hidden Primary Architecture**
-   - Hidden primary benefits
-   - Security advantages
-   - Implementation strategies
-   - Zone transfer optimisation
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (VM 1, VM 2, registry, lab resolver; packages and the offline path), Labs 3.1-3.4 (a resolver on VM 2; forwarding; a secondary on VM 2; failure and clean-up)
 
-9. **Anycast DNS Deployment**
-   - Anycast concept and benefits
-   - Geographic load distribution
-   - Failover mechanisms
-   - Implementation challenges
-
-10. **DNS Load Balancing Techniques**
-    - Round-robin DNS
-    - Weighted responses
-    - Geographic load balancing
-    - Health checking integration
-
-### DNS Server Placement and Topology (10 slides)
-11. **DNS Infrastructure Planning**
-    - Server placement strategies
-    - Network topology considerations
-    - Redundancy requirements
-    - Performance optimisation
-
-12. **ISP DNS Infrastructure**
-    - ISP resolver deployment
-    - Customer DNS services
-    - Peering and transit considerations
-    - Cache hierarchy design
-
-13. **Enterprise DNS Architecture**
-    - Internal DNS requirements
-    - Active Directory integration
-    - Branch office considerations
-    - Cloud service integration
-
-### Security and Performance Considerations (8 slides)
-14. **DNS Security Architecture**
-    - Access control implementations
-    - Rate limiting strategies
-    - DDoS mitigation techniques
-    - Monitoring and logging
-
-15. **Performance Optimisation**
-    - Query response time optimisation
-    - Cache hit ratio improvement
-    - Network latency reduction
-    - Capacity planning
-
-### Practical Lab Introduction (5 slides)
-16. **Lab Environment Setup**
-    - Multi-server configuration
-    - Network segments
-    - Testing procedures
-
-17. **Server Configuration Workshop**
-    - Primary/secondary setup
-    - Recursive resolver configuration
-    - Split-horizon implementation
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1058,7 +978,7 @@
 |--------|---------------|-----------|-------|
 | Module 1: DNS Foundations | 64 | 6 | 70 |
 | Module 2: DNS Operations | 52 | 6 | 58 |
-| Module 3: DNS Server Types | 50 | 5 | 55 |
+| Module 3: DNS Server Types | 54 | 6 | 60 |
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
 | Module 6: DNS Security | 62 | 8 | 70 |
@@ -1069,9 +989,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **666** | **67** | **733** |
+| **Total Core Content** | **670** | **68** | **738** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **778** |
+| **Grand Total** | | | **783** |
 
 ---
 
