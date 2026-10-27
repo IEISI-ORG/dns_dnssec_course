@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~770 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~778 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -49,128 +49,37 @@
 
 ## Module 2: DNS Operations - Zones, Records, and Data Management
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 50-55
+**Slides:** 58 (52 theory, 6 lab); deck: `modules/module02-dns-operations.marp.md`. Theory content is 75 minutes; Knowledge Check 1 (Day 1 quiz, on paper) takes the last 15 minutes of Session 3
 
-### Zone Concepts Deep Dive (12 slides)
-1. **Understanding DNS Zones**
-   - Zone vs domain distinction
-   - Zone boundaries and delegation
-   - Authoritative zone concept
+### Opening (6 slides)
+- Title; module overview; learning objectives; where this morning left off (Module 1's worked example: the delegated `teamNN.example` answers SERVFAIL); what changed recently (DMARC RFC 9989-9991, SPF TXT only, CAA RFC 8659, HTTPS/SVCB RFC 9460, DKIM RFC 8301/8463, RFC 9499 terms, Debian 13's `bind9` without example zone files); agenda (theory with the 15-minute Knowledge Check 1, and lab)
 
-2. **Zone Delegation Process**
-   - Parent-child relationships
-   - NS record placement
-   - Glue records necessity and function
+### 1. Zones as Data (4 slides)
+- A zone is data and a server (apex, SOA and NS, primary and secondaries, RFC 1034 §4.1); parent side and child side of a delegation (RFC 1034 §4.2.2); delegating part of your own zone (glue, occluded names, BIND's missing-glue warning)
 
-3. **Zone Types Classification**
-   - Primary zones (legacy BIND keyword: `type master`)
-   - Secondary zones (legacy BIND keyword: `type slave`)
-   - Stub zones
-   - Forward zones
+### 2. Zone File Syntax (7 slides)
+- The zone file format (RFC 1035 §5.1); absolute and relative names (the missing dot); directives (`$TTL`, `$ORIGIN`, `$INCLUDE`, `$GENERATE`; RFC 2181 §5.2 one TTL per RRset); the lab zone after Lab 2.1; checking before loading (`named-checkzone`, `-k fail`, `-l`, `named-checkconf -z`, `named-compilezone`); BIND 9.20.30's error messages
 
-4. **Zone Transfer Mechanisms**
-   - AXFR (full zone transfer)
-   - IXFR (incremental zone transfer)
-   - NOTIFY mechanisms
-   - Security considerations
+### 3. SOA, Serials and Loading (5 slides)
+- The SOA record (RFC 1035 §3.3.13, RFC 2308 §4, RFC 1912 §2.2, RFC 2142); serial numbers (RFC 1982, RFC 1912, BIND's unchanged-serial warning); how secondaries keep up (REFRESH/RETRY/EXPIRE, NOTIFY RFC 1996, IXFR RFC 1995, AXFR RFC 5936; BIND 9.20 defaults); loading a zone on Debian 13
 
-### DNS Record Types (20 slides)
-5. **Address Records (A/AAAA)**
-   - IPv4 address mapping (A records)
-   - IPv6 address mapping (AAAA records)
-   - Multiple address configurations
-   - Load balancing considerations
+### 4. Record Types (10 slides)
+- The records in this module (IANA codes); addresses and host names (check-names); CNAME; the apex problem: HTTPS and SVCB (RFC 9460) vs vendor ALIAS/ANAME; MX, implicit and null MX (RFC 5321, RFC 7505); TXT strings and underscored names (RFC 8552); SRV (RFC 2782, 6186); CAA (RFC 8659); less common records (wildcards, DNAME, unknown types, SPF type 99)
 
-6. **Canonical Name Records (CNAME)**
-   - Alias functionality
-   - CNAME restrictions and limitations
-   - CNAME vs A record decisions
-   - Common CNAME use cases
+### 5. Email Records (5 slides)
+- How mail uses your zone; SPF (RFC 7208); DKIM (RFC 6376, 8301, 8463; key generation and string splitting); DMARC (RFC 9989-9991)
 
-7. **Name Server Records (NS)**
-   - Delegation specification
-   - NS record placement rules
-   - Circular dependency prevention
-   - Best practices for NS records
+### 6. Reverse DNS (4 slides)
+- Reverse zones and PTR (RFC 3596, RFC 1912 §2.1, RFC 8501); smaller than a /24 (RFC 2317) and IPv6 nibble boundaries; the lab's reverse zones and the resolver's locally served empty zones (RFC 6303)
 
-8. **Mail Exchange Records (MX)**
-   - Mail routing configuration
-   - Priority and preference values
-   - Multiple MX record strategies
-   - Backup mail server setup
+### 7. TTL Strategy and Zone Management (5 slides)
+- Choosing TTLs (RFC 1034 §2.2; BIND and Unbound limits; RFC 2308 §5; parent-side TTLs; RFC 8767); planning a change (RFC 1912 §2.2; rehearsed timings); designing the zone structure (RFC 1034 §4.2; naming by function); a zone change procedure
 
-9. **Reverse DNS and PTR Records**
-   - Reverse DNS concept and importance
-   - PTR record structure
-   - in-addr.arpa and ip6.arpa zones
-   - Reverse delegation management
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (VM 1 with BIND, registry, Module 1's lab resolver; packages and the offline path), Labs 2.1-2.4 (write and load the zone; reverse zones and a broken file; TTLs and caching; email records)
 
-10. **Text Records (TXT)**
-    - General purpose text storage
-    - SPF (Sender Policy Framework) TXT records (RFC 7208; the SPF RR type is deprecated)
-    - DKIM (DomainKeys Identified Mail) public keys in TXT at `_domainkey` (RFC 6376)
-    - DMARC (Domain-based Message Authentication, Reporting, and Conformance) policies in TXT at `_dmarc` (RFC 9989)
-
-11. **Service Records (SRV)**
-    - Service discovery mechanism
-    - SRV record format and fields
-    - Common SRV implementations
-    - Microsoft Active Directory usage
-
-12. **Certificate Authority Authorisation (CAA)**
-    - SSL/TLS certificate control
-    - CAA record format
-    - Certificate authority restrictions
-    - Implementation best practices
-
-### Zone File Management (10 slides)
-13. **Zone File Syntax and Structure**
-    - BIND zone file format
-    - $ORIGIN and $TTL directives
-    - Comment conventions
-    - Record ordering best practices
-
-14. **Start of Authority (SOA) Records**
-    - SOA record components
-    - Serial number management
-    - Refresh, retry, and expire timers
-    - Minimum TTL field
-
-15. **TTL Strategy and Implementation**
-    - Time-to-Live concept
-    - Default TTL settings
-    - Record-specific TTL values
-    - TTL planning for different scenarios
-
-16. **Zone File Validation**
-    - Syntax checking tools
-    - named-checkzone utility
-    - Common zone file errors
-    - Debugging techniques
-
-### Email Infrastructure DNS (8 slides)
-17. **Complete Email DNS Setup**
-    - MX record configuration
-    - SPF record implementation
-    - DKIM key publication
-    - DMARC policy deployment
-
-18. **Anti-Spam DNS Techniques**
-    - SPF alignment strategies
-    - DKIM key rotation
-    - DMARC policy evolution
-    - Monitoring and reporting
-
-### Practical Lab Introduction (5 slides)
-19. **Zone Creation Workshop**
-    - Zone file templates
-    - Domain assignments
-    - Validation procedures
-
-20. **Email DNS Laboratory**
-    - Mail server scenarios
-    - Security record implementation
-    - Testing procedures
+### Closing (6 slides)
+- References, knowledge check (answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -1148,7 +1057,7 @@
 | Module | Theory Slides | Lab Intro | Total |
 |--------|---------------|-----------|-------|
 | Module 1: DNS Foundations | 64 | 6 | 70 |
-| Module 2: DNS Operations | 45 | 5 | 50 |
+| Module 2: DNS Operations | 52 | 6 | 58 |
 | Module 3: DNS Server Types | 50 | 5 | 55 |
 | Module 4: DNS Software Platforms | 56 | 4 | 60 |
 | Module 5: Advanced Operations | 52 | 3 | 55 |
@@ -1160,9 +1069,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **659** | **66** | **725** |
+| **Total Core Content** | **666** | **67** | **733** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **770** |
+| **Grand Total** | | | **778** |
 
 ---
 

@@ -1,0 +1,12 @@
+; /var/lib/bind/db.2001-db8-NN: reverse zone for 2001:db8:NN::/48, team NN (Module 2, Lab 2.2).
+; The zone name is the first 12 nibbles of the prefix, reversed, under
+; ip6.arpa (team 01: 1.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa). Owner names below
+; are the other 20 nibbles, relative to the zone: take them from
+; dig @192.0.2.55 -x <address> +noall +question.
+$TTL 60
+@       IN SOA  ns1.teamNN.example. hostmaster.teamNN.example. (
+                2026102701 3600 600 1209600 60 )
+        IN NS   ns1.teamNN.example.
+0.8.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 IN PTR www.teamNN.example.  ; 2001:db8:NN::80
+
+; Lab 2.2: add the PTR record for mail (2001:db8:NN::81).

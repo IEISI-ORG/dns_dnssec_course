@@ -1,0 +1,15 @@
+; db.broken.example: a zone file for Lab 2.2. It has seven mistakes.
+; Check it:  named-checkzone broken.example db.broken.example
+$TTL 60
+@       IN SOA  ns1.broken.example. hostmaster.broken.example. (
+                20261027001 3600 600 1209600 60 )
+        IN NS   ns1.broken.example.
+        IN NS   ns2.broken.example.
+        IN MX   10 mail.broken.example
+ns1     IN A    192.0.2.53
+www     IN A    192.0.2.8O
+web     IN CNAME www
+web     IN TXT  "the web server"
+mail    IN A    192.0.2.81
+mail_relay IN A 192.0.2.82
+ftp.broken.example IN A 192.0.2.83

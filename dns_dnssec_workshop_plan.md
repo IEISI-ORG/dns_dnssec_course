@@ -169,53 +169,48 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 2: DNS Operations - Zones, Records, and Data Management
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module02-dns-operations.marp.md` (58 slides: 52 theory, 6 lab). Theory content takes 75 minutes; Knowledge Check 1 (Day 1 quiz, Modules 1-2) takes the last 15 minutes of the session (Program Facts). Lab kit: `labs/module02/`; lab servers: the instructor stack's `m01` profile, kept on all of Day 1.
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall different DNS record types and their purposes
-- Identify zone file syntax and structure
-- List TTL concepts and timing considerations
+- Recall the record types an organisation needs (A, AAAA, CNAME, MX, TXT, SRV, CAA, HTTPS/SVCB, PTR, NS, SOA), their purpose and their defining RFCs
+- Identify the parts of a zone file: directives (`$TTL`, `$ORIGIN`, `$INCLUDE`, BIND's `$GENERATE`), owner, TTL, class, type, data; absolute and relative names
+- List the SOA fields (MNAME, RNAME, SERIAL, REFRESH, RETRY, EXPIRE, MINIMUM) and what each controls
 
 **Comprehension (Understand):**
-- Explain the relationship between zones and domains
-- Describe how DNS delegation works
-- Interpret zone file contents and record formats
+- Explain a zone as data served by a primary and copied by secondaries (serial, REFRESH/RETRY/EXPIRE, NOTIFY, AXFR, IXFR) and the parent and child sides of a delegation
+- Describe the rules for CNAME (no other data, not at the apex), MX/NS/SRV targets, TXT strings and underscored names
+- Interpret `named-checkzone` messages and `dig` answers from a primary (`aa`) and through a resolver (TTL counting down, negative caching)
 
 **Application (Apply):**
-- Create and edit DNS zone files
-- Configure different record types for various use cases
-- Set appropriate TTL values for different scenarios
+- Write `teamNN.example` from a template and load it into BIND 9.20 on Debian 13 (`named.conf.local`, `named-checkconf -z`, `rndc reload`)
+- Configure forward and reverse zones for IPv4 and IPv6, and the email records MX, SPF, DKIM (key generated with `openssl`) and DMARC (RFC 9989)
+- Set TTLs for a planned change and observe them in a shared resolver's cache
 
 **Analysis (Analyse):**
-- Analyse zone file syntax and identify errors
-- Evaluate TTL strategies for different environments
+- Find and fix errors in a zone file with `named-checkzone` (including `-k fail`) and `named-compilezone`
+- Evaluate TTL choices: resolver limits, negative TTL, parent-side delegation TTLs
 
 **Synthesis (Create):**
-- Design zone structures for complex organisations
-- Develop naming conventions and zone management policies
+- Design a zone structure for an organisation (where to delegate, reverse zones, naming by function)
+- Develop a zone change procedure (version control, serial scheme, checks, reload, verification)
 
 ### Theory Content
-- Zone concepts: authoritative zones, delegation, glue records
-- DNS record types in detail:
-  - A, AAAA (address records)
-  - CNAME (canonical names); the zone-apex problem: vendor ALIAS/ANAME records vs. standard HTTPS/SVCB records (RFC 9460)
-  - MX (mail exchange)
-  - NS (name server)
-  - PTR (reverse DNS)
-  - TXT, including the TXT-based email policies SPF (RFC 7208), DKIM (RFC 6376) and DMARC (RFC 9989); the SPF RR type is deprecated
-  - SRV (service records)
-  - CAA (certificate authority authorisation)
-- Zone file syntax and best practices
-- TTL strategy and caching implications
-- Reverse DNS and PTR record management
+- Day 1 so far (Module 1's worked example: `teamNN.example` delegated, nothing answering) and what changed recently: DMARC RFC 9989-9991 (May 2026), SPF TXT only (RFC 7208), CAA RFC 8659, HTTPS/SVCB (RFC 9460), DKIM RFC 8301/8463, RFC 9499 terms, Debian 13's `bind9` without example zone files
+- Zones as data: apex, SOA and NS, primary and secondaries (RFC 9499; RFC 1034 §4.1 two servers); parent and child sides of a delegation; delegating part of a zone (glue, occluded names, BIND's missing-glue warning)
+- Zone file syntax (RFC 1035 §5.1): entries, blank owners, `@`, quoting; absolute and relative names and the missing-dot mistake; directives (RFC 2308 §4 `$TTL`; `$GENERATE` from the BIND 9.20 ARM); the lab zone in full; `named-checkzone`, `named-checkconf -z`, `named-compilezone`, `-k fail`, `-l`; a table of BIND 9.20.30 error messages (tested)
+- SOA, serials and loading: SOA fields (RFC 1035 §3.3.13, RFC 2308 §4, RFC 1912 §2.2, RFC 2142); serial arithmetic and schemes (RFC 1982, RFC 1912 §2.2 and §3.1), BIND's unchanged-serial warning; secondaries, NOTIFY, IXFR, AXFR (RFC 1034 §4.3.5, 1995, 1996, 5936), BIND 9.20 defaults (`notify yes`, `allow-transfer` none); loading on Debian 13 (`named.conf.local`, `rndc reload`, AppArmor layout, default recursion to the local subnet)
+- Record types: IANA codes (registry updated 16 October 2026); A/AAAA and host names (RFC 1034 §3.5, check-names); CNAME rules (RFC 1034 §3.6.2, RFC 2181 §10); the apex problem: vendor ALIAS/ANAME vs HTTPS/SVCB AliasMode (RFC 9460); MX, implicit MX, null MX (RFC 5321 §5.1, RFC 7505); TXT strings and underscored names (RFC 8552); SRV (RFC 2782, 6186, 6335); CAA (RFC 8659); wildcards, DNAME, unknown types, SPF type 99 (RFC 4592, 6672, 3597, 7208 §14.1); real examples dated 27 October 2026
+- Email records: how mail uses the zone; SPF (RFC 7208: TXT only, one record, 10-lookup limit); DKIM (RFC 6376 STD 76, RFC 8301, RFC 8463; key generation and splitting a 392-character key into strings); DMARC (RFC 9989: `p`, `sp`, `np` from RFC 9091, `t` and `psd` new, `rua` RFC 9990, `ruf` RFC 9991, `pct`, `rf`, `ri` removed, DNS Tree Walk; start with `p=none`)
+- Reverse DNS: in-addr.arpa and ip6.arpa (RFC 3596 §2.5), who delegates, PTR matching (RFC 1912 §2.1, RFC 8501 §4); classless delegation (RFC 2317, BCP 20) with `$GENERATE`; IPv6 nibble boundaries and RFC 8501's options; the lab's reverse zones
+- TTL strategy and zone management: the trade-off (RFC 1034 §2.2), resolver limits (BIND 1 week / 3 hours; Unbound 1 day / 1 hour), negative TTL (RFC 2308 §5), parent-side TTLs, serve-stale (RFC 8767); planning a change (RFC 1912 §2.2); designing zone structure (RFC 1034 §4.2) and naming; a zone change procedure
+- Pointers, not content: server types, secondaries and resolvers (Module 3), BIND in depth and other software (4), hidden primaries and anycast (5), TSIG and hardening (6), DNSSEC (7), transfers over TLS and DDR (8), registration over EPP (9), monitoring (11)
 
 ### Practical Lab
-- Create complete zone files from scratch
-- Configure forward and reverse DNS zones
-- Implement email-related DNS records (MX, SPF, DKIM, DMARC)
-- Set up service discovery with SRV records
-- Test and validate zone configurations
-- TTL modification and cache behaviour observation
+- Lab 2.1 Write and load your zone (30 min): `teamNN.example` from the kit template, every record type, `named-checkzone`, loaded into BIND on VM 1; Module 1's SERVFAIL becomes an answer through the lab resolver
+- Lab 2.2 Reverse zones and a broken file (25 min): `2.0.192.in-addr.arpa` and the team's `ip6.arpa` zone; seven mistakes in `broken/db.broken.example`
+- Lab 2.3 TTLs and caching (20 min): TTL countdown, a change waiting for the TTL, a planned change, negative caching, the unchanged-serial warning, `named-checkzone -l 60`
+- Lab 2.4 Email records (15 min): SPF, null MX, DKIM (key made with `openssl`, split into strings, read back with `cmp`), DMARC
 
 ---
 
@@ -614,7 +609,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - Evaluate business continuity planning for DNS services
 
 ### Theory Content
-- DNS monitoring strategy and metrics
+- DNS monitoring strategy and metrics, including SOA serial agreement across a zone's servers and the parent's delegation (NS, glue, DS) against the zone (pointed to from Module 2)
 - Performance optimisation techniques
 - Incident response planning and procedures
 - Capacity planning for DNS infrastructure
@@ -731,7 +726,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
-- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1 and 6-9 use them; the "Participant VMs" lines of Modules 2-5 below still give other counts and are to be reconciled when those decks are written
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1, 2 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there. The "Participant VMs" lines of Modules 3-5 below still give other counts and are to be reconciled when those decks are written
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -793,46 +788,58 @@ All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 st
 
 ## Module 2: DNS Operations - Lab Requirements
 
+All steps below were run on 2026-10-27 from a Debian 13 stand-in VM 1 (bind9, bind9-utils and bind9-dnsutils 1:9.20.30-1~deb13u1, openssl 3.5.7) against the instructor stack with the `m01` profile (`labs/module02/test/rehearse.sh`, 54 checks; first run 2026-10-27, re-run 2026-10-28 after the review fixes). Lab kit: `labs/module02/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 1 Debian server VM per participant
-- **Software:** BIND 9 utilities, text editors (vim/nano)
-- **Zone Files:** Template zone files and examples
+- **Participant VMs:** the two Debian 13 VMs from Module 1. Module 2 uses VM 1 (192.0.2.30 on the slides): it gets `bind9`, `bind9-utils` and `openssl` and becomes the primary for `teamNN.example`, `2.0.192.in-addr.arpa` and the team's `ip6.arpa` zone (`2001:db8:NN::/48`). VM 2 (192.0.2.10) waits for Module 3
+- **Packages offline:** the VM image carries the packages with `named` disabled (Module 1 relies on nothing answering on port 53); Lab 2.1 gives the VM its own rndc key and starts it: `sudo rndc-confgen -a -u bind; sudo systemctl enable --now named` (remove `/etc/bind/rndc.key` before sealing the image: Debian's postinst makes one at install time, which every clone would share). With a mirror, `sudo apt install bind9 bind9-utils openssl` in Lab 2.1 does the same
+- **Configuration:** only `/etc/bind/named.conf.local`; zone files in `/var/lib/bind`, where Debian's AppArmor profile lets `named` write (Module 7 signs `teamNN.example` inline, which writes `.signed` and journal files next to the zone file; `/etc/bind` is read-only to `named`). Debian's `named.conf.options` stays as installed (Module 6 Lab 6.1 hardens it)
+- **Instructor stack:** the `m01` profile stays on for all of Day 1: the registry (192.0.2.53) delegates `teamNN.example` to VM 1 (`teams.conf`), and the lab resolver (192.0.2.55) is the shared cache for Lab 2.3
+- **Lab TTLs:** 60 seconds or less in every team zone, to match `max-zone-ttl 60` in the lab signing policy of Appendix A, Module 7; the zone keeps `www` 192.0.2.80, `mail` 192.0.2.81 and `ftp` 192.0.2.82 for Modules 6-8
+- **Secrets:** the Lab 2.4 DKIM key is made by each participant in their home directory; nothing secret is in the kit
+- **Not tested:** real VMs (`sudo`, `systemctl`, `journalctl`, AppArmor), `apt install` in class, ipvlan on a real classroom NIC, IPv6 transport
 
 ### Lab Exercises
 
-#### Lab 2.1: Zone File Creation and Management (45 minutes)
-**Objective:** Create and manage DNS zone files
-**Resources Needed:**
-- Zone file templates
-- Domain name assignments for each participant
-- Zone file validation tools
+#### Lab 2.1: Write and Load Your Zone (30 minutes)
+**Objective:** Write `teamNN.example` from a template and serve it from VM 1
 **Exercise Steps:**
-1. Create forward zone file for assigned domain
-2. Add various record types (A, AAAA, CNAME, MX, TXT)
-3. Create reverse zone file
-4. Validate zone file syntax using named-checkzone
+1. Start BIND; `named -v`; `ls /etc/bind` (no zone files in Debian 13)
+2. Copy `zones/db.teamNN.example` to `/var/lib/bind`, set the team number with `sed`, set `ns1`'s address
+3. Add apex A, AAAA, `HTTPS 0 www`, `MX 10 mail`, CAA `issue` and `iodef`; `www` A, AAAA, HTTPS; `web` CNAME; `mail` A, AAAA; `ftp` A; `_imaps._tcp` SRV
+4. `named-checkzone` until OK with no warnings; read the zone with `named-compilezone -o -`
+5. Add the zone statement to `named.conf.local`; `named-checkconf -z`; `rndc reload`; `rndc zonestatus`
+6. Query VM 1 with `+norec`, the lab resolver, and compare the registry's NS and glue with the zone
+**Success Criteria:** `aa` (and `ra`, Debian's default) from VM 1; NOERROR from the lab resolver where Module 1 had SERVFAIL; parent and child agree (Practical Assessment 1B task 1)
 
-#### Lab 2.2: TTL and Caching Behaviour (30 minutes)
-**Objective:** Understand TTL impact on DNS caching
-**Resources Needed:**
-- DNS server with configurable TTLs
-- Cache monitoring tools
+#### Lab 2.2: Reverse Zones and a Broken File (25 minutes)
+**Objective:** Serve IPv4 and IPv6 reverse zones; find errors in a zone file
 **Exercise Steps:**
-1. Configure records with different TTL values
-2. Monitor cache behaviour using dig +norecurse
-3. Observe TTL countdown in cached responses
-4. Implement TTL strategy for different record types
+1. Copy `zones/db.192.0.2` and `zones/db.2001-db8-NN` to `/var/lib/bind`; add PTRs (owner names for IPv6 from `dig @192.0.2.55 -x ... +noall +question`)
+2. Add both zone statements; check; reload
+3. `dig -x` against VM 1; confirm each PTR target resolves back to the address; the lab resolver answers NXDOMAIN with `aa` from its own built-in empty zone for `2.0.192.in-addr.arpa` (RFC 6303 locally served zones): read its SOA
+4. `broken/db.broken.example`: `named-checkzone` until OK, then `-k fail`, then `named-compilezone -o -` (seven mistakes: serial out of range, bad dotted quad, CNAME and other data, NS without address, MX target without its dot, `_` in a host name, owner without its dot)
+**Success Criteria:** PTRs answer and match the forward data; the broken file passes `-k fail` with no warnings (Practical Assessment 1B tasks 2 and 4)
 
-#### Lab 2.3: Email DNS Records Configuration (15 minutes)
-**Objective:** Configure email-related DNS records
-**Resources Needed:**
-- Email server scenarios
-- SPF, DKIM, DMARC record templates
+#### Lab 2.3: TTLs and Caching (20 minutes)
+**Objective:** Observe TTLs and negative caching in a shared resolver
 **Exercise Steps:**
-1. Configure MX records for mail routing
-2. Implement SPF records for sender authentication
-3. Publish DKIM public keys in DNS
-4. Configure DMARC policy records
+1. Add `app`; compare TTLs from VM 1 (always 60) and the lab resolver (counting down)
+2. Change `app`; time how long the resolver keeps the old address (`+norec` shows the cache)
+3. Planned change: lower `app`'s TTL to 10, wait for the old copy to expire, change it
+4. Negative caching: NXDOMAIN for `new`, add it, wait for the SOA's negative TTL
+5. Reload without raising the serial; read BIND's warning in the journal
+6. `named-checkzone -l 60` (Module 7's limit)
+**Success Criteria:** each delay explained by the TTL that caused it (rehearsed: 53 s for a 60 s copy; 11 s after lowering to 10; 59 s negative); the serial warning explained for secondaries
+
+#### Lab 2.4: Email Records (15 minutes)
+**Objective:** Publish MX, SPF, DKIM and DMARC records
+**Exercise Steps:**
+1. SPF `v=spf1 mx -all` at the apex; null MX and `v=spf1 -all` for `ftp`
+2. DKIM: `openssl genpkey` (RSA 2048) in the home directory; the 392-character public key split into strings with `fold -w 250`; try it as one string first (`syntax error`)
+3. DMARC `v=DMARC1; p=none; rua=mailto:...` at `_dmarc`
+4. Check (`-k fail -l 60`), reload, query VM 1 and the lab resolver; compare the published key with `cmp`
+**Success Criteria:** all four answer from VM 1 and through the resolver; the key matches (Practical Assessment 1B task 3)
 
 ---
 
@@ -840,6 +847,7 @@ All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 st
 
 ### Lab Environment Setup
 - **Participant VMs:** 2 Debian server VMs per participant
+- **From Modules 2 and 6-7 (to reconcile when this deck is written):** VM 1 already serves `teamNN.example` as primary (Module 2). A secondary built here on VM 2 must be removed at the end of Module 3: Module 6 Lab 6.4 builds VM 2's TSIG secondary from scratch and removes it, because Module 7 needs VM 2 as a validating resolver. The registry delegates `teamNN.example` to one address per team (`teams.conf`); a second NS for VM 2 needs an instructor-stack change
 - **Software:** BIND 9, systemd-resolved
 - **Network:** Multi-segment lab network for testing
 
@@ -852,8 +860,8 @@ All steps below were run on 2026-10-22: the lab-server steps from a Debian 13 st
 - Zone transfer configuration templates
 - Monitoring scripts
 **Exercise Steps:**
-1. Configure primary authoritative server
-2. Set up secondary server with zone transfers
+1. The primary on VM 1 exists from Module 2 (`teamNN.example` in `/var/lib/bind`); review it and allow transfers to VM 2
+2. Set up the secondary on VM 2 with zone transfers
 3. Test automatic zone synchronisation
 4. Implement notify mechanisms
 
@@ -1026,7 +1034,7 @@ All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-uti
 2. Copy the key to the resolver VM over SSH (same owner and mode); there, **as root** (`sudo dig`, because `dig -k` on a key it cannot read sends the query unsigned), AXFR with no key, the right key, a wrong secret and an unknown key name
 3. Make the resolver VM a TSIG secondary (`resolver/named.conf.secondary`); change the zone and watch NOTIFY and the transfer
 4. Remove the secondary zone from the resolver (Module 7 needs the resolver to resolve, not serve, the zone)
-**Success criteria:** "Transfer failed" without a key, BADSIG with a wrong secret, BADKEY with an unknown name, the full zone with the right key; the secondary logs "transferred serial 2: TSIG 'teamNN-xfr'"
+**Success criteria:** "Transfer failed" without a key, BADSIG with a wrong secret, BADKEY with an unknown name, the full zone with the right key; the secondary logs "transferred serial <the team's new serial>: TSIG 'teamNN-xfr'" (serial 2 in the Module 6 rehearsal zone)
 
 #### Lab 6.5: RPZ and Spotting a Tunnel (15 minutes)
 **Objective:** Filter with a policy feed and recognise covert-channel traffic

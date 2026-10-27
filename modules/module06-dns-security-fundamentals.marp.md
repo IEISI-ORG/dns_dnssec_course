@@ -694,7 +694,7 @@ key "teamNN-xfr" {
 include "/etc/bind/teamNN-xfr.key";
 zone "teamNN.example" {
   type primary;
-  file "/etc/bind/db.teamNN.example";
+  file "/var/lib/bind/db.teamNN.example";
   allow-transfer { key "teamNN-xfr"; };
   also-notify { 192.0.2.10
                 key "teamNN-xfr"; };
@@ -977,7 +977,7 @@ If something behaves unexpectedly, stop the load and ask the instructor.
 5. On the authoritative VM: add a record, raise the serial, `rndc reload teamNN.example`; watch the NOTIFY and the new transfer arrive
 6. **Remove the secondary zone** from the resolver and reconfigure: Module 7 needs the resolver to resolve your zone, not serve it
 
-> **Checkpoint:** no key gives "Transfer failed", a wrong secret BADSIG, an unknown name BADKEY, the right key the whole zone; the secondary logs "transferred serial 2: TSIG 'teamNN-xfr'"
+> **Checkpoint:** no key gives "Transfer failed", a wrong secret BADSIG, an unknown name BADKEY, the right key the whole zone; the secondary logs "transferred serial <your new serial>: TSIG 'teamNN-xfr'"
 
 ---
 <!-- _class: dense -->

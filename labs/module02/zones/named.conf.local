@@ -1,0 +1,21 @@
+// Module 2: add these zone statements to /etc/bind/named.conf.local on VM 1.
+// Replace NN (two digits), and N1 N2 with the two digits of NN in the IPv6
+// reverse zone name (team 01: "1.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa").
+// Zone files live in /var/lib/bind: Debian's AppArmor profile lets named write
+// there (journals, Module 7's signed copy), not in /etc/bind.
+// Debian's named.conf.options is left as installed (Module 6 hardens it).
+
+zone "teamNN.example" {                       // Lab 2.1
+    type primary;
+    file "/var/lib/bind/db.teamNN.example";
+};
+
+zone "2.0.192.in-addr.arpa" {                 // Lab 2.2
+    type primary;
+    file "/var/lib/bind/db.192.0.2";
+};
+
+zone "N2.N1.0.0.8.b.d.0.1.0.0.2.ip6.arpa" {   // Lab 2.2
+    type primary;
+    file "/var/lib/bind/db.2001-db8-NN";
+};
