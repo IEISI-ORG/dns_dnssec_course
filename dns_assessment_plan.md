@@ -146,14 +146,14 @@ Assessed from Lab 4.4's comparison sheet (`labs/module04/comparison-sheet.md`, o
 **Assessment Type:** Complex configuration exercise
 **Learning Objectives Tested:**
 - Advanced architecture design (Apply/Analyse)
-- Performance optimisation (Apply)
+- Operating a distributed service: propagation, views, anycast routing (Apply)
 - Troubleshooting skills (Analyse)
 
-**Tasks:**
-1. Implement anycast DNS configuration (8 points)
-2. Configure hidden primary architecture (7 points)
-3. Set up split-horizon DNS with views (5 points)
-4. Troubleshoot provided DNS issues (5 points)
+**Tasks** (assessed from the Module 5 labs on the participant's own VMs; see Appendix A of `dns_dnssec_workshop_plan.md` and `labs/module05/README.md`):
+1. Run the anycast service (Lab 5.3): bring up `anycast-lab.sh`, show from the routers' tables and NSID which site answers each city and why (AS-path length), stop one site and show the health check withdrawing its route and the other site taking its catchment; name two things the single-VM lab cannot show about Internet anycast (8 points)
+2. Configure a hidden primary (Lab 5.1): VM 2 as the primary for `hp.teamNN.example` with `notify explicit`, `also-notify`, `allow-transfer` and `allow-query` for VM 1 only; VM 1 as the listed secondary with the delegation in `teamNN.example`; show the lab resolver's answer coming from VM 1, the refused transfer from VM 2's own address, and a change reaching VM 1 by NOTIFY; explain the result of a change without a new serial (7 points). Assess before the Lab 5.1 clean-up
+3. Set up split horizon with views (Lab 5.2): two views on VM 1 (VM 2 internal, everyone else external, the reverse zones shared with `in-view`), the root-hints include moved into a view; show `intranet` through VM 2 and NXDOMAIN through the lab resolver, and explain why the view follows the resolver's address, not the user's (5 points). Assess before the Lab 5.2 clean-up
+4. Troubleshoot the anycast faults (Lab 5.4): the instructor sets three faults one at a time with `labs/module05/instructor/faults.sh` and gives only the symptom. Graded on the evidence and the method, not the named cause alone: the commands run and their order (both cities with `+nsid`, the SOA at each site's own address, the routers' paths and forwarding, the health logs), what each showed and which causes it ruled out, then the fix checked from both cities; finally the lab removed and both VMs as Module 4 left them (5 points). The repository is public, so the faults and answers can be read in advance; the instructor sets them in an order of their choosing without naming them
 
 #### Practical Assessment 3B: DNS Security Implementation (45 minutes)
 **Assessment Type:** Security configuration and testing

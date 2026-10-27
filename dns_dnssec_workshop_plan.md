@@ -313,37 +313,47 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 5: Advanced DNS Operations and Architecture
 **Duration:** 90 minutes theory + 90 minutes practical
-**Prerequisites:** Completion of Modules 1-4 or equivalent experience
+**Deck:** `modules/module05-advanced-dns-operations.marp.md` (60 slides: 54 theory, 6 lab). Day 3 Session 1, so no knowledge-check slot (the mid-course assessment belongs to Session 3). Lab kit: `labs/module05/`; lab servers: the registry and the `m01` profile's lab resolver, kept on until the end of this module's lab (Day 3 lunch).
+**Prerequisites:** Modules 1-4 or equivalent experience
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall advanced DNS concepts including delegation models, anycast routing, and hidden primarys
-- Identify different DNS server architectures and their use cases
+- Recall the layers of a DNS service (provisioning, hidden primary, listed secondaries, anycast instances, resolvers) and the RFC 9499 terms stealth server, hidden primary, split DNS and view
+- Identify the standards behind them: NOTIFY (RFC 1996), BCP 16 (RFC 2182), anycast (RFC 3258, RFC 4786, RFC 9199), NSID (RFC 5001), serve-stale (RFC 8767), EDE (RFC 8914)
 
 **Comprehension (Understand):**
-- Explain the relationship between authoritative and recursive resolvers in complex networks
-- Describe DNS caching mechanisms and TTL strategies
+- Explain who receives NOTIFY (`notify yes` and `explicit`, SOA MNAME) and why a change without a new serial reaches no secondary
+- Explain anycast catchments, BGP route selection by AS-path length, health-checked withdrawal, and what a single-VM lab cannot show
+- Describe resolver caching controls (TTL caps, prefetch, failure caching per RFC 9520, serve-stale) and the trade-offs of short and long TTLs
 
 **Application (Apply):**
-- Configure BIND/NSD for advanced scenarios including split-horizon DNS
-- Implement DNS load balancing and failover mechanisms
+- Build a hidden primary with a public secondary, restricted by `allow-query`, `allow-transfer` and `notify explicit`, and check propagation on every server
+- Configure split horizon with BIND views (`match-clients`, `in-view`, root hints inside a view) and remove it again
+- Run an anycast service with BIRD and BIND in network namespaces: identify instances with NSID, withdraw a site through a health check
 
 **Analysis (Analyse):**
-- Troubleshoot complex DNS resolution issues using dig, nslookup, and specialised tools
-- Analyse DNS query patterns and performance metrics
+- Troubleshoot a service that answers differently depending on who asks: which server, view, instance or cache answered, with SOA loops, NSID, flags and EDE codes
+- Diagnose three anycast faults: a stale instance, a dead site still announced, a catchment moved by AS-path prepending
+
+**Evaluation (Evaluate):**
+- Evaluate round robin, weighted records (SRV, HTTPS), GeoDNS with ECS and anycast for spreading load
+- Assess the costs of split horizon (two zones, caches, leaks, DNSSEC) against simpler alternatives
 
 ### Theory Content
-- Advanced DNS architecture patterns (hidden primarys, anycast, GeoDNS)
-- DNS caching strategies and optimisation
-- Split-horizon DNS implementations
-- DNS load balancing techniques
-- Advanced debugging methodologies
+- Day 3 so far and what changed (as of 28 October 2026): RFC 9499 terms; RFC 9199 (2022) anycast advice; serve-stale (RFC 8767) and failure caching (RFC 9520); the root server system's 2049 instances (root-servers.org)
+- Building blocks: layers of an authoritative service; how many servers and where (RFC 2182, RFC 9199 C1 and C6); NOTIFY, transfers, TSIG and catalog zone pointers; name server replication versus anycast; the root server system as an example (online fact, dated)
+- Hidden primary: why; who gets the NOTIFY (RFC 1996 Notify Set, BIND `notify explicit`, SOA MNAME); the lab's configuration; Lab 5.1 transcripts (REFUSED with EDE 18, the public path, transfer ACLs); serial discipline (the "unchanged" warning, same serial with different data); checklist
+- Anycast: definitions and catchments (RFC 4786, RFC 3258); route selection (RFC 4271 §9.1.2.2) and steering (RFC 9199 C2, C4); health-checked withdrawal and covering prefixes (RFC 4786 §4.4.1-4.4.2); the namespace lab and what it cannot show; NSID and `id.server` (RFC 5001, RFC 4892; BIND's CHAOS rate limit); failure modes; anycast for authoritative servers and for resolvers
+- Split horizon: RFC 9499 definitions; BIND views (first match, all zones in views, root hints, TSIG keys as selectors, `in-view`); the lab's views and transcripts; costs and alternatives
+- Traffic and caching: round robin and its limits (ARM note, RFC 6724 rule 9); records with weights (MX, SRV, HTTPS/SVCB); GeoDNS, ECS (RFC 7871) and provider health checks; TTL strategy at scale (RFC 9199 C5-C6, RFC 2308); BIND 9.20 cache controls (`named -C` defaults); serve-stale (tested); caches in a multi-server design
+- Troubleshooting a distributed service: four questions; ask every server (SOA loop, NSID, flags, EDE); symptoms and where to look; exercise (three service-desk reports; answers in presenter notes); a change checklist
+- Pointers, not content: TSIG, RRL, RPZ (Module 6); signing with several servers (Module 7); monitoring (Module 11)
 
 ### Practical Lab
-- Configure a multi-tier DNS architecture
-- Implement split-horizon DNS
-- Performance tuning exercises
-- Advanced troubleshooting scenarios
+- Lab 5.1 Hidden primary (25 min): VM 2 hidden primary for `hp.teamNN.example`, VM 1 its public secondary and the delegation in `teamNN.example`; the public path through the lab resolver; transfer ACLs; a change with and without a new serial; clean-up
+- Lab 5.2 Split horizon with views (20 min): two views on VM 1 (VM 2 internal, everyone else external); the root-hints rule; `rndc` with views; a client moved between views; views removed again
+- Lab 5.3 Anycast in one VM (25 min): `anycast-lab.sh` (six namespaces, BIRD 2.17, two site servers); catchments by AS path; NSID; query distribution; failover when a site's `named` stops
+- Lab 5.4 Troubleshooting drill and clean-up (20 min): three faults (stale instance, dead site still announced, AS-path prepending); the lab removed; both VMs as Module 4 left them
 
 ---
 
@@ -683,7 +693,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
-- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-4 and 6-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary); Module 4 adds Unbound on VM 2 and PowerDNS on VM 1 on port 5300 for its labs and disables them again. The "Participant VMs" line of Module 5 below still gives another count, to be reconciled when that deck is written
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary); Module 4 adds Unbound on VM 2 and PowerDNS on VM 1 on port 5300 for its labs and disables them again; Module 5 uses the same two VMs (a hidden primary, views, and an anycast lab in network namespaces inside VM 2) and undoes each change
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -925,48 +935,63 @@ All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs (bind9 1:
 
 ## Module 5: Advanced DNS Operations - Lab Requirements
 
+All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs (bind9, bind9-utils and bind9-dnsutils 1:9.20.30-1~deb13u1, bird2 2.17.5-0+deb13u1, iproute2 6.15.0-1) against the instructor stack with the `m01` profile (`labs/module05/test/rehearse.sh`, 61 checks after the review fixes, including the serve-stale transcript on the caching slide; both stand-in VMs mount `/run` `noexec`, as Debian 13 does). Lab kit: `labs/module05/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 4 Debian server VMs per participant
-- **Network:** Complex multi-segment topology
-- **Software:** BIND 9, NSD, monitoring tools
+- **Participant VMs:** the two Debian 13 VMs from Module 1, as Module 4 left them: VM 1 (192.0.2.30) BIND primary for `teamNN.example` and its reverse zones; VM 2 (192.0.2.10) BIND resolver with Module 3's files, Unbound and PowerDNS disabled. No extra VMs: the hidden primary is VM 2 (for a child zone the team delegates itself), the views are on VM 1, and the anycast service runs in network namespaces inside VM 2
+- **Packages:** `bird2` added to the VM image with `--no-install-recommends` and `sudo systemctl disable --now bird` (Debian's unit would run BIRD in the VM's own namespace); `iproute2` is part of Debian. Offline path: the pre-installed image; with a mirror, `sudo apt install --no-install-recommends bird2` and the same `disable`
+- **Instructor stack:** the registry (192.0.2.53) and the `m01` profile's lab resolver (192.0.2.55), kept on until the end of the Module 5 lab: Lab 5.1's resolver elsewhere, Lab 5.2's external client. No instructor-stack code change
+- **Anycast lab:** `anycast-lab.sh up` builds clients C1 and C2, routers R1 (AS 65001) and R2 (AS 65002) and sites A and B (both AS 65100, both 198.51.100.53/32) with BIRD 2.17.5 and two extra `named` instances whose files are in the paths Debian's AppArmor profile allows (`/etc/bind/m05-anycast`, `/var/cache/bind/m05-anycast`; `pid-file none`, `session-keyfile none`, `controls { }`); the health checks run from `/usr/local/lib/m05-anycast`, because Debian mounts `/run` `noexec`. Nothing touches VM 2's interfaces, routes or resolver; `down` removes it all
+- **What the anycast lab cannot show:** Internet catchments and latency, BGP convergence across many networks, covering prefixes (a /32 does not propagate on the Internet, RFC 4786 §4.4.2), DDoS absorption, TCP across a route change. The deck says so
+- **Instructor-only:** `labs/module05/instructor/faults.sh` sets the Lab 5.4 faults on each team's VM 2 over SSH; its README has the answers. The repository is public, so the drill is graded on evidence and method (3A task 4)
+- **Secrets:** none; transfers are restricted by address (TSIG is Module 6)
+- **End state (what Module 6 starts from):** both VMs as Module 4 left them (`named.conf`, `named.conf.local`, `named.conf.options` unchanged; no `hp`, internal-zone or per-view `mkeys` files; no namespaces; only `named` on port 53; query logging off); `teamNN.example` two serials higher (the delegation added and removed); `bird2` installed and disabled
+- **Not tested:** real VMs (`sudo`, `systemctl`, `journalctl`, AppArmor enforcement, also on the site servers under `ip netns exec`; Docker does not enforce AppArmor, so the paths were checked against the profile's text); `apt install bird2`; IPv6 transport; memory on a 2-vCPU VM (BIRD's four processes used 12-13 MiB on the test host; the site servers' memory was not separated from VM 2's own resolver)
 
 ### Lab Exercises
 
-#### Lab 5.1: Anycast DNS Implementation (45 minutes)
-**Objective:** Configure anycast DNS for high availability
-**Resources Needed:**
-- Multiple server VMs with same IP addresses
-- BGP simulation or static routing
-- Health check monitoring
+#### Lab 5.1: Hidden Primary (25 minutes)
+**Objective:** Run a zone whose primary is in no NS set, and check that changes reach the public server
 **Exercise Steps:**
-1. Configure identical DNS servers with same anycast IP
-2. Implement health checking and failover
-3. Test automatic failover scenarios
-4. Monitor query distribution
+1. VM 2: save `named.conf.local`; install `vm2/db.hp.teamNN.example` and append `vm2/named.conf.hidden-primary` (`notify explicit`, `also-notify`, `allow-transfer` and `allow-query` for VM 1 only); check; reconfig; query log on; VM 2's own query is REFUSED (EDE 18)
+2. VM 1: save `named.conf.local`; append `vm1/named.conf.public-secondary`; query log on; "transferred serial 2026102801"; `aa` from VM 1
+3. VM 1: `hp IN NS ns1.teamNN.example.` in `teamNN.example`, new serial, reload
+4. The lab resolver resolves `www.hp.teamNN.example` through the registry and VM 1; VM 2's log has no query from it
+5. AXFR refused from VM 2's own address, allowed from VM 1 (VM 1 against itself is refused too: an extra if time allows)
+6. A change with a new serial: NOTIFY to VM 1 only, transfer, the lab resolver sees it; a change without one: "zone serial ... unchanged", same serial with different data (asked from VM 1, which VM 2 allows); then a new serial
+7. Clean-up: saved files back on both VMs, the `hp` line removed with a new serial, reconfig, then the secondary's file and the zone file deleted; VM 2's query log off
+**Success Criteria:** the public path never reaches VM 2; the serial lesson explained; both VMs clean (Practical Assessment 3A task 2, assessed before step 7)
 
-#### Lab 5.2: Hidden Primary Architecture (30 minutes)
-**Objective:** Implement hidden primary DNS architecture
-**Resources Needed:**
-- Hidden primary server (not publicly accessible)
-- Multiple public secondary servers
-- Zone transfer automation
+#### Lab 5.2: Split Horizon with Views (20 minutes)
+**Objective:** Give insiders and outsiders different versions of the team zone, then remove the views
 **Exercise Steps:**
-1. Configure hidden primary server
-2. Set up automated zone transfers to public secondaries
-3. Implement security restrictions
-4. Test update propagation
+1. VM 1: save `named.conf.local` and `named.conf`; install `vm1/named.conf.views`; `named-checkconf` stops: "all zones must be in views" (the root hints in `named.conf`)
+2. Comment out the root-hints include; the internal copy of the zone with `vm1/internal.additions` and a new serial; `named-checkconf -z`; reconfig
+3. `intranet` and `whichview` through VM 2 (internal) and the lab resolver (external, NXDOMAIN); "view internal"/"view external" in VM 1's query log
+4. `rndc reload teamNN.example` fails ("found in multiple views"); `... IN internal` works
+5. VM 2 out of the internal ACL: a cached answer first, NXDOMAIN after `rndc flushtree`; `aa rd` without `ra` from the external view
+6. Undo: saved files back, internal zone file deleted, reconfig, then `internal.mkeys*`/`external.mkeys*` deleted; query log off
+**Success Criteria:** each answer explained by the address VM 1 saw; VM 1 without views, files byte-equal to the saved ones (3A task 3, assessed before step 6)
 
-#### Lab 5.3: DNS Performance Optimisation (15 minutes)
-**Objective:** Optimise DNS server performance
-**Resources Needed:**
-- Performance monitoring tools
-- Load testing utilities
-- Configuration optimisation guides
+#### Lab 5.3: Anycast in One VM (25 minutes)
+**Objective:** See one address served by two sites, and a site withdrawn by its health check
 **Exercise Steps:**
-1. Baseline DNS server performance
-2. Implement caching optimisations
-3. Tune server parameters for high load
-4. Conduct performance testing and analysis
+1. Read the kit's BIRD, named and health-check files; `anycast-lab.sh up`; six namespaces
+2. `status`: R1 has two paths (AS path 65100, and 65002 65100) and uses site A
+3. NSID from C1 (`site-a`) and C2 (`site-b`); `id.server`; site B's own address from C1
+4. Ten queries from each client: each site's query log has only its city's
+5. A loop from C1 while `stop a`: C1 at site B within about a second (0.7 s in the rehearsal, where the stop always lands at the same point of the health check's 1-second cycle; sampled every 0.2 s); health log; R1 now via R2
+6. `start a`: C1 back at site A
+**Success Criteria:** catchments and failover explained from the routers' tables and the health log (3A task 1)
+
+#### Lab 5.4: Troubleshooting Drill and Clean-Up (20 minutes)
+**Objective:** Diagnose three anycast faults from evidence, then remove the lab
+**Exercise Steps:**
+1. The instructor sets one fault at a time with `labs/module05/instructor/faults.sh` (piped to the team's VM 2 over SSH) and gives only the symptom: an old address in city 2 (site B serves an older serial), no answers in city 1 (site A's `named` and health check stopped, route still announced), city 1 answered by site B (AS 65100 prepended at site A)
+2. For each: evidence first (`+nsid` from both cities, SOA at each site's own address, `status`, health logs), then the cause, shown to the instructor with what ruled the others out; `fix` (both sites restored, each city at its own site)
+3. `down`: no namespaces, no lab files, only `named` listening
+4. Both VMs: `named-checkconf`, no files left from Labs 5.1-5.2, query logging off, the team zone resolves through VM 2
+**Success Criteria:** each fault explained with the commands that showed it and the order they were run; both VMs in the end state above (3A task 4)
 
 ---
 
@@ -980,7 +1005,7 @@ All steps below were run on 2026-10-21 with Debian 13 packages (bind9, bind9-uti
 - **Packages:** `bind9`, `bind9-utils`, `bind9-dnsutils`, `dnsperf`, `tcpdump`, `tshark`
 - **Containment:** all traffic stays on the isolated lab network; the only load is `dnsperf -Q 50 -l 10` from the team's resolver VM to its own authoritative VM; no spoofing, no poisoning tool
 - **Set up here and kept for Module 7:** the resolver's `static-stub` zone for `example` (Module 7 Lab 7.3 step 2) and `validate-except { "example"; };`, which Module 7 Lab 7.3 step 1 deletes when it adds the `example.` trust anchor
-- **Starting state from Module 3:** VM 2 already runs BIND as a resolver with the same static-stub zone and `validate-except` (Module 3 Lab 3.1); Lab 6.1 replaces both files. Module 3 Lab 3.4 removed its stealth secondary (`/var/cache/bind/db.teamNN.example`) and VM 1's address-based `allow-transfer` and `also-notify` lines, so Lab 6.4 adds its TSIG lines to a zone statement that has none (two `allow-transfer` lines in one zone are a configuration error)
+- **Starting state from Modules 3-5:** Modules 4 and 5 undo their own changes (Module 5 leaves `teamNN.example` two serials higher and `bird2` installed and disabled), so the state below is Module 3's. VM 2 already runs BIND as a resolver with the same static-stub zone and `validate-except` (Module 3 Lab 3.1); Lab 6.1 replaces both files. Module 3 Lab 3.4 removed its stealth secondary (`/var/cache/bind/db.teamNN.example`) and VM 1's address-based `allow-transfer` and `also-notify` lines, so Lab 6.4 adds its TSIG lines to a zone statement that has none (two `allow-transfer` lines in one zone are a configuration error)
 - **Secrets:** each team makes its own TSIG key with `tsig-keygen` during Lab 6.4; nothing secret is in the kit
 - **Not tested:** the `sudo`/`systemctl` steps and `journalctl` on real VMs; queries from real neighbouring or outside machines (emulated with a second address and a child namespace); the shipped `dnssec-validation auto` with `validate-except`, which was run only with Internet access (slirp4netns) while the harness uses `dnssec-validation no`; Debian 12. Configuration changes were rehearsed with `rndc reconfig`, as in class
 
