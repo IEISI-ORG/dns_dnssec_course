@@ -1,0 +1,14 @@
+; /var/lib/bind/db.hp.teamNN.example on VM 2, the hidden primary (Module 5,
+; Lab 5.1). Set the team number (sed 's/NN/01/g' for team 01). Edit the zone
+; here, raise the serial, then: sudo rndc reload hp.teamNN.example
+; The NS set names only the public server, VM 1 (ns1.teamNN.example).
+; VM 2 appears nowhere in the zone, nor in the parent's delegation.
+$TTL 60
+@       IN SOA  ns1.teamNN.example. hostmaster.teamNN.example. (
+                2026102801 ; serial
+                3600       ; refresh
+                600        ; retry
+                1209600    ; expire
+                60 )       ; negative caching TTL
+        IN NS   ns1.teamNN.example.
+www     IN A    192.0.2.120

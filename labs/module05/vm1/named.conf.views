@@ -1,0 +1,42 @@
+// Module 5, Lab 5.2, VM 1: split horizon with two views. Replaces
+// /etc/bind/named.conf.local for Lab 5.2 only: the lab saves yours first
+// and moves it back at the end. Replace NN, N1 N2 (as in Module 2's
+// zone statements) and 192.0.2.10 (VM 2) with your lab sheet's values.
+// Once one view exists, every zone must be in a view: named.conf's
+// root-hints include moves into the internal view (Lab 5.2 step 2).
+
+acl "internal" {
+    localhost;          // VM 1 itself
+    192.0.2.10;         // VM 2, the organisation's resolver
+};
+
+view "internal" {       // first match wins: the specific view goes first
+    match-clients { internal; };
+    include "/etc/bind/named.conf.root-hints";
+
+    zone "teamNN.example" {
+        type primary;
+        file "/var/lib/bind/db.teamNN.example.internal";
+    };
+    zone "2.0.192.in-addr.arpa" {
+        type primary;
+        file "/var/lib/bind/db.192.0.2";
+    };
+    zone "N2.N1.0.0.8.b.d.0.1.0.0.2.ip6.arpa" {
+        type primary;
+        file "/var/lib/bind/db.2001-db8-NN";
+    };
+};
+
+view "external" {       // everyone else, e.g. resolvers on other networks
+    match-clients { any; };
+    recursion no;       // answers from the zones only, no cache for outsiders
+
+    zone "teamNN.example" {
+        type primary;
+        file "/var/lib/bind/db.teamNN.example";
+    };
+    // one zone, served in both views: loaded once, by the internal view
+    zone "2.0.192.in-addr.arpa" { in-view "internal"; };
+    zone "N2.N1.0.0.8.b.d.0.1.0.0.2.ip6.arpa" { in-view "internal"; };
+};

@@ -1,0 +1,9 @@
+// Module 5, Lab 5.1, VM 1: the public secondary for hp.teamNN.example.
+// Append to /etc/bind/named.conf.local after saving a copy (Lab 5.1 step 2).
+// Replace NN, and 192.0.2.10 (VM 2, the hidden primary) with your lab
+// sheet's address. VM 1 is the server that the NS set and the delegation name.
+zone "hp.teamNN.example" {
+    type secondary;
+    primaries { 192.0.2.10; };
+    file "/var/cache/bind/db.hp.teamNN.example";   // AppArmor: secondaries write in /var/cache/bind
+};

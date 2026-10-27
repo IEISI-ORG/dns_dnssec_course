@@ -1,0 +1,13 @@
+// Module 5, Lab 5.1, VM 2: the hidden primary for hp.teamNN.example.
+// Append to /etc/bind/named.conf.local after saving a copy (Lab 5.1 step 1).
+// Replace NN, and 192.0.2.30 (VM 1, the public secondary) with your lab
+// sheet's address. VM 1 is the only server allowed to ask, transfer or be
+// notified; nothing on the Internet needs to reach this server.
+zone "hp.teamNN.example" {
+    type primary;
+    file "/var/lib/bind/db.hp.teamNN.example";
+    notify explicit;                 // NOTIFY the also-notify list only, not the NS set
+    also-notify { 192.0.2.30; };
+    allow-transfer { 192.0.2.30; };
+    allow-query { 192.0.2.30; };     // SOA checks and transfers from VM 1; nobody else
+};

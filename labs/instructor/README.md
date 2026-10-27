@@ -7,9 +7,9 @@ The instructor-side services for the labs run as one Compose project on a Debian
 | `init` | none | 7-9 | One-shot, on every `up`: rndc key; broken-zone keys; re-signs `expired.example` with validity in the past |
 | `parent` | `PARENT_ADDR` (192.0.2.53 on the slides) | 7-9 | The "registry": on start, builds `db.example` from `classroom/teams.conf` and the published DS records; BIND serving `example.` (signed by the Module 7 `lab` policy), `expired.example` and `wrongds.example`; `publish-ds` for team DS records; writes the trust-anchor handout |
 | `doq` | `DOQ_ADDR` (192.0.2.40), profile `m08` | 8 | Knot DNS 3.4 serving `doq.example` over DoQ (UDP 853) for the instructor demo |
-| `m01-root` | `M01_ROOT_ADDR` (192.0.2.52), profile `m01` | 1-4 | Lab root server: a root zone `.` that delegates `example.` to the parent, and `root-servers.test` |
+| `m01-root` | `M01_ROOT_ADDR` (192.0.2.52), profile `m01` | 1-5 | Lab root server: a root zone `.` that delegates `example.` to the parent, and `root-servers.test` |
 | `m01-child` | `M01_CHILD_ADDR` (192.0.2.54), profile `m01` | 1 | `good.example` and two of the Lab 1.3 fault zones; the parent delegates `good` and four fault zones, each with one fault (names from `M01_FAULT_LABELS`) |
-| `m01-resolver` | `M01_RESOLVER_ADDR` (192.0.2.55), profile `m01` | 1-4 | Recursive resolver for `LAB_SUBNET` whose root hints are the lab root: resolves only the lab hierarchy. Module 2's shared cache; Module 3's forwarder (Lab 3.2) and outside resolver (Lab 3.4); Unbound's forwarder in Module 4 (Lab 4.2) |
+| `m01-resolver` | `M01_RESOLVER_ADDR` (192.0.2.55), profile `m01` | 1-5 | Recursive resolver for `LAB_SUBNET` whose root hints are the lab root: resolves only the lab hierarchy. Module 2's shared cache; Module 3's forwarder (Lab 3.2) and outside resolver (Lab 3.4); Unbound's forwarder in Module 4 (Lab 4.2); a resolver elsewhere and an outside client of VM 1's external view in Module 5 (Labs 5.1-5.2) |
 
 The `m01` services have no keys and no state: `m01-run` fills the classroom addresses and fault labels into the templates in `module01/` on every start. The faults, the labels for assessed runs and the Lab 1.3 answer key are in `module01/README.md` (instructor only; the participants' kit is `../module01/`).
 
@@ -30,7 +30,7 @@ docker compose up -d                                  # no --build: see Images b
 docker compose exec parent named -v                   # the BIND version this class runs
 cat handout/example.ds                                # the example. DS for the lab sheet (written a few seconds after start)
 ```
-On Days 1 and 2 (Modules 1-4), set the three `M01_*` addresses and add `m01` to `COMPOSE_PROFILES`. Modules 2, 3 and 4 use the lab resolver too, and Module 3 Lab 3.2 needs one unused address on the classroom subnet for a dead forwarder (192.0.2.250 on the slides): put it on the lab sheet. For a graded Lab 1.3, also set `M01_FAULT_LABELS` to five names the class has not seen (`module01/README.md`). `teams.conf` must already list every team's VM 1 (the registry delegates `teamNN.example` to it before it runs a server, which Module 1 uses as a worked example). Leave `M01_CHILD_ADDR` empty from Day 3 on: the Module 1 zones are then not delegated. Make these changes at the start of a day: changing them recreates the parent, which leaves `example.` unanswered for a few seconds (keys and the handout are kept).
+On Days 1 and 2 and the Day 3 morning (Modules 1-5), set the three `M01_*` addresses and add `m01` to `COMPOSE_PROFILES`. Modules 2 to 5 use the lab resolver too, and Module 3 Lab 3.2 needs one unused address on the classroom subnet for a dead forwarder (192.0.2.250 on the slides): put it on the lab sheet. For a graded Lab 1.3, also set `M01_FAULT_LABELS` to five names the class has not seen (`module01/README.md`). `teams.conf` must already list every team's VM 1 (the registry delegates `teamNN.example` to it before it runs a server, which Module 1 uses as a worked example). Switch the profile off at the Day 3 lunch break, after the Module 5 lab ("Turning a profile off" below): from then on the `M01_*` addresses stay empty and the Module 1 zones are not delegated. Make these changes at the start of a day or in a break: changing them recreates the parent, which leaves `example.` unanswered for a few seconds (keys and the handout are kept).
 
 With a profile on, an empty address for one of its services stops `up` (`invalid IPv4 address: ParseAddr("set-..._ADDR-in-.env")`), rather than letting Docker pick an address that may belong to another host on the classroom LAN. With the profile off, the empty address is ignored.
 
@@ -71,7 +71,7 @@ Run these in this directory. `-T` lets you pipe a file in.
 ## Turning a profile off
 Compose acts only on services whose profile is active (in `COMPOSE_PROFILES` or given with `--profile`) or that you name. After you take `m01` or `m08` out of `.env`, its containers keep running, `restart: unless-stopped` brings them back after a reboot, and a plain `docker compose down` leaves them and the network ("Resource is still in use"). Remove them by name; this works whether or not the profile is still in `.env`:
 ```sh
-# end of Day 2 (Modules 1-4 use the m01 profile)
+# Day 3 lunch, after the Module 5 lab (Modules 1-5 use the m01 profile)
 docker compose rm -sf m01-root m01-child m01-resolver
 # then, in .env: empty the M01_* addresses and remove m01 from COMPOSE_PROFILES
 docker compose up -d        # recreates the parent without the Module 1 delegations

@@ -1,0 +1,4 @@
+; Module 5, Lab 5.2: append to /var/lib/bind/db.teamNN.example.internal only
+; (the internal view's copy of the zone), then raise its serial.
+intranet  IN A    192.0.2.90
+whichview IN TXT  "internal"
