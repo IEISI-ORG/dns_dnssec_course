@@ -1,0 +1,12 @@
+; /var/lib/bind/db.192.0.2: reverse zone 2.0.192.in-addr.arpa, team NN (Module 2, Lab 2.2).
+; In the lab every team serves its own copy and nobody delegates it to you
+; (resolvers answer it from a built-in empty zone, RFC 6303): ask your own
+; server. Set the team number with sed. The ns1 line holds your VM 1's last
+; octet; if your lab sheet subnet is not 192.0.2.0/24, delete that line.
+$TTL 60
+@       IN SOA  ns1.teamNN.example. hostmaster.teamNN.example. (
+                2026102701 3600 600 1209600 60 )
+        IN NS   ns1.teamNN.example.
+30      IN PTR  ns1.teamNN.example.
+
+; Lab 2.2: add PTR records for www (.80), mail (.81) and ftp (.82).

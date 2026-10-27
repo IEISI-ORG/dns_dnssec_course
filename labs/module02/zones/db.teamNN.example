@@ -1,0 +1,16 @@
+; /var/lib/bind/db.teamNN.example: zone teamNN.example, team NN (Module 2, Lab 2.1).
+; Set the team number with sed (Lab 2.1 step 2) and put your VM 1 address
+; from the lab sheet on the ns1 line. Lab TTLs stay at 60 seconds or less:
+; you can watch changes arrive, and the workshop plan's lab signing policy
+; for Module 7 (max-zone-ttl 60) rejects a zone with a longer TTL.
+$TTL 60
+@       IN SOA  ns1.teamNN.example. hostmaster.teamNN.example. (
+                2026102701 ; serial: YYYYMMDDnn; raise it on every change
+                3600       ; refresh: 1 hour
+                600        ; retry: 10 minutes
+                1209600    ; expire: 2 weeks
+                60 )       ; negative caching TTL: 1 minute
+        IN NS   ns1.teamNN.example.
+ns1     IN A    192.0.2.30
+
+; Lab 2.1: add your records below this line.
