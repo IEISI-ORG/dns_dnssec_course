@@ -107,11 +107,11 @@ step "2.1.2 named-compilezone shows every name in full" "named-compilezone -o - 
     '^web\.team01\.example\.[[:space:]]+60[[:space:]]+IN[[:space:]]+CNAME[[:space:]]+www\.team01\.example\.' \
     '^team01\.example\.[[:space:]]+60[[:space:]]+IN[[:space:]]+MX[[:space:]]+10 mail\.team01\.example\.' \
     '^_imaps\._tcp\.team01\.example\..*SRV[[:space:]]+0 1 993 mail\.team01\.example\.'
-# the image's key is replaced by a new one, as on a VM cloned from an image;
-# then named starts with no zones and the zone arrives with rndc reload
+# the image has no rndc key (removed before sealing, README); the VM makes
+# its own; then named starts with no zones and the zone arrives with rndc reload
 step "2.1.0 a new rndc key for this VM, readable by named" \
-    "md5sum < /etc/bind/rndc.key; rndc-confgen -a -u bind && md5sum < /etc/bind/rndc.key && stat -c '%U %a' /etc/bind/rndc.key" \
-    'wrote key file "/etc/bind/rndc\.key"' '^bind [0-7]+$'
+    "test ! -e /etc/bind/rndc.key && echo no-key-yet; rndc-confgen -a -u bind && stat -c '%U %a' /etc/bind/rndc.key" \
+    '^no-key-yet$' 'wrote key file "/etc/bind/rndc\.key"' '^bind 6[04]0$'
 docker exec "$VM" install -d -o bind -g bind /run/named
 docker exec -d "$VM" sh -c 'exec named -u bind -g > /var/log/named.out 2>&1'
 for _ in $(seq 20); do docker exec "$VM" rndc status >/dev/null 2>&1 && break; sleep 0.5; done
