@@ -1,0 +1,65 @@
+# Module 11, Lab 11.2: /etc/prometheus/dns-rules.yml on VM 2.
+# Alert on what users notice (failed or slow answers) and on what will soon
+# break (serials apart, a certificate near expiry). Each alert says what to
+# check first. "for" keeps a single failed probe from paging anyone.
+# test/dns-rules.test.yml tests every rule with promtool test rules.
+groups:
+  - name: dns
+    rules:
+      # a failed probe, or a probe that is not running at all (the blackbox
+      # exporter down: probe_success then disappears and up drops to 0)
+      - alert: DNSProbeFailed
+        expr: probe_success{job=~"dns_soa|dns_resolve|dot"} == 0 or up{job=~"dns_soa|dns_resolve|dot"} == 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: "{{ $labels.job }} probe of {{ $labels.instance }} failing"
+          first_check: "dig the same question at {{ $labels.instance }}; then the server's log; if every probe fails, systemctl status prometheus-blackbox-exporter"
+
+      # needs two or more servers as dns_soa targets: with the lab's one
+      # target it cannot fire (the rule test shows it with two)
+      - alert: DNSSerialsDiffer
+        expr: count(count_values("serial", probe_dns_serial{job="dns_soa"})) > 1
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: "the servers of the zone answer with different SOA serials"
+          first_check: "SOA from every listed server with +norec; transfer log lines on the secondaries"
+
+      - alert: DNSSlowAnswers
+        expr: sum by (job, instance) (probe_dns_duration_seconds) > 0.5
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: "{{ $labels.instance }} takes over 500 ms to answer the {{ $labels.job }} probe"
+          first_check: "dig +stats at {{ $labels.instance }} (Query time); rndc status there (recursive clients)"
+
+      # only when the resolver is busy (over 1 query per second): a ratio of
+      # a few probes would page for one failed lookup. The labs stay below
+      # that rate (Module 6's load cap), so it is tested with promtool only.
+      - alert: ResolverServfailRatio
+        expr: |
+          sum(rate(bind_response_rcodes_total{role="resolver",rcode="SERVFAIL"}[2m]))
+            / sum(rate(bind_incoming_requests_total{role="resolver",opcode="QUERY"}[2m])) > 0.05
+          and sum(rate(bind_incoming_requests_total{role="resolver",opcode="QUERY"}[2m])) > 1
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: "more than 5% of the resolver's answers are SERVFAIL"
+          first_check: "dig through the resolver: EDE code; then dig +cd and the authoritative servers"
+
+      - alert: BINDStatisticsMissing
+        expr: up{job="bind"} == 0 or bind_up == 0
+        for: 2m
+        labels: {severity: ticket}
+        annotations:
+          summary: "no BIND counters from {{ $labels.instance }} (exporter or statistics channel down)"
+          first_check: "curl -s 127.0.0.1:8053/json/v1/server on that VM; systemctl status prometheus-bind-exporter"
+
+      - alert: CertificateExpiresSoon
+        expr: probe_ssl_earliest_cert_expiry{job="dot"} - time() < 14 * 86400
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "the DoT certificate on {{ $labels.instance }} expires in under 14 days"
+          first_check: "openssl x509 -noout -enddate -in /etc/bind/tls/resolver.crt; renew it (Module 8, make-certs.sh)"

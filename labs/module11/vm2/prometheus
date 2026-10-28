@@ -1,0 +1,4 @@
+# Module 11, Lab 11.2: /etc/default/prometheus on VM 2 (save Debian's copy
+# first). Web interface and API on this VM only (Debian's default is every
+# address); reach it with an SSH tunnel: ssh -L 9090:127.0.0.1:9090 <VM 2>
+ARGS="--web.listen-address=127.0.0.1:9090"

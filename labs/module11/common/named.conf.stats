@@ -1,0 +1,9 @@
+// Module 11, Lab 11.1, both VMs: append to /etc/bind/named.conf.local
+// (save a copy first: sudo cp named.conf.local named.conf.local.m09).
+// BIND's counters over HTTP, in JSON (/json/v1/...) and XML (/xml/v3/...).
+// Local only: the ARM warns that the statistics "may contain sensitive
+// internal information", and reading them often locks parts of named.
+// bind_exporter (Lab 11.2) reads this channel on the same VM.
+statistics-channels {
+    inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+};

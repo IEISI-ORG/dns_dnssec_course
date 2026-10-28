@@ -1,0 +1,47 @@
+# Module 11, Lab 11.2: /etc/prometheus/prometheus.yml on VM 2 (replace NN
+# and the two addresses with yours from the lab sheet).
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/dns-rules.yml
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['127.0.0.1:9090']
+
+  # White-box: BIND's own counters, through bind_exporter on each VM
+  - job_name: bind
+    static_configs:
+      - targets: ['127.0.0.1:9119']      # VM 2, the resolver
+        labels: {role: resolver}
+      - targets: ['192.0.2.30:9119']     # VM 1, the authoritative server
+        labels: {role: authoritative}
+
+  # Black-box: questions asked from outside, through the blackbox exporter.
+  # The relabelling turns each target into the exporter's ?target= parameter.
+  - job_name: dns_soa
+    metrics_path: /probe
+    params: {module: [soa_teamNN]}
+    static_configs:
+      - targets: ['192.0.2.30']          # every server listed for the zone
+    relabel_configs: &probe
+      - {source_labels: [__address__], target_label: __param_target}
+      - {source_labels: [__param_target], target_label: instance}
+      - {target_label: __address__, replacement: '127.0.0.1:9115'}
+
+  - job_name: dns_resolve
+    metrics_path: /probe
+    params: {module: [www_teamNN]}
+    static_configs:
+      - targets: ['192.0.2.10']
+    relabel_configs: *probe
+
+  - job_name: dot
+    metrics_path: /probe
+    params: {module: [dot_tls]}
+    static_configs:
+      - targets: ['192.0.2.10:853']
+    relabel_configs: *probe

@@ -1,0 +1,136 @@
+# Rule tests for ../vm2/dns-rules.yml: promtool test rules test/dns-rules.test.yml
+# (run from labs/module11; rehearse.sh runs it on VM 2). Each rule fires on
+# the data it is written for and stays quiet on data that looks like the
+# lab's: one probe every 15 s, one authoritative server.
+rule_files:
+  - ../vm2/dns-rules.yml
+evaluation_interval: 15s
+tests:
+  # DNSProbeFailed: a probe that fails from 0:30 fires after "for: 1m"
+  - interval: 15s
+    input_series:
+      - series: 'probe_success{job="dns_soa",instance="192.0.2.30"}'
+        values: '1 1 0x12'
+    alert_rule_test:
+      - eval_time: 1m15s
+        alertname: DNSProbeFailed
+        exp_alerts: []
+      - eval_time: 2m
+        alertname: DNSProbeFailed
+        exp_alerts:
+          - exp_labels: {severity: page, job: dns_soa, instance: 192.0.2.30}
+            exp_annotations:
+              summary: "dns_soa probe of 192.0.2.30 failing"
+              first_check: "dig the same question at 192.0.2.30; then the server's log; if every probe fails, systemctl status prometheus-blackbox-exporter"
+  # DNSProbeFailed: the blackbox exporter down (no probe_success, up 0)
+  - interval: 15s
+    input_series:
+      - series: 'up{job="dns_resolve",instance="192.0.2.10"}'
+        values: '0x12'
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: DNSProbeFailed
+        exp_alerts:
+          - exp_labels: {severity: page, job: dns_resolve, instance: 192.0.2.10}
+            exp_annotations:
+              summary: "dns_resolve probe of 192.0.2.10 failing"
+              first_check: "dig the same question at 192.0.2.10; then the server's log; if every probe fails, systemctl status prometheus-blackbox-exporter"
+  # DNSSerialsDiffer: two servers, different serials for over 5 minutes;
+  # one server (the lab) never fires
+  - interval: 15s
+    input_series:
+      - series: 'probe_dns_serial{job="dns_soa",instance="192.0.2.30"}'
+        values: '2026102801x30'
+      - series: 'probe_dns_serial{job="dns_soa",instance="192.0.2.31"}'
+        values: '2026102800x30'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: DNSSerialsDiffer
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "the servers of the zone answer with different SOA serials"
+              first_check: "SOA from every listed server with +norec; transfer log lines on the secondaries"
+  - interval: 15s
+    input_series:
+      - series: 'probe_dns_serial{job="dns_soa",instance="192.0.2.30"}'
+        values: '2026102801x30'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: DNSSerialsDiffer
+        exp_alerts: []
+  # DNSSlowAnswers: 0.6 s in total over the probe's phases for 5 minutes
+  - interval: 15s
+    input_series:
+      - series: 'probe_dns_duration_seconds{job="dns_soa",instance="192.0.2.30",phase="request"}'
+        values: '0.5x30'
+      - series: 'probe_dns_duration_seconds{job="dns_soa",instance="192.0.2.30",phase="connect"}'
+        values: '0.1x30'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: DNSSlowAnswers
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: dns_soa, instance: 192.0.2.30}
+            exp_annotations:
+              summary: "192.0.2.30 takes over 500 ms to answer the dns_soa probe"
+              first_check: "dig +stats at 192.0.2.30 (Query time); rndc status there (recursive clients)"
+  # ResolverServfailRatio: 2 queries per second, a third of them SERVFAIL:
+  # fires; the same ratio at one query per 15 s (the lab's probes): quiet
+  - interval: 15s
+    input_series:
+      - series: 'bind_incoming_requests_total{role="resolver",opcode="QUERY",instance="127.0.0.1:9119",job="bind"}'
+        values: '0+30x40'
+      - series: 'bind_response_rcodes_total{role="resolver",rcode="SERVFAIL",instance="127.0.0.1:9119",job="bind"}'
+        values: '0+10x40'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: ResolverServfailRatio
+        exp_alerts:
+          - exp_labels: {severity: page}
+            exp_annotations:
+              summary: "more than 5% of the resolver's answers are SERVFAIL"
+              first_check: "dig through the resolver: EDE code; then dig +cd and the authoritative servers"
+  - interval: 15s
+    input_series:
+      - series: 'bind_incoming_requests_total{role="resolver",opcode="QUERY",instance="127.0.0.1:9119",job="bind"}'
+        values: '0+1x40'
+      - series: 'bind_response_rcodes_total{role="resolver",rcode="SERVFAIL",instance="127.0.0.1:9119",job="bind"}'
+        values: '0+1x40'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: ResolverServfailRatio
+        exp_alerts: []
+  # BINDStatisticsMissing: the exporter on VM 1 not scraped for 2 minutes
+  - interval: 15s
+    input_series:
+      - series: 'up{job="bind",instance="192.0.2.30:9119",role="authoritative"}'
+        values: '0x20'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: BINDStatisticsMissing
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: bind, instance: "192.0.2.30:9119", role: authoritative}
+            exp_annotations:
+              summary: "no BIND counters from 192.0.2.30:9119 (exporter or statistics channel down)"
+              first_check: "curl -s 127.0.0.1:8053/json/v1/server on that VM; systemctl status prometheus-bind-exporter"
+  # CertificateExpiresSoon: 10 days left fires after 10 minutes; 20 days does not
+  - interval: 1m
+    input_series:
+      - series: 'probe_ssl_earliest_cert_expiry{job="dot",instance="192.0.2.10:853"}'
+        values: '864000x20'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: CertificateExpiresSoon
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: dot, instance: "192.0.2.10:853"}
+            exp_annotations:
+              summary: "the DoT certificate on 192.0.2.10:853 expires in under 14 days"
+              first_check: "openssl x509 -noout -enddate -in /etc/bind/tls/resolver.crt; renew it (Module 8, make-certs.sh)"
+  - interval: 1m
+    input_series:
+      - series: 'probe_ssl_earliest_cert_expiry{job="dot",instance="192.0.2.10:853"}'
+        values: '1728000x20'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: CertificateExpiresSoon
+        exp_alerts: []

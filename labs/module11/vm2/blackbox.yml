@@ -1,0 +1,40 @@
+# Module 11, Lab 11.2: /etc/prometheus/blackbox.yml on VM 2 (replace NN).
+# Each module is one kind of question; Prometheus says which server to ask
+# (the probe's "target"). Answers are checked, not just timed.
+modules:
+  # The zone's SOA from an authoritative server, without recursion.
+  # Exports probe_dns_serial, so the serials of all servers can be compared.
+  soa_teamNN:
+    prober: dns
+    timeout: 3s
+    dns:
+      preferred_ip_protocol: ip4      # default ip6; the lab is IPv4
+      query_name: teamNN.example
+      query_type: SOA
+      recursion_desired: false
+      valid_rcodes: [NOERROR]
+      validate_answer_rrs:
+        fail_if_none_matches_regexp: ['^teamNN\.example\.\s.*\sSOA\s']
+  # A name through the resolver, as a user would ask it.
+  www_teamNN:
+    prober: dns
+    timeout: 3s
+    dns:
+      preferred_ip_protocol: ip4
+      query_name: www.teamNN.example
+      query_type: A
+      recursion_desired: true
+      valid_rcodes: [NOERROR]
+      validate_answer_rrs:
+        fail_if_none_matches_regexp: ['\sA\s']
+  # The DoT listener (Module 8): a TLS handshake that checks the certificate
+  # chain and name; exports probe_ssl_earliest_cert_expiry.
+  dot_tls:
+    prober: tcp
+    timeout: 3s
+    tcp:
+      preferred_ip_protocol: ip4
+      tls: true
+      tls_config:
+        ca_file: /etc/prometheus/team-ca.crt
+        server_name: resolver.teamNN.example

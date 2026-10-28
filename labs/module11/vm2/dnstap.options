@@ -1,0 +1,7 @@
+    // Module 11, Lab 11.1: paste inside options { } on VM 2 (save a copy of
+    // named.conf.options first), then rndc reconfig. Logs the queries that
+    // clients send and the queries the resolver sends upstream, to a file
+    // in a directory Debian's AppArmor profile lets named write. Bounded:
+    // at most 3 files of 20 MB; delete them when the lab is done.
+    dnstap { client; resolver query; };
+    dnstap-output file "/var/cache/bind/dnstap.fstrm" size 20m versions 3;

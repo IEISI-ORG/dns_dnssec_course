@@ -21,3 +21,7 @@ instructor/.env
 instructor/classroom/teams.conf
 instructor/handout/
 instructor/test/work/
+# captures and dnstap files hold query data (Labs 6.5, 8.1, 11.1)
+*.fstrm*
+*.pcap
+*.pcapng
