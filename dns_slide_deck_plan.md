@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~780 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~785 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -151,108 +151,34 @@
 
 ## Module 5: Advanced DNS Operations and Architecture
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 55-60
+**Slides:** 60 (54 theory, 6 lab); deck: `modules/module05-advanced-dns-operations.marp.md`. Day 3 Session 1: 90 minutes of content, no knowledge-check slot
 
-### Advanced Architecture Patterns (15 slides)
-1. **Complex DNS Topologies**
-   - Multi-tier DNS architectures
-   - Geographic distribution strategies
-   - Redundancy and failover planning
-   - Scalability considerations
+### Opening (6 slides)
+- Title; module overview; learning objectives; where Day 3 starts (VM 1 and VM 2 as Module 4 left them; the lab resolver on until lunch); what changed recently (RFC 9499 terms, RFC 9199, serve-stale and RFC 9520, 2049 root server instances as of 27 October 2026 UTC); agenda (theory and lab)
 
-2. **Anycast DNS Implementation**
-   - Anycast routing principles
-   - BGP advertisement strategies
-   - Health checking and monitoring
-   - Failover mechanisms and timing
+### 1. Building Blocks of a DNS Service (6 slides)
+- Layers of an authoritative service; how many servers and where (RFC 2182, RFC 9199 C1, C6); moving data between the layers (NOTIFY, transfers, TSIG, catalog zones, multi-signer pointers); two kinds of replication (NS records, anycast); the root server system as an example
 
-3. **Hidden Primary Architectures**
-   - Security benefits and use cases
-   - Implementation strategies
-   - Zone transfer optimisation
-   - Operational procedures
+### 2. Hidden Primary (7 slides)
+- Why hide the primary; who gets the NOTIFY (RFC 1996, `notify explicit`, SOA MNAME); the lab's configuration; seen in Lab 5.1 (tested); serial discipline (tested); checklist
 
-4. **Split-Horizon DNS Advanced Concepts**
-   - Complex view configurations
-   - Policy-based routing
-   - Security implications
-   - Management and maintenance
+### 3. Anycast (9 slides)
+- One address, many servers (RFC 4786, RFC 3258); routing decides (RFC 4271, the lab's two paths, prepending, RFC 9199 C2/C4); health checks and withdrawal (RFC 4786 §4.4.1-4.4.2); the lab inside VM 2; what the lab can and cannot show (failover measured with its set-up); which instance answered (NSID, `id.server`, BIND's CHAOS rate limit, tested); when anycast goes wrong; authoritative and resolver anycast
 
-### DNS Caching Optimisation (12 slides)
-5. **Advanced Caching Strategies**
-   - Cache hierarchy design
-   - Negative caching optimisation
-   - Prefetching mechanisms
-   - Cache warming techniques
+### 4. Split Horizon (6 slides)
+- Split DNS and views (RFC 9499) and alternatives; BIND views (ARM, tested errors); the lab's views; seen in Lab 5.2 (tested); costs of split horizon
 
-6. **TTL Strategy Development**
-   - Business requirement analysis
-   - Change frequency assessment
-   - Performance vs freshness tradeoffs
-   - Emergency change procedures
+### 5. Traffic and Caching (8 slides)
+- Round robin and its limits; records with weights (MX, SRV, HTTPS); GeoDNS, ECS and health-checked answers; TTL strategy at scale; BIND 9.20 cache controls (`named -C`); serve-stale (tested); caches in a multi-server design
 
-7. **Cache Performance Analysis**
-   - Hit ratio optimisation
-   - Memory usage patterns
-   - Query pattern analysis
-   - Capacity planning methodologies
+### 6. Troubleshooting a Distributed Service (6 slides)
+- Four questions; ask every server; symptoms and where to look; exercise: three reports from the service desk (answers in presenter notes); a change checklist
 
-### DNS Load Balancing and Traffic Management (10 slides)
-8. **DNS-Based Load Balancing**
-   - Round-robin implementations
-   - Weighted response strategies
-   - Geographic load balancing
-   - Health check integration
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (two VMs, `bird2` in the image, the lab resolver, end state), Labs 5.1-5.4 (hidden primary; split horizon with views; anycast in one VM; troubleshooting drill and clean-up)
 
-9. **GeoDNS Implementation**
-   - Geographic query routing
-   - Content delivery optimisation
-   - Latency-based routing
-   - Compliance and legal considerations
-
-10. **Traffic Engineering with DNS**
-    - Capacity management
-    - Planned maintenance procedures
-    - Emergency traffic redirection
-    - Performance monitoring
-
-### Advanced Troubleshooting Methodologies (12 slides)
-11. **Systematic DNS Troubleshooting**
-    - Problem classification frameworks
-    - Tool selection strategies
-    - Data collection methodologies
-    - Root cause analysis techniques
-
-12. **Query Path Analysis**
-    - End-to-end query tracing
-    - Latency measurement techniques
-    - Bottleneck identification
-    - Performance optimisation
-
-13. **Complex Resolution Issues**
-    - Delegation problems
-    - DNSSEC validation failures
-    - Timeout and retry scenarios
-    - Interoperability challenges
-
-### DNS Monitoring and Observability (8 slides)
-14. **End-to-End Monitoring Strategies**
-    - Metrics collection frameworks
-    - Real-time alerting systems
-    - Performance baseline establishment
-    - Trend analysis and capacity planning
-
-15. **Operational Excellence Practices**
-    - Change management procedures
-    - Documentation standards
-    - Incident response protocols
-    - Continuous improvement processes
-
-### Practical Lab Introduction (3 slides)
-16. **Advanced Configuration Workshop**
-    - Complex architecture implementation
-    - Performance optimisation exercises
-    - Troubleshooting scenarios
+### Closing (6 slides)
+- References, knowledge check (review questions, answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -868,7 +794,7 @@
 | Module 2: DNS Operations | 52 | 6 | 58 |
 | Module 3: DNS Server Types | 54 | 6 | 60 |
 | Module 4: DNS Software Platforms | 51 | 6 | 57 |
-| Module 5: Advanced Operations | 52 | 3 | 55 |
+| Module 5: Advanced Operations | 54 | 6 | 60 |
 | Module 6: DNS Security | 62 | 8 | 70 |
 | Module 7: DNSSEC Implementation | 64 | 6 | 70 |
 | Module 8: DNS Privacy | 56 | 7 | 63 |
@@ -877,9 +803,9 @@
 | Module 11: Monitoring & Performance | 50 | 5 | 55 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **665** | **70** | **735** |
+| **Total Core Content** | **667** | **73** | **740** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **780** |
+| **Grand Total** | | | **785** |
 
 ---
 

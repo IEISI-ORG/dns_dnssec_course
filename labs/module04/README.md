@@ -15,8 +15,8 @@ switches the two newcomers off again.
 | Registry / lab TLD (`parent`) | 192.0.2.53 | serves `example.`; Unbound's stub zone points at it |
 | Lab resolver (`m01-resolver`) | 192.0.2.55 | Module 1's resolver: Unbound's forwarder in Lab 4.2 |
 
-The instructor stack keeps the `m01` profile on until the end of Day 2
-(instructor README). Use the lab sheet addresses in place of the slide
+The instructor stack keeps the `m01` profile on until the Day 3 lunch break,
+after the Module 5 lab (instructor README). Use the lab sheet addresses in place of the slide
 addresses.
 
 ## Why port 5300, and why two VMs are enough

@@ -1,0 +1,12 @@
+; Module 5, Labs 5.3-5.4: the zone every anycast site serves. Each site
+; loads its own copy; keeping the copies equal is the operator's job.
+$TTL 30
+@       IN SOA  ns.svc.test. hostmaster.svc.test. (
+                2026102801 ; serial
+                3600       ; refresh
+                600        ; retry
+                1209600    ; expire
+                30 )       ; negative caching TTL
+        IN NS   ns.svc.test.
+ns      IN A    198.51.100.53
+www     IN A    198.51.100.80

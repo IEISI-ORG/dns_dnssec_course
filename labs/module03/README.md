@@ -15,8 +15,8 @@ then removes the secondary again.
 | Registry / lab TLD (`parent`) | 192.0.2.53 | serves `example.`; delegates `teamNN.example` to VM 1 only (`teams.conf`); target of VM 2's static-stub zone |
 | Lab resolver (`m01-resolver`) | 192.0.2.55 | Module 1's resolver: the forwarder in Lab 3.2 and "a resolver elsewhere" in Lab 3.4 |
 
-The instructor stack keeps the `m01` profile on through Day 2 (instructor
-README). Use the lab sheet addresses in place of the slide addresses.
+The instructor stack keeps the `m01` profile on until the Day 3 lunch break,
+after the Module 5 lab (instructor README). Use the lab sheet addresses in place of the slide addresses.
 
 ## Why VM 2 is a stealth secondary
 
