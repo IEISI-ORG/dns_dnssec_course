@@ -272,13 +272,13 @@ Assessed from Lab 4.4's comparison sheet (`labs/module04/comparison-sheet.md`, o
 **Learning Objectives Tested:**
 - Monitoring implementation (Apply)
 - Incident response (Apply/Analyse)
-- Performance optimisation (Analyse/Evaluate)
+- Performance analysis (Analyse/Evaluate)
 
-**Tasks:**
-1. Deploy a DNS monitoring solution (10 points)
-2. Respond to simulated DNS outage scenario (10 points)
-3. Analyse performance data and recommend optimisations (5 points)
-4. Document incident response procedures (5 points)
+**Tasks** (assessed from the Module 11 labs on the participant's own VMs; see Appendix A of `dns_dnssec_workshop_plan.md` and `labs/module11/README.md`; any load stays within `dnsperf -Q 50 -l 10` against the participant's own resolver):
+1. Deploy DNS monitoring (Labs 11.2-11.3): bind_exporter on both VMs, Prometheus and blackbox DNS and TLS probes on VM 2 with the kit's alert rules; show six targets up, the probe's serial equal to the counter's, and an alert that fired when `named` stopped and cleared when it came back, with its timing explained; run `zonecheck.sh` on both team zones and state the hand-signed zone's expiry date (10 points). Assess before the Lab 11.4 clean-up
+2. Respond to simulated outages (Lab 11.4, faults 1 and 3, about 5 points each): the instructor sets each fault for all teams at once with `labs/module11/instructor/` (one of two variants per fault) and gives only the symptom. Graded on the evidence and the method, not the named cause alone: what detected it and when, the commands run and their order (through the resolver with and without `+cd`, each server with `+norec`, the registry, the logs), what each showed and ruled out, the fix (for fault 3, the correct DS sent to the registry) and its verification (10 points). The repository is public, so the faults and answers can be read in advance; the instructor chooses the order and does not name them
+3. Analyse performance data and recommend (Lab 11.1): explain the two `dnsperf` runs (existing names, then unique names) from the resolver's counters (hit ratio, recursions, latency) and recommend what to watch and change, stating that the numbers come from the lab, not production hardware (5 points)
+4. Document incident response (Lab 11.4): one `incident-record.md` per fault, with UTC times, evidence with commands, cause, fix, verification, time to detect and to recover, and one change to monitoring or the runbook; fault 2's record is the short one (cause, why no alert fired, the check that caught it). The records may be finished after the session and are due by the end of Day 6 (5 points)
 
 ---
 

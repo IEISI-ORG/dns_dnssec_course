@@ -3,7 +3,7 @@
 ## Overall Presentation Structure
 - **Course Duration:** 6 full days + Day 7 Final Project morning, 12 modules (see Program Facts in `dns_dnssec_workshop_plan.md`)
 - **Slide Format:** Theory sessions (90 minutes each) with practical lab introductions
-- **Estimated Total Slides:** ~785 (see Total Slide Count Summary)
+- **Estimated Total Slides:** ~792 (see Total Slide Count Summary)
 - **Format:** Professional presentation template with consistent branding
 
 ---
@@ -467,96 +467,34 @@
 
 ## Module 11: DNS Monitoring, Incident Response, and Performance Optimisation
 **Duration:** 90 minutes theory + 90 minutes practical
-**Estimated Slides:** 55-60
+**Slides:** 62 (56 theory, 6 lab); deck: `modules/module11-monitoring-incident-response.marp.md`. Day 6 Session 1: 90 minutes of content, no knowledge-check slot
 
-### DNS Monitoring Strategy (15 slides)
-1. **Monitoring Framework Development**
-   - Key Performance Indicators (KPIs)
-   - Service Level Objectives (SLOs)
-   - Monitoring architecture design
-   - Tool selection criteria
+### Opening (6 slides)
+- Title; module overview; learning objectives; where Day 6 starts (VM 1 and VM 2 as Module 9 left them, the registry; Module 10 assumed to change nothing on the VMs); what changed recently (NIST SP 800-61 Rev. 3, RFC 9499 on lame delegation, Prometheus 2.53 in Debian 13 and its upstream end of support, dnsperf on Codeberg, RIPE Atlas probes as of 27 October 2026 UTC); agenda (theory and lab)
 
-2. **DNS Metrics and Measurements**
-   - Query response times
-   - Availability measurements
-   - Error rate tracking
-   - Cache performance metrics
+### 1. What to Watch (8 slides)
+- Why DNS fails quietly; black-box and white-box monitoring (SRE book); the four golden signals for authoritative servers and resolvers; SLIs, SLOs and ICANN Specification 10; checks across servers and the parent (serials, NS sets, glue, DS, lame servers: RFC 1912, RFC 9499, RFC 7477, RFC 9471); signature and certificate clocks (RFC 6781, BIND default and lab policies); the forward pointers from Modules 1-8, collected
 
-3. **Monitoring Infrastructure**
-   - Prometheus and Grafana setup
-   - RIPE Atlas integration
-   - ThousandEyes deployment
-   - Custom monitoring solutions
+### 2. Where the Numbers Come From (7 slides)
+- BIND's statistics channel and `rndc stats`; counters become rates (tested `rates.sh`, Prometheus `rate()`); counters worth watching (ARM); logs and their cost (RFC 8932); dnstap (tested); other tools and their Debian 13 status
 
-4. **Alerting and Notification Systems**
-   - Alert threshold configuration
-   - Escalation procedures
-   - Notification channel management
-   - Alert fatigue prevention
+### 3. Collecting, Alerting, Looking from Outside (8 slides)
+- Prometheus in one slide (Debian 13 packages); the lab's monitoring stack; probes that check the answer (blackbox DNS and TLS); alert rules and `for` (tested timings); alerts people act on (SRE book, Alertmanager); checks a probe cannot make (`zonecheck.sh`, Monitoring Plugins exit codes, Zonemaster, DNSViz); looking from outside (RIPE Atlas, NSID, commercial services)
 
-### Performance Optimisation (15 slides)
-5. **DNS Performance Analysis**
-   - Baseline establishment
-   - Bottleneck identification
-   - Performance testing methodologies
-   - Capacity planning procedures
+### 4. Performance and Capacity (7 slides)
+- What sets a resolver's speed (RFC 8198, BIND's NSEC-only synthesis); measured in Lab 11.1 (with its set-up); dnsperf and resperf; BIND's limits and knobs (`named -C`, ARM); capacity planning (RFC 9199 C4); authoritative servers under load (RRL and cookies, tested)
 
-6. **Query Response Optimisation**
-   - Caching strategy optimisation
-   - Network latency reduction
-   - Server placement strategies
-   - Load balancing improvements
+### 5. Incident Response (8 slides)
+- An incident's life (NIST SP 800-61 Rev. 3); roles and communication; first questions for a DNS incident; fast fixes and their traps (tested DS timings, RFC 7646); case: Meta, 4 October 2021; case: Slack, 30 September 2021; after the incident
 
-7. **Infrastructure Scaling**
-   - Horizontal scaling strategies
-   - Vertical scaling considerations
-   - Auto-scaling implementations
-   - Cost optimisation techniques
+### 6. Continuity and Recovery (6 slides)
+- RTO, RPO and MTD (NIST SP 800-34 Rev. 1); what keeps answering when something fails (RFC 1035 EXPIRE, signatures, caches, the registry); what to back up and test; disaster scenarios to rehearse; exercise: a tabletop (answers in presenter notes)
 
-### Incident Response Management (15 slides)
-8. **Incident Response Framework**
-   - Incident classification system
-   - Response team organisation
-   - Communication procedures
-   - Documentation requirements
+### Practical Lab (6 slides)
+- Lab introduction, lab environment (two VMs, the Prometheus packages in the image, load limits, end state), Labs 11.1-11.4 (counters, rates and a capture; Prometheus, exporters and alerts; checks across servers and the parent; incident drill and clean-up)
 
-9. **DNS Incident Types**
-   - Service outages
-   - Performance degradation
-   - Security incidents
-   - Configuration errors
-
-10. **Incident Response Procedures**
-    - Detection and alerting
-    - Initial assessment
-    - Mitigation strategies
-    - Resolution and recovery
-
-11. **Post-Incident Activities**
-    - Root cause analysis
-    - Lessons learned documentation
-    - Process improvement implementation
-    - Preventive measure development
-
-### Business Continuity and Disaster Recovery (10 slides)
-12. **Disaster Recovery Planning**
-    - Risk assessment procedures
-    - Recovery time objectives (RTO)
-    - Recovery point objectives (RPO)
-    - Backup and restore strategies
-
-13. **Business Continuity Implementation**
-    - Service redundancy design
-    - Geographic distribution strategies
-    - Failover automation
-    - Communication plans
-
-### Practical Lab Introduction (5 slides)
-14. **Monitoring Implementation Workshop**
-    - Complete monitoring stack deployment
-    - Incident response simulation
-    - Performance optimisation exercises
-    - Recovery procedure testing
+### Closing (6 slides)
+- References, knowledge check (review questions, answers in presenter notes), thank you, contact, licence
 
 ---
 
@@ -800,12 +738,12 @@
 | Module 8: DNS Privacy | 56 | 7 | 63 |
 | Module 9: Registry Operations | 60 | 7 | 67 |
 | Module 10: CoCCA Systems | 45 | 5 | 50 |
-| Module 11: Monitoring & Performance | 50 | 5 | 55 |
+| Module 11: Monitoring & Performance | 56 | 6 | 62 |
 | Module 12: Emerging Technologies | 45 | 5 | 50 |
 | Course Conclusion | 10 | 0 | 10 |
-| **Total Core Content** | **667** | **73** | **740** |
+| **Total Core Content** | **673** | **74** | **747** |
 | **Supplementary Materials** | | | **45** |
-| **Grand Total** | | | **785** |
+| **Grand Total** | | | **792** |
 
 ---
 
