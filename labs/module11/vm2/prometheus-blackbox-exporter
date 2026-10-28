@@ -1,0 +1,3 @@
+# Module 11, Lab 11.2: /etc/default/prometheus-blackbox-exporter on VM 2
+# (save Debian's copy first). The probes are defined in blackbox.yml.
+ARGS="--config.file=/etc/prometheus/blackbox.yml --web.listen-address=127.0.0.1:9115"

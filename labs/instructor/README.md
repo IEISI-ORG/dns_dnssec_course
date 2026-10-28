@@ -5,7 +5,7 @@ The instructor-side services for the labs run as one Compose project on a Debian
 | Service | Address (`.env`) | Module | What it does |
 |---|---|---|---|
 | `init` | none | 7-9 | One-shot, on every `up`: rndc key; broken-zone keys; re-signs `expired.example` with validity in the past |
-| `parent` | `PARENT_ADDR` (192.0.2.53 on the slides) | 7-9 | The "registry": on start, builds `db.example` from `classroom/teams.conf` and the published DS records; BIND serving `example.` (signed by the Module 7 `lab` policy), `expired.example` and `wrongds.example`; `publish-ds` for team DS records; writes the trust-anchor handout |
+| `parent` | `PARENT_ADDR` (192.0.2.53 on the slides) | 7-9, 11 | The "registry": on start, builds `db.example` from `classroom/teams.conf` and the published DS records; BIND serving `example.` (signed by the Module 7 `lab` policy), `expired.example` and `wrongds.example`; `publish-ds` for team DS records; writes the trust-anchor handout |
 | `doq` | `DOQ_ADDR` (192.0.2.40), profile `m08` | 8 | Knot DNS 3.4 serving `doq.example` over DoQ (UDP 853) for the instructor demo |
 | `m01-root` | `M01_ROOT_ADDR` (192.0.2.52), profile `m01` | 1-5 | Lab root server: a root zone `.` that delegates `example.` to the parent, and `root-servers.test` |
 | `m01-child` | `M01_CHILD_ADDR` (192.0.2.54), profile `m01` | 1 | `good.example` and two of the Lab 1.3 fault zones; the parent delegates `good` and four fault zones, each with one fault (names from `M01_FAULT_LABELS`) |
@@ -52,6 +52,7 @@ Run these in this directory. `-T` lets you pipe a file in.
 | 7.1 | their `dsset-manualNN.example.` file | `docker compose exec -T parent publish-ds manualNN.example < dsset-manualNN.example.` |
 | 7.2 | "our CDS is up" | `docker compose exec parent publish-ds teamNN.example --cds` (asks the address in `teams.conf`; add an address to ask another) |
 | 7.4 | "new CDS after the KSK rollover" | the same `--cds` command |
+| 11.4 | nothing (fault 3 of the incident drill) | `sh ../module11/instructor/ds-fault.sh set NN [digest\|tag]`, then, when the team sends its corrected DS, `sh ../module11/instructor/ds-fault.sh fix NN` (runs `publish-ds` through `docker compose exec`; see `../module11/instructor/README.md`) |
 
 - **First DS for a zone:** when a zone has no DS yet, `--cds` cannot check the CDS signature against anything. It checks that the CDS matches a DNSKEY the team publishes, accepts it and prints the key tags; confirm them with the team before moving on. RFC 8078 calls this accepting the initial DS by out-of-band means.
 - **Replacing a DS:** when a DS is already published, `dnssec-cds` accepts the new CDS only if it is signed by a key that matches the current DS (RFC 7344). A CDS of `0 0 0 00` withdraws the DS.

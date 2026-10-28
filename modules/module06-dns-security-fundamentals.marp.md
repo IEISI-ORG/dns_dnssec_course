@@ -888,7 +888,7 @@ team01.example                 5       3         4      2  1
 
 | Sign | Where BIND shows it |
 |---|---|
-| Refused queries (probing, open-resolver scans) | `rndc stats`: "auth queries rejected", "recursive queries rejected" (not logged at info) |
+| Refused queries (probing, open-resolver scans) | `rndc stats`: "auth queries rejected", "recursive queries rejected"; ACL denials for a zone the server serves are also logged in `security` ("query ... denied"), refusals for lack of recursion (EDE 20) are not |
 | Reflection through your server | `rate-limit` log category; "responses dropped/truncated for rate limits" |
 | Transfer attempts | `security`: "zone transfer ... denied"; `xfer-out` for successes |
 | TSIG problems | `security`: "tsig verify failure (BADSIG)", BADKEY, BADTIME |

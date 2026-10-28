@@ -1,0 +1,8 @@
+www.teamNN.example A
+mail.teamNN.example A
+ftp.teamNN.example A
+teamNN.example MX
+teamNN.example SOA
+resolver.teamNN.example A
+nosuch.teamNN.example A
+www.manualNN.example A

@@ -1,0 +1,7 @@
+# Module 11, Lab 11.2: /etc/default/prometheus-bind-exporter on VM 1
+# (save Debian's copy first). Reads the statistics channel on this VM and
+# offers the counters to Prometheus on VM 2 at this VM's address, port 9119.
+# Replace the address with VM 1's from the lab sheet. The exporter has no
+# access list of its own: in production, a firewall rule or
+# --web.config.file (TLS and basic authentication) keeps others out.
+ARGS="--web.listen-address=192.0.2.30:9119 --bind.stats-url=http://127.0.0.1:8053/"

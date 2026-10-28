@@ -557,39 +557,46 @@ The modular design allows for flexible course delivery tailored to specific audi
 
 ## Module 11: DNS Monitoring, Incident Response, and Performance Optimisation
 **Duration:** 90 minutes theory + 90 minutes practical
+**Deck:** `modules/module11-monitoring-incident-response.marp.md` (62 slides: 56 theory, 6 lab). Day 6 Session 1, so no knowledge-check slot. Lab kit: `labs/module11/`; lab server: the registry (`example.`) only.
+**Prerequisites:** Modules 1-9 or equivalent experience; the labs start from the VMs as Module 9 left them
 
 ### Learning Objectives (Bloom's Taxonomy)
 **Knowledge (Remember):**
-- Recall DNS monitoring metrics and KPIs
-- Identify incident response procedures for DNS outages
+- Recall the four golden signals (latency, traffic, errors, saturation) and the DNS metrics behind each, and the checks across servers and parent: serials, NS sets, glue, DS against DNSKEY, lame servers (RFC 1912, RFC 9499)
+- Identify the incident response cycle of NIST SP 800-61 Rev. 3 (CSF 2.0: Detect, Respond, Recover) and the continuity terms RTO, RPO and MTD (NIST SP 800-34 Rev. 1)
+
+**Comprehension (Understand):**
+- Explain black-box and white-box monitoring, why counters must become rates, and what each view misses
+- Explain how caches delay both an outage and its fix (TTLs, DS records at the parent) and how long each layer keeps answering when another fails
 
 **Application (Apply):**
-- Implement DNS monitoring solutions
-- Execute incident response procedures
+- Read BIND's counters (statistics channel, `rndc stats`, `rndc status`) and capture traffic with dnstap
+- Deploy Prometheus with bind_exporter and blackbox DNS and TLS probes, write alert rules and test that an alert fires and clears
+- Check a zone across its servers and its parent with a script that uses the Monitoring Plugins exit codes
 
 **Analysis (Analyse):**
-- Analyse DNS performance data and identify optimisation opportunities
-- Evaluate the effectiveness of monitoring and alerting systems
+- Analyse a resolver's behaviour under a capped load (`dnsperf -Q 50 -l 10`) from its counters: cache hit ratio, recursions, limits
+- Diagnose three injected faults from alerts, checks, `dig` and logs, and record each incident
 
 **Evaluation (Evaluate):**
-- Assess DNS infrastructure resilience and redundancy
-- Evaluate business continuity planning for DNS services
+- Evaluate alert rules for actionability (symptoms, floors on ratios, `for` durations) and monitoring coverage (fixed target lists against server lists taken from the DNS)
+- Assess a DNS service's recovery plan: backups (zone sources, keys and key state, accounts), restore tests and the time each layer gives you
 
 ### Theory Content
-- DNS monitoring strategy and metrics, including SOA serial agreement across a zone's servers and the parent's delegation (NS, glue, DS) against the zone (pointed to from Module 2)
-- Performance optimisation techniques
-- Incident response planning and procedures
-- Capacity planning for DNS infrastructure
-- Business continuity and disaster recovery
+- Day 6 start and what changed (as of 28 October 2026): NIST SP 800-61 Rev. 3 (April 2025, Rev. 2 withdrawn); RFC 9499 on "lame delegation"; Prometheus 2.53 in Debian 13 (upstream LTS ended 31 July 2025); dnsperf on Codeberg (2.16.0); RIPE Atlas probe count (dated)
+- What to watch: why DNS fails quietly; black-box and white-box (SRE book); the four golden signals for authoritative servers and resolvers; SLIs, SLOs and ICANN Specification 10; checks across servers and the parent (serials, NS sets, glue, DS, lame servers, RFC 7477 CSYNC); signature and certificate clocks (BIND default policy P14D/P5D, the lab policy, RFC 6781 §4.4.2.2, hand-signed zones); the forward pointers from Modules 1-8, collected
+- Where the numbers come from: BIND's statistics channel and `rndc stats` (ARM warnings on access and locking); counters to rates (`rates.sh`, Prometheus `rate()`); counters worth watching (ARM definitions); logs and their cost, RFC 8932 retention; dnstap (BIND, `dnstap-read`, fstrm); other tools and their Debian 13 status (dnscap, dnstop, DSC not packaged, `unbound-control stats_noreset`, collectd, Zabbix, Monitoring Plugins; the contrib DNS plugins start at the real root)
+- Collecting, alerting, looking from outside: Prometheus and the Debian 13 packages; the lab's stack; blackbox DNS probes that check the answer (`probe_dns_serial`, TLS certificate expiry); alert rules and `for`; actionable alerts and Alertmanager (grouping, inhibition, silences); `zonecheck.sh` and online checkers (Zonemaster, DNSViz); outside vantage points (RIPE Atlas credits, NSID rather than `id.server`, commercial services)
+- Performance and capacity: what sets a resolver's speed (hit ratio, RFC 8198 and BIND's NSEC-only synthesis); Lab 11.1's measured comparison with its set-up; dnsperf and resperf (resperf theory only); BIND's limits (`recursive-clients`, `clients-per-query`, `fetches-per-*`, `max-cache-size`, `tcp-clients`, `servfail-ttl`); capacity planning (peaks, N+1, RFC 9199 C4); authoritative servers under load (RRL and cookies, response size, propagation time)
+- Incident response: the SP 800-61 Rev. 3 cycle; roles and communication; first questions for a DNS incident; fast fixes and their traps (serials, DS TTLs, NTAs per RFC 7646, serve-stale); cases from primary sources: Meta 4 October 2021 (health-checked withdrawal of every DNS site), Slack 30 September 2021 (DS cached for 24 hours); after the incident (record, two numbers, blameless review)
+- Continuity and recovery: RTO, RPO, MTD (SP 800-34 Rev. 1) per DNS layer; what keeps answering (SOA EXPIRE, signatures, caches, the registry); what to back up and test; disaster scenarios; a tabletop exercise (answers in presenter notes)
+- Pointers, not content: attacks, RRL design and RPZ (Module 6); key rollovers (Module 7); registry service levels and registry lock (Module 9); abuse detection and filtering (Module 12)
 
 ### Practical Lab
-- Deploy DNS monitoring with tools like RIPE Atlas, ThousandEyes
-- Configure alerting and notification systems
-- Conduct tabletop incident response exercises
-- Performance optimisation workshops
-- Disaster recovery testing scenarios
-
----
+- Lab 11.1 Counters, rates and a capture (20 min): statistics channel on both VMs; `rates.sh` while `dnsperf -Q 50 -l 10` sends existing names, then 500 unique names, to the team's own resolver; `rndc status`; dnstap on VM 2, read and removed
+- Lab 11.2 Prometheus, exporters and alerts (25 min): bind_exporter on both VMs; Prometheus and the blackbox exporter on VM 2 (all on 127.0.0.1 except VM 1's exporter); six targets; probe and counter serials compared; an alert tested by stopping `named` on VM 1
+- Lab 11.3 Checks across servers and the parent (10 min): `zonecheck.sh` on both team zones; the hand-signed zone's expiry date; exit codes
+- Lab 11.4 Incident drill and clean-up (35 min): three instructor-set faults, each set for all teams at once, each with a variant the instructor may choose (`named` listening on loopback only; a lame second server added to the zone; a wrong DS at the registry), evidence, fix, verification and an incident record each; everything removed, both VMs as Module 9 left them
 
 ## Module 12: Emerging Technologies and Future Considerations
 **Duration:** 90 minutes theory + 90 minutes practical
@@ -693,7 +700,7 @@ The modular design allows for flexible course delivery tailored to specific audi
 - **VLAN Segmentation:** Separate lab segments for different exercises
 - **Virtual Machine Host:** VMware vSphere, VirtualBox, or KVM-based infrastructure
 - **Lab Reset Capability:** Snapshots for quick environment restoration
-- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary); Module 4 adds Unbound on VM 2 and PowerDNS on VM 1 on port 5300 for its labs and disables them again; Module 5 uses the same two VMs (a hidden primary, views, and an anycast lab in network namespaces inside VM 2) and undoes each change
+- **Participant VMs for the week:** from Module 1 on, each participant (team `NN`) keeps two Debian 13 VMs: VM 1, the authoritative server for `teamNN.example` and the client (192.0.2.30 on the slides), and VM 2, the resolver (192.0.2.10). Modules 1-9 use them; Module 2 installs BIND on VM 1 and loads `teamNN.example` there; Module 3 runs BIND on VM 2 as the resolver (and, for Labs 3.3-3.4 only, a stealth secondary); Module 4 adds Unbound on VM 2 and PowerDNS on VM 1 on port 5300 for its labs and disables them again; Module 5 uses the same two VMs (a hidden primary, views, and an anycast lab in network namespaces inside VM 2) and undoes each change; Modules 6-9 harden, sign and encrypt on the same two VMs; Module 11 adds monitoring (statistics channels, Prometheus on VM 2) for its labs and removes it again
 
 ### Base Virtual Machine Requirements
 - **Operating System:** Debian 13 "trixie" (Stable; BIND 9.20) or Debian 12 "bookworm" (LTS until 30 June 2028; BIND 9.18, or 9.20 from bookworm-backports)
@@ -1307,48 +1314,58 @@ All steps below were run on 2026-10-21 against the Namingo v1.0.34 EPP server (M
 
 ## Module 11: DNS Monitoring and Performance - Lab Requirements
 
+All steps below were run on 2026-10-28 from two Debian 13 stand-in VMs set up as Modules 6-9 leave them (bind9, bind9-utils and bind9-dnsutils 1:9.20.30-1~deb13u1, dnsperf 2.14.0-5, prometheus 2.53.3+ds1-2, prometheus-bind-exporter 0.8.0-1+b6, prometheus-blackbox-exporter 0.26.0-1), against the instructor stack's registry (`labs/module11/test/rehearse.sh`; both stand-in VMs mount `/run` `noexec`, as Debian 13 does). Lab kit: `labs/module11/`.
+
 ### Lab Environment Setup
-- **Participant VMs:** 2 Debian server VMs per participant
-- **Software:** Prometheus, Grafana, RIPE Atlas tools, custom monitoring scripts
-- **Monitoring:** Network monitoring capabilities
+- **Participant VMs:** the two Debian 13 VMs as Module 9 left them: VM 1 (192.0.2.30) BIND authoritative for `teamNN.example` (lab policy, DS at the registry) and `manualNN.example` (signed by hand in Lab 7.1), Module 6's options and logging; VM 2 (192.0.2.10) the validating resolver with Module 6's options, the `example` static-stub zone, Module 7's trust anchor and Module 8's DoT and DoH listeners. Module 10 has no lab on these VMs yet; if it gets one, it must leave them unchanged
+- **Packages:** `prometheus`, `prometheus-bind-exporter` and `prometheus-blackbox-exporter` added to the VM image with `--no-install-recommends` (keeps `prometheus-node-exporter` out) and `sudo systemctl disable --now` on all three (Debian starts them on installation, Prometheus on every address). `dnsperf`, `curl`, `jq`, `dnstap-read` are already in the image. Offline path: the pre-installed image; with a mirror, `apt install` and the same `disable`. Grafana is not packaged in Debian; Prometheus's own query API and page are used
+- **Instructor stack:** the registry (192.0.2.53) for the parent checks and fault 3; no profile. No instructor-stack code change
+- **Load:** only `dnsperf -Q 50 -l 10` from VM 1 to the team's own VM 2, twice; probes every 15 s; `zonecheck.sh` a few dozen queries per run
+- **Instructor-only:** `labs/module11/instructor/faults.sh` (faults 1 and 2 on VM 1 over SSH, root login or passwordless sudo; its `clean` removes the saved copies in `/var/backups/m11` after the drill) and `ds-fault.sh` (fault 3 at the registry); a variant per fault; answers and grading in its README. The repository is public, so the drill is graded on evidence and method (6A tasks 2 and 4)
+- **Secrets:** none in the kit; the team CA certificate (`ca.crt`, public) is copied to `/etc/prometheus/team-ca.crt`, never `ca.key`
+- **End state (what Module 12 starts from):** both VMs as Module 9 left them (`named.conf`, `named.conf.local`, `named.conf.options` byte-equal to the saved copies; no statistics channel, no dnstap); the Prometheus services stopped and disabled, their `/etc/default` files and Debian's `prometheus.yml` and `blackbox.yml` back, the TSDB emptied; `teamNN.example` two serials higher; the DS at the registry matches the team's KSK
+- **Not tested:** real VMs (`systemctl` and Debian's units, `journalctl`, AppArmor enforcement; dnstap's file is in `/var/cache/bind`, which the profile allows); `apt install` on a running VM; the Prometheus page through an SSH tunnel; IPv6; a 2-vCPU, 2 GB VM (on the test host Prometheus used 78 MiB, the blackbox exporter 25 MiB, bind_exporter 22 MiB)
+- **Starting-state checks:** Module 8's kit file (before PR #17) added only the 853 and 443 `listen-on` lines; on a resolver with Debian's default (no `listen-on`) `named` then stops listening on port 53 (tested). Lab 11.1 step 1 checks port 53 first and gives the fix (the `listen-on port 53` lines the Module 8 slide shows); the stand-in VM 2 has them. Lab 6.4's `allow-transfer` and `also-notify` with the TSIG key stay on VM 1, so VM 1 sends a signed NOTIFY to VM 2 at every serial change and VM 2 logs "tsig verify failure (BADKEY)" and "NOTAUTH" each time (tested): background noise, not evidence of a fault; the stand-in VM 1 has these lines
 
 ### Lab Exercises
 
-#### Lab 11.1: DNS Monitoring Implementation (45 minutes)
-**Objective:** Deploy DNS monitoring
-**Resources Needed:**
-- Prometheus and Grafana
-- DNS-specific exporters
-- Alerting configuration
+#### Lab 11.1: Counters, Rates and a Capture (20 minutes)
+**Objective:** Read BIND's counters as rates and see what a cache-missing load does
 **Exercise Steps:**
-1. Set up Prometheus for DNS metrics collection
-2. Configure Grafana dashboards
-3. Implement alerting rules
-4. Test monitoring and alerting scenarios
+1. Both VMs: save `named.conf.local` and `named.conf.options` as `.m09`; append `common/named.conf.stats` (127.0.0.1:8053); check; reconfig; read `/json/v1/server`
+2. VM 1: the query files (`vm1/names.txt` with the team number; 500 unique names with `seq`)
+3. VM 2 `tools/rates.sh 10` while VM 1 runs `dnsperf -s <VM 2> -d names.txt -Q 50 -l 10`; then the same with the unique names
+4. VM 2: `rndc status` (recursive clients 0/900/1000)
+5. VM 2: dnstap lines in `options`, one query, `rndc dnstap -roll`, `dnstap-read`; the saved options back, files deleted
+**Success Criteria:** both runs explained from the counters (test lab, six runs: hit ratio 99% and 0%, 0.7 and 49.8-49.9 recursions per second, average latency 0.141-0.180 ms and 1.109-1.225 ms on one Docker bridge; a comparison, not a benchmark); the CQ and RQ lines read (Practical Assessment 6A task 3)
 
-#### Lab 11.2: Performance Analysis and Optimisation (30 minutes)
-**Objective:** Analyse and optimise DNS performance
-**Resources Needed:**
-- Performance testing tools
-- Query log analysis scripts
-- Optimisation configuration examples
+#### Lab 11.2: Prometheus, Exporters and Alerts (25 minutes)
+**Objective:** Collect counters and probe results, and prove an alert works
 **Exercise Steps:**
-1. Conduct DNS performance baseline testing
-2. Analyse query patterns and bottlenecks
-3. Implement performance optimisations
-4. Measure improvement results
+1. VM 1: `/etc/default/prometheus-bind-exporter` from the kit (VM 1's address, port 9119); enable and start; read `bind_up` from VM 2
+2. VM 2: the kit's three `/etc/default` files, `prometheus.yml`, `blackbox.yml`, `dns-rules.yml` and the team CA certificate; `promtool check config`; `--config.check`; enable and start
+3. Six targets up; `probe_dns_serial` against `bind_zone_serial`; days left on the DoT certificate
+4. Stop `named` on VM 1: DNSProbeFailed pending, then firing; start it: the alert clears
+**Success Criteria:** six targets up; the two serials agree; the alert fired and cleared and its timing explained (test lab, six runs: 65-86 s to fire with 15 s scrapes and `for: 1m`; 14-29 s to clear) (6A task 1, assessed before the clean-up)
 
-#### Lab 11.3: Incident Response Simulation (15 minutes)
-**Objective:** Practice DNS incident response procedures
-**Resources Needed:**
-- Simulated DNS outage scenarios
-- Incident response playbooks
-- Communication tools
+#### Lab 11.3: Checks Across Servers and the Parent (10 minutes)
+**Objective:** Check what a fixed list of probes cannot see
 **Exercise Steps:**
-1. Simulate various DNS failure scenarios
-2. Execute incident response procedures
-3. Practice communication protocols
-4. Conduct post-incident review
+1. Read `tools/zonecheck.sh`
+2. Run it for `teamNN.example` (thresholds 1200 and 600 seconds for the lab policy) and `manualNN.example` (default 4 and 2 days, below BIND's default refresh point)
+3. A warning threshold longer than the days left: exit code 1
+4. Leave it running under `watch -n 60` for Lab 11.4 (the comparison with the probes is the Lab 11.4 debrief)
+**Success Criteria:** OK for both zones; the expiry date of the hand-signed zone stated (about 28 days left on Day 6); the difference between the check and the probes explained (6A task 1)
+
+#### Lab 11.4: Incident Drill and Clean-Up (35 minutes)
+**Objective:** Handle three faults from detection to record, then undo the module
+**Exercise Steps:**
+0. Day 6 precondition (Lab 11.1 step 1): VM 2 answers plain DNS on port 53; if not, add the two `listen-on port 53` lines from the Module 8 slide
+1. The instructor sets one fault at a time, for all teams in one loop, and gives only a symptom: fault 1 `named` on VM 1 answers on loopback only (DNSProbeFailed; `rndc status` normal; `ss` shows 127.0.0.1:53 only); fault 2 a second, lame name server (VM 2) added to the zone (no alert; `zonecheck.sh` "NS sets differ" and "REFUSED"; ns2 in VM 1's NS RRset); fault 3 a wrong DS at the registry (SERVFAIL through VM 2, no EDE; `+cd` answers; "DS ... matches no DNSKEY"). Variants: fault 1 an `allow-query` for loopback only (REFUSED), fault 2 an unused address (time-outs), fault 3 a wrong key tag
+2. For each: the time, evidence before change, the cause shown, the fix (fault 3: the correct DS sent to the registry), verification, one incident record (`incident-record.md`; fault 2's is short; all three handed in by the end of Day 6)
+3. Debrief (5 minutes): which of zonecheck's checks the probes could make, and why fault 2 raised no alert
+4. Clean-up: Prometheus services stopped and disabled on both VMs, every `.m09` file back, the rules, CA copy and TSDB deleted, reconfig; only `named` listening
+**Success Criteria:** each fault explained from evidence and verified fixed (test lab, six runs: SERVFAIL 103-115 s after the wrong DS, AD 57-60 s after the fix, with TTL 60); three records handed in; both VMs in the end state above (6A tasks 2 and 4)
 
 ---
 
@@ -1356,6 +1373,7 @@ All steps below were run on 2026-10-21 against the Namingo v1.0.34 EPP server (M
 
 ### Lab Environment Setup
 - **Participant VMs:** 2 Debian server VMs per participant
+- **Starting state from Module 11:** the two VMs as Module 9 left them (Module 11 undoes its changes: `teamNN.example` two serials higher, the Prometheus packages installed with their services stopped and disabled)
 - **Software:** Experimental DNS software, IPv6 configuration tools
 - **Network:** IPv6-enabled lab environment
 
