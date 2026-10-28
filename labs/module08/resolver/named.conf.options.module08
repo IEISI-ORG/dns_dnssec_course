@@ -1,5 +1,10 @@
 // Lines to add inside the existing options { } block of the Module 7
-// resolver. Keep your existing port 53 listen-on lines.
+// resolver. Once any listen-on line is present, BIND no longer listens on
+// port 53 by default, so the first two lines keep plain DNS on port 53.
+// If your options block already has port 53 listen-on lines, keep those
+// instead of these two.
+    listen-on port 53 { any; };                                         // plain DNS
+    listen-on-v6 port 53 { any; };
     listen-on port 853 tls resolver-tls { any; };                     // DoT
     listen-on port 443 tls resolver-tls http resolver-http { any; };  // DoH
     listen-on-v6 port 853 tls resolver-tls { any; };

@@ -11,7 +11,7 @@ as the client.
 |---|---|---|
 | `make-certs.sh` | run on the resolver VM: `sudo sh make-certs.sh NN <resolver address> /etc/bind/tls` | 8.2 |
 | `resolver/named.conf.module08` | `/etc/bind/`, included from `named.conf` | 8.2, 8.4 |
-| `resolver/named.conf.options.module08` | lines to paste into the resolver's `options { }` | 8.2, 8.5 |
+| `resolver/named.conf.options.module08` | lines to paste into the resolver's `options { }`, including port 53 (any `listen-on` line replaces the default) | 8.2, 8.5 |
 | `resolver/db.resolver.arpa` | `/etc/bind/`; set your team number | 8.4 |
 | `unbound/module08-forward.conf` | client VM, `/etc/unbound/unbound.conf.d/` | 8.3 |
 | `unbound/module08-server.conf` | reference only: the same service on Unbound | - |

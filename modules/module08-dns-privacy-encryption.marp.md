@@ -268,7 +268,7 @@ options {
 };
 ```
 
-- `tls` names a key and certificate; `listen-on ... tls NAME` turns a listener into DoT
+- `tls` names a key and certificate; `listen-on ... tls NAME` turns a listener into DoT. Once any `listen-on` is set, BIND drops its default port 53 listeners: keep the port 53 line (tested)
 - `tls ephemeral` makes a throw-away self-signed certificate: fine for tests and opportunistic clients, useless for strict ones
 - The `tls` block also sets `protocols`, `ciphers` and session tickets; BIND accepts TLS 1.2 and 1.3 by default
 - The key file must be readable by `named` (group `bind`, mode 640) and nobody else
